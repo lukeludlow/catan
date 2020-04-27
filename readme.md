@@ -1,0 +1,3 @@
+# catan generator
+
+init 

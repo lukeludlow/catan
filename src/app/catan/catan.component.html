@@ -1,38 +1,43 @@
-<h2>catan random map generator</h2>
-
-<fieldset class="form-group">
-    <legend>radio buttons</legend>
-    <div class="form-check">
-        <label class="form-check-label">
-            <input
-                [(ngModel)]="gameOption"
-                type="radio"
-                class="form-check-input"
-                name="optionsRadios"
-                id="optionsRadios1"
-                value="base"
-                checked=""
-            />
-            base game (3-4 players)
-        </label>
-    </div>
-    <div class="form-check">
-        <label class="form-check-label">
-            <input
-                [(ngModel)]="gameOption"
-                type="radio"
-                class="form-check-input"
-                name="optionsRadios"
-                id="optionsRadios2"
-                value="seafarers"
-            />
-            seafarers (3-4 players)
-        </label>
-    </div>
-</fieldset>
-
-<button type="button" class="btn btn-success" (click)="generate()">
-    generate
-</button>
-
-<app-map-display></app-map-display>
+<div class="container">
+    <!-- <h3>catan random map generator</h3> -->
+    <legend>catan random map generator</legend>
+    <fieldset class="form-group">
+        <div class="form-check">
+            <label class="form-check-label">
+                <input
+                    [(ngModel)]="gameOption"
+                    type="radio"
+                    class="form-check-input"
+                    name="optionsRadios"
+                    id="optionsRadios1"
+                    value="base"
+                    checked=""
+                />
+                base game (3-4 players)
+            </label>
+        </div>
+        <div class="form-check">
+            <label class="form-check-label">
+                <input
+                    [(ngModel)]="gameOption"
+                    type="radio"
+                    class="form-check-input"
+                    name="optionsRadios"
+                    id="optionsRadios2"
+                    value="seafarers"
+                />
+                seafarers (3-4 players)
+            </label>
+        </div>
+    </fieldset>
+    <button
+        type="button"
+        class="btn btn-success"
+        (click)="generate()"
+        onclick="this.blur()"
+    >
+        generate
+    </button>
+    <br/>
+    <app-map-display></app-map-display>
+</div>

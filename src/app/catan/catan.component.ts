@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { CatanService } from "../_services/catan.service";
 
 @Component({
@@ -8,8 +8,6 @@ import { CatanService } from "../_services/catan.service";
 })
 export class CatanComponent implements OnInit {
     gameOption = "base";
-    uncheckableRadioModel = "Middle";
-
 
     constructor(private catanService: CatanService) {}
 

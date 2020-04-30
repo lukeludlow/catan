@@ -1,0 +1,38 @@
+<h2>catan random map generator</h2>
+
+<fieldset class="form-group">
+    <legend>radio buttons</legend>
+    <div class="form-check">
+        <label class="form-check-label">
+            <input
+                [(ngModel)]="gameOption"
+                type="radio"
+                class="form-check-input"
+                name="optionsRadios"
+                id="optionsRadios1"
+                value="base"
+                checked=""
+            />
+            base game (3-4 players)
+        </label>
+    </div>
+    <div class="form-check">
+        <label class="form-check-label">
+            <input
+                [(ngModel)]="gameOption"
+                type="radio"
+                class="form-check-input"
+                name="optionsRadios"
+                id="optionsRadios2"
+                value="seafarers"
+            />
+            seafarers (3-4 players)
+        </label>
+    </div>
+</fieldset>
+
+<button type="button" class="btn btn-success" (click)="generate()">
+    generate
+</button>
+
+<app-map-display></app-map-display>

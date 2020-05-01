@@ -1,4 +1,5 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
+import { MapDisplayService } from "../_services/map-display.service";
 
 @Component({
     selector: "app-map-display",
@@ -6,7 +7,14 @@ import { Component, OnInit } from "@angular/core";
     styleUrls: ["./map-display.component.css"],
 })
 export class MapDisplayComponent implements OnInit {
-    constructor() {}
+    constructor(private mapDisplayService: MapDisplayService) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.generate();
+    }
+
+    generate(): void {
+        console.log("map display component generate");
+        this.mapDisplayService.generate();
+    }
 }

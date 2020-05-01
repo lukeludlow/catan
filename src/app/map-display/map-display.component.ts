@@ -22,6 +22,7 @@ export class MapDisplayComponent implements OnInit {
         this.drawBackground();
         this.drawTiles();
         this.drawPorts();
+        this.drawNumbers();
     }
 
     drawBackground(): void {
@@ -113,6 +114,69 @@ export class MapDisplayComponent implements OnInit {
         this.renderer.setStyle(portImage, "width", "6%");
         this.renderer.setStyle(portImage, "transform", `rotate(${rotation}deg)`);
         return portImage;
+    }
+
+    drawNumbers(): void {
+        const row1TopOffset = 0.165;
+        const row1LeftOffset = 0.323;
+        for (let i = 0; i < 3; i++) {
+            const leftOffset = row1LeftOffset + i * 0.15;
+            const numberImage = this.createNumber(8, row1TopOffset, leftOffset);
+            this.renderer.appendChild(this.el.nativeElement, numberImage);
+        }
+        const row2TopOffset = 0.324;
+        const row2LeftOffset = 0.246;
+        for (let i = 0; i < 4; i++) {
+            const leftOffset = row2LeftOffset + i * 0.15;
+            const numberImage = this.createNumber(8, row2TopOffset, leftOffset);
+            this.renderer.appendChild(this.el.nativeElement, numberImage);
+        }
+        const row3TopOffset = 0.472;
+        const row3LeftOffset = 0.17;
+        for (let i = 0; i < 5; i++) {
+            const leftOffset = row3LeftOffset + i * 0.15;
+            const numberImage = this.createNumber(9, row3TopOffset, leftOffset);
+            this.renderer.appendChild(this.el.nativeElement, numberImage);
+        }
+        const row4TopOffset = 0.623;
+        const row4LeftOffset = 0.242;
+        for (let i = 0; i < 4; i++) {
+            const leftOffset = row4LeftOffset + i * 0.15;
+            const numberImage = this.createNumber(8, row4TopOffset, leftOffset);
+            this.renderer.appendChild(this.el.nativeElement, numberImage);
+        }
+        const row5TopOffset = 0.773;
+        const row5LeftOffset = 0.319;
+        for (let i = 0; i < 3; i++) {
+            const leftOffset = row5LeftOffset + i * 0.15;
+            const numberImage = this.createNumber(9, row5TopOffset, leftOffset);
+            this.renderer.appendChild(this.el.nativeElement, numberImage);
+        }
+    }
+
+    createNumber(value: number, top: number, left: number): any {
+        const circleDiv = this.renderer.createElement("div");
+        this.renderer.setStyle(circleDiv, "position", "absolute");
+        const topCoord = this.backgroundHeight * top + this.backgroundHeightOffset;
+        const leftCoord = this.backgroundWidth * left;
+        const width = this.backgroundWidth * 0.055;
+        this.renderer.setStyle(circleDiv, "top", `${topCoord}px`);
+        this.renderer.setStyle(circleDiv, "left", `${leftCoord}px`);
+        this.renderer.setStyle(circleDiv, "width", `${width}px`);
+        this.renderer.setStyle(circleDiv, "height", `${width}px`);
+        let textColor = "#000000";
+        if (value === 6 || value === 8) {
+            textColor = "#FF0000";
+        }
+        this.renderer.setStyle(circleDiv, "color", `${textColor}`);
+        this.renderer.setStyle(circleDiv, "background-color", "#FFE3A6");
+        this.renderer.setStyle(circleDiv, "border-radius", "50%");
+        this.renderer.setStyle(circleDiv, "font-size", `${width * 0.7}px`);
+        this.renderer.setStyle(circleDiv, "text-align", "center");
+        this.renderer.setStyle(circleDiv, "line-height", `${width}px`);
+        this.renderer.setProperty(circleDiv, "innerHTML", `${value}`);
+        // FIXME should it be "color" and "background" or should it be "background-color and foreground-color" ?
+        return circleDiv;
     }
 
     generate(): void {

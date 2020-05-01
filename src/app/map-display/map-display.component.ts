@@ -21,6 +21,7 @@ export class MapDisplayComponent implements OnInit {
         this.generate();
         this.drawBackground();
         this.drawTiles();
+        this.drawPorts();
     }
 
     drawBackground(): void {
@@ -79,15 +80,39 @@ export class MapDisplayComponent implements OnInit {
     }
 
     createTile(resource: string, top: number, left: number): any {
-        const tile = this.renderer.createElement("img");
-        this.renderer.setAttribute(tile, "src", `assets/images/${resource}.png`);
-        this.renderer.setStyle(tile, "position", "absolute");
+        const tileImage = this.renderer.createElement("img");
+        this.renderer.setAttribute(tileImage, "src", `assets/images/${resource}.png`);
+        this.renderer.setStyle(tileImage, "position", "absolute");
         const topCoord = this.backgroundHeight * top + this.backgroundHeightOffset;
         const leftCoord = this.backgroundWidth * left;
-        this.renderer.setStyle(tile, "top", `${topCoord}px`);
-        this.renderer.setStyle(tile, "left", `${leftCoord}px`);
-        this.renderer.setStyle(tile, "width", "15.5%");
-        return tile;
+        this.renderer.setStyle(tileImage, "top", `${topCoord}px`);
+        this.renderer.setStyle(tileImage, "left", `${leftCoord}px`);
+        this.renderer.setStyle(tileImage, "width", "15.5%");
+        return tileImage;
+    }
+
+    drawPorts(): void {
+        const port1 = this.createPort("rock", 0.03, 0.255, 160);
+        this.renderer.appendChild(this.el.nativeElement, port1);
+        const port2 = this.createPort("rock", 0.88, 0.246, 45);
+        this.renderer.appendChild(this.el.nativeElement, port2);
+        const port3 = this.createPort("rock", 0.89, 0.535, -30);
+        this.renderer.appendChild(this.el.nativeElement, port3);
+        const port4 = this.createPort("rock", 0.465, 0.905, -75);
+        this.renderer.appendChild(this.el.nativeElement, port4);
+    }
+
+    createPort(resource: string, top: number, left: number, rotation: number): any {
+        const portImage = this.renderer.createElement("img");
+        this.renderer.setAttribute(portImage, "src", `assets/images/port_${resource}.png`);
+        this.renderer.setStyle(portImage, "position", "absolute");
+        const topCoord = this.backgroundHeight * top + this.backgroundHeightOffset;
+        const leftCoord = this.backgroundWidth * left;
+        this.renderer.setStyle(portImage, "top", `${topCoord}px`);
+        this.renderer.setStyle(portImage, "left", `${leftCoord}px`);
+        this.renderer.setStyle(portImage, "width", "6%");
+        this.renderer.setStyle(portImage, "transform", `rotate(${rotation}deg)`);
+        return portImage;
     }
 
     generate(): void {

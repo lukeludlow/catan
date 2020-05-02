@@ -33,7 +33,7 @@ export class MapDisplayComponent implements OnInit, AfterViewInit {
         this.renderer.setStyle(timestampParagraph, "top", "50%");
         this.renderer.setStyle(timestampParagraph, "left", "2%");
         // const timestampText = this.renderer.createText(new Date().toISOString());
-        const timestampText = this.renderer.createText("v4 " + new Date().toISOString());
+        const timestampText = this.renderer.createText("v5 " + new Date().toISOString());
         this.renderer.appendChild(timestampParagraph, timestampText);
         this.renderer.appendChild(this.mainDiv.nativeElement, timestampParagraph);
     }
@@ -65,35 +65,55 @@ export class MapDisplayComponent implements OnInit, AfterViewInit {
         const row1LeftOffset = 31;
         for (let i = 0; i < 3; i++) {
             const leftOffset = row1LeftOffset + i * 17.25;
-            const tile = this.createTile("rock", row1TopOffset, leftOffset);
+            const tile = this.createTile(
+                this.mapDisplayService.getTile(0, i),
+                row1TopOffset,
+                leftOffset
+            );
             this.renderer.appendChild(this.mainDiv.nativeElement, tile);
         }
         const row2TopOffset = 12.75;
         const row2LeftOffset = 22.2;
         for (let i = 0; i < 4; i++) {
             const leftOffset = row2LeftOffset + i * 17.25;
-            const tile = this.createTile("rock", row2TopOffset, leftOffset);
+            const tile = this.createTile(
+                this.mapDisplayService.getTile(1, i),
+                row2TopOffset,
+                leftOffset
+            );
             this.renderer.appendChild(this.mainDiv.nativeElement, tile);
         }
         const row3TopOffset = 20.4;
         const row3LeftOffset = 13.65;
         for (let i = 0; i < 5; i++) {
             const leftOffset = row3LeftOffset + i * 17.25;
-            const tile = this.createTile("rock", row3TopOffset, leftOffset);
+            const tile = this.createTile(
+                this.mapDisplayService.getTile(2, i),
+                row3TopOffset,
+                leftOffset
+            );
             this.renderer.appendChild(this.mainDiv.nativeElement, tile);
         }
         const row4TopOffset = 28.15;
         const row4LeftOffset = 21.9;
         for (let i = 0; i < 4; i++) {
             const leftOffset = row4LeftOffset + i * 17.25;
-            const tile = this.createTile("rock", row4TopOffset, leftOffset);
+            const tile = this.createTile(
+                this.mapDisplayService.getTile(3, i),
+                row4TopOffset,
+                leftOffset
+            );
             this.renderer.appendChild(this.mainDiv.nativeElement, tile);
         }
         const row5TopOffset = 36;
         const row5LeftOffset = 30.4;
         for (let i = 0; i < 3; i++) {
             const leftOffset = row5LeftOffset + i * 17.25;
-            const tile = this.createTile("rock", row5TopOffset, leftOffset);
+            const tile = this.createTile(
+                this.mapDisplayService.getTile(4, i),
+                row5TopOffset,
+                leftOffset
+            );
             this.renderer.appendChild(this.mainDiv.nativeElement, tile);
         }
     }
@@ -117,13 +137,13 @@ export class MapDisplayComponent implements OnInit, AfterViewInit {
     }
 
     drawPorts(): void {
-        const port1 = this.createPort("rock", 1.75, 29.5, 160);
+        const port1 = this.createPort(this.mapDisplayService.getPort(), 1.75, 29.5, 160);
         this.renderer.appendChild(this.mainDiv.nativeElement, port1);
-        const port2 = this.createPort("rock", 46, 27.5, 45);
+        const port2 = this.createPort(this.mapDisplayService.getPort(), 46, 27.5, 45);
         this.renderer.appendChild(this.mainDiv.nativeElement, port2);
-        const port3 = this.createPort("rock", 46.4, 61, -30);
+        const port3 = this.createPort(this.mapDisplayService.getPort(), 46.4, 61, -30);
         this.renderer.appendChild(this.mainDiv.nativeElement, port3);
-        const port4 = this.createPort("rock", 24.25, 103, -75);
+        const port4 = this.createPort(this.mapDisplayService.getPort(), 24.25, 103, -75);
         this.renderer.appendChild(this.mainDiv.nativeElement, port4);
     }
 
@@ -148,36 +168,71 @@ export class MapDisplayComponent implements OnInit, AfterViewInit {
         // const row1TopOffset = 0.165;
         // const row1LeftOffset = 0.323;
         for (let i = 0; i < 3; i++) {
+            if (this.mapDisplayService.isTileDesert(0, i)) {
+                continue;
+            }
             const leftOffset = row1LeftOffset + i * 15.2;
-            const numberImage = this.createNumber(8, row1TopOffset, leftOffset);
+            const numberImage = this.createNumber(
+                this.mapDisplayService.getNumber(0, i),
+                row1TopOffset,
+                leftOffset
+            );
             this.renderer.appendChild(this.mainDiv.nativeElement, numberImage);
         }
         const row2TopOffset = 16.2;
         const row2LeftOffset = 24;
         for (let i = 0; i < 4; i++) {
+            if (this.mapDisplayService.isTileDesert(1, i)) {
+                continue;
+            }
             const leftOffset = row2LeftOffset + i * 15.2;
-            const numberImage = this.createNumber(8, row2TopOffset, leftOffset);
+            const numberImage = this.createNumber(
+                this.mapDisplayService.getNumber(0, i),
+                row2TopOffset,
+                leftOffset
+            );
             this.renderer.appendChild(this.mainDiv.nativeElement, numberImage);
         }
         const row3TopOffset = 24;
         const row3LeftOffset = 16.5;
         for (let i = 0; i < 5; i++) {
+            if (this.mapDisplayService.isTileDesert(2, i)) {
+                continue;
+            }
             const leftOffset = row3LeftOffset + i * 15.2;
-            const numberImage = this.createNumber(9, row3TopOffset, leftOffset);
+            const numberImage = this.createNumber(
+                this.mapDisplayService.getNumber(0, i),
+                row3TopOffset,
+                leftOffset
+            );
             this.renderer.appendChild(this.mainDiv.nativeElement, numberImage);
         }
         const row4TopOffset = 31.7;
         const row4LeftOffset = 24;
         for (let i = 0; i < 4; i++) {
+            if (this.mapDisplayService.isTileDesert(3, i)) {
+                continue;
+            }
             const leftOffset = row4LeftOffset + i * 15.2;
-            const numberImage = this.createNumber(8, row4TopOffset, leftOffset);
+            const numberImage = this.createNumber(
+                this.mapDisplayService.getNumber(0, i),
+                row4TopOffset,
+                leftOffset
+            );
             this.renderer.appendChild(this.mainDiv.nativeElement, numberImage);
         }
         const row5TopOffset = 39.5;
         const row5LeftOffset = 31.5;
         for (let i = 0; i < 3; i++) {
+            if (this.mapDisplayService.isTileDesert(4, i)) {
+                continue;
+            }
             const leftOffset = row5LeftOffset + i * 15.2;
-            const numberImage = this.createNumber(9, row5TopOffset, leftOffset);
+            const numberImage = this.createNumber(
+                this.mapDisplayService.getNumber(0, i),
+                row5TopOffset,
+                leftOffset
+            );
             this.renderer.appendChild(this.mainDiv.nativeElement, numberImage);
         }
     }
@@ -216,29 +271,4 @@ export class MapDisplayComponent implements OnInit, AfterViewInit {
     generate(): void {
         console.log("map display component generate");
     }
-
-    // num rock tiles: 3
-    // num wheat tiles: 4
-    // num tree tiles: 4
-    // num sheep tiles: 4
-    // num brick tiles: 3
-    // num desert tiles: 1
-
-    // num 2s: 1 (1dot)
-    // num 3s: 2 (2dot)
-    // num 4s: 2 (3dot)
-    // num 5s: 2 (4dot)
-    // num 6s: 2 (5dot)
-    // num 8s: 2 (5dot)
-    // num 9s: 2 (4dot)
-    // num 10s: 2 (3dot)
-    // num 11s: 2 (2dot)
-    // num 12s: 1 (1dot)
-
-    // num rock ports: 1
-    // num wheat ports: 1
-    // num tree ports: 1
-    // num sheep ports: 1
-    // num brick ports: 1
-    // num port slots needed (the question marks): 4
 }

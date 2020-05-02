@@ -33,7 +33,7 @@ export class MapDisplayComponent implements OnInit, AfterViewInit {
         this.renderer.setStyle(timestampParagraph, "top", "50%");
         this.renderer.setStyle(timestampParagraph, "left", "2%");
         // const timestampText = this.renderer.createText(new Date().toISOString());
-        const timestampText = this.renderer.createText("v5 " + new Date().toISOString());
+        const timestampText = this.renderer.createText("v6 " + new Date().toISOString());
         this.renderer.appendChild(timestampParagraph, timestampText);
         this.renderer.appendChild(this.mainDiv.nativeElement, timestampParagraph);
     }
@@ -187,7 +187,7 @@ export class MapDisplayComponent implements OnInit, AfterViewInit {
             }
             const leftOffset = row2LeftOffset + i * 15.2;
             const numberImage = this.createNumber(
-                this.mapDisplayService.getNumber(0, i),
+                this.mapDisplayService.getNumber(1, i),
                 row2TopOffset,
                 leftOffset
             );
@@ -201,7 +201,7 @@ export class MapDisplayComponent implements OnInit, AfterViewInit {
             }
             const leftOffset = row3LeftOffset + i * 15.2;
             const numberImage = this.createNumber(
-                this.mapDisplayService.getNumber(0, i),
+                this.mapDisplayService.getNumber(2, i),
                 row3TopOffset,
                 leftOffset
             );
@@ -215,7 +215,7 @@ export class MapDisplayComponent implements OnInit, AfterViewInit {
             }
             const leftOffset = row4LeftOffset + i * 15.2;
             const numberImage = this.createNumber(
-                this.mapDisplayService.getNumber(0, i),
+                this.mapDisplayService.getNumber(3, i),
                 row4TopOffset,
                 leftOffset
             );
@@ -229,7 +229,7 @@ export class MapDisplayComponent implements OnInit, AfterViewInit {
             }
             const leftOffset = row5LeftOffset + i * 15.2;
             const numberImage = this.createNumber(
-                this.mapDisplayService.getNumber(0, i),
+                this.mapDisplayService.getNumber(4, i),
                 row5TopOffset,
                 leftOffset
             );

@@ -1,4 +1,4 @@
-import { Hex } from './hex';
+import { Hex } from "./hex";
 
 export class BoardResources {
     private resourceNames: ["rock", "wheat", "brick", "tree", "sheep", "desert"];
@@ -113,7 +113,7 @@ export class BoardResources {
         // this.numSheepPorts = 1;
 
         // for (let i = 0; i < 19; i++) {
-            // this.hexes.push(new Hex())
+        // this.hexes.push(new Hex())
         // }
         this.hexes = [];
         for (let i = 0; i < 5; i++) {
@@ -134,11 +134,59 @@ export class BoardResources {
         });
         const remainingNumbersArray = [...remainingNumbers] as number[];
         console.log("remaining numbers array: " + remainingNumbersArray.toString());
-        const randomIndex = this.getRandomNumberWithinRange(remainingNumbersArray.length);
-        const chosenNumber = remainingNumbersArray[randomIndex];
-        // if (chosenNumber === 8 || chosenNumber === )
+        let randomIndex = this.getRandomNumberWithinRange(remainingNumbersArray.length);
+        let chosenNumber = remainingNumbersArray[randomIndex];
+        if (chosenNumber === 6 || chosenNumber === 8) {
+            // if (this.isNearAnotherSixOrEight(row, col)) {
+            while (
+                (chosenNumber === 6 || chosenNumber === 8) &&
+                this.isNearAnotherSixOrEight(row, col)
+            ) {
+                console.log("detected 6 and 8 too close to each other. generating again...");
+                randomIndex = this.getRandomNumberWithinRange(remainingNumbersArray.length);
+                chosenNumber = remainingNumbersArray[randomIndex];
+            }
+        }
         this.numbers.set(chosenNumber, this.numbers.get(chosenNumber) - 1);
+        this.hexes[row][col].value = chosenNumber;
         return chosenNumber;
+    }
+
+    isNearAnotherSixOrEight(row: number, col: number): boolean {
+        // let isHorizontalAdjacent =
+        //     this.hexes[row - 1][col].value === 6 ||
+        //     this.hexes[row + 1][col].value === 6 ||
+        //     this.hexes[row - 1][col].value === 8 ||
+        //     this.hexes[row + 1][col].value === 8;
+        // let isVerticalAdjacent =
+        //     this.hexes[row][col - 1].value === 6 ||
+        //     this.hexes[row][col + 1].value === 6 ||
+        //     this.hexes[row][col - 1].value === 8 ||
+        //     this.hexes[row][col + 1].value === 8;
+        // let isDiagonalAdjacent = false;
+        // return isHorizontalAdjacent || isVerticalAdjacent || isDiagonalAdjacent;
+        return this.getAdjacentHexes(row, col).some((item) => item.value === 6 || item.value === 8);
+    }
+
+    getAdjacentHexes(row: number, col: number): Hex[] {
+        let adjacentHexes = [];
+        if (row > 0) {
+            adjacentHexes.push(this.hexes[row - 1][col]);
+        }
+        if (row < 4) {
+            adjacentHexes.push(this.hexes[row + 1][col]);
+        }
+        if (col > 0) {
+            adjacentHexes.push(this.hexes[row][col - 1]);
+        }
+        if (col < 4) {
+            adjacentHexes.push(this.hexes[row][col + 1]);
+        }
+        // top left
+        // top right
+        // bottom left
+        // bottom right
+        return adjacentHexes;
     }
 
     chooseRandomRemainingTileResource(row: number, col: number): string {

@@ -1,4 +1,4 @@
-import { Hex } from "./hex";
+import { Hex } from "./Hex";
 
 export class BoardResources {
     private resourceNames: ["rock", "wheat", "brick", "tree", "sheep", "desert"];
@@ -125,6 +125,7 @@ export class BoardResources {
         console.log(this.hexes);
     }
 
+
     chooseRandomRemainingNumber(row: number, col: number): number {
         const remainingNumbers = new Set<number>();
         this.numbers.forEach((value, key) => {
@@ -148,7 +149,7 @@ export class BoardResources {
             }
         }
         this.numbers.set(chosenNumber, this.numbers.get(chosenNumber) - 1);
-        this.hexes[row][col].value = chosenNumber;
+        this.hexes[row][col].diceNumber = chosenNumber;
         return chosenNumber;
     }
 
@@ -165,7 +166,7 @@ export class BoardResources {
         //     this.hexes[row][col + 1].value === 8;
         // let isDiagonalAdjacent = false;
         // return isHorizontalAdjacent || isVerticalAdjacent || isDiagonalAdjacent;
-        return this.getAdjacentHexes(row, col).some((item) => item.value === 6 || item.value === 8);
+        return this.getAdjacentHexes(row, col).some((item) => item.diceNumber === 6 || item.diceNumber === 8);
     }
 
     getAdjacentHexes(row: number, col: number): Hex[] {

@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Hex } from "./hex";
+import { Hex } from "./Hex";
 import { BoardResources } from "./board-resources";
 
 // num rock tiles: 3

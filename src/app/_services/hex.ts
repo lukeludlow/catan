@@ -1,12 +1,12 @@
 export class Hex {
-    x: number;
-    y: number;
-    value: number;
+    row: number;
+    col: number;
+    diceNumber: number;
     resource: string;
-    constructor(x: number, y: number, value: number, resource: string) {
-        this.x = x;
-        this.y = y;
-        this.value = value;
+    constructor(row: number, col: number, diceNumber: number, resource: string) {
+        this.row = row;
+        this.col = col;
+        this.diceNumber = diceNumber;
         this.resource = resource;
     }
 }

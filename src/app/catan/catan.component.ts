@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
-import { CatanService } from "../_services/catan.service";
 import { Router } from "@angular/router";
 import { MapDisplayService } from "../_services/map-display.service";
 
@@ -11,11 +10,7 @@ import { MapDisplayService } from "../_services/map-display.service";
 export class CatanComponent implements OnInit {
     gameOption = "base";
 
-    constructor(
-        private catanService: CatanService,
-        private mapDisplayService: MapDisplayService,
-        private router: Router
-    ) {}
+    constructor(private mapDisplayService: MapDisplayService, private router: Router) {}
 
     ngOnInit(): void {}
 

@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Hex } from "./Hex";
 import { BoardResources } from "./board-resources";
+import { BoardGeneratorService } from "./board-generator.service";
 
 // num rock tiles: 3
 // num wheat tiles: 4
@@ -37,7 +38,10 @@ export class MapDisplayService {
 
     private gameOption = "base";
 
-    constructor() {
+    hexListCurrentPos = -1;
+    hexList = [];
+
+    constructor(private boardGeneratorService: BoardGeneratorService) {
         this.boardResources = new BoardResources();
     }
 
@@ -47,6 +51,23 @@ export class MapDisplayService {
 
     generate(): void {
         console.log("map display service generate: " + this.gameOption);
+    }
+
+    getNextHex() {
+        if (this.hexList.length === 0) {
+            const hexes = this.boardGeneratorService.generateWithNoCollisions();
+            for (let i = 0; i < 5; i++) {
+                for (let j = 0; j < 5; j++) {
+                    if (hexes[i][j].resource !== "") {
+                        this.hexList.push(hexes[i][j]);
+                    }
+                }
+            }
+            this.hexListCurrentPos = 0;
+        }
+        const nextHex = this.hexList[this.hexListCurrentPos];
+        this.hexListCurrentPos++;
+        return nextHex;
     }
 
     getTile(row: number, col: number): string {

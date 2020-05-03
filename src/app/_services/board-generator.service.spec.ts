@@ -233,9 +233,9 @@ describe("BoardGeneratorService", () => {
             }
         }
         hexes[4][1] = new Hex(4, 1, 6, "rock");
-        hexes[3][1] = new Hex(3, 1, 8, "rock");
+        hexes[3][0] = new Hex(3, 0, 8, "rock");
         const hex1 = hexes[4][1];
-        const hex2 = hexes[3][1];
+        const hex2 = hexes[3][0];
         const isCollision = service.areHexesSixEightCollision(hex1, hex2);
         expect(isCollision).toBeTrue();
     });
@@ -267,27 +267,45 @@ describe("BoardGeneratorService", () => {
             }
         }
         hexes[2][2] = new Hex(2, 2, 6, "rock");
-        hexes[1][3] = new Hex(1, 3, 8, "rock");
+        hexes[1][2] = new Hex(1, 2, 8, "rock");
         const hex1 = hexes[2][2];
-        const hex2 = hexes[1][3];
+        const hex2 = hexes[1][2];
         const isCollision = service.areHexesSixEightCollision(hex1, hex2);
         expect(isCollision).toBeTrue();
     });
 
-    it("areHexesSixEightCollision should detect diagonal collision top right odd to even row", () => {
-        const gridSize = 5;
-        const hexes = new Array<Array<Hex>>();
-        for (let row = 0; row < gridSize; row++) {
-            hexes[row] = new Array<Hex>(gridSize);
-            for (let col = 0; col < gridSize; col++) {
-                hexes[row][col] = new Hex(-1, -1, -1, "");
-            }
-        }
-        hexes[3][4] = new Hex(3, 4, 6, "rock");
-        hexes[2][4] = new Hex(2, 4, 8, "rock");
-        const hex1 = hexes[3][4];
-        const hex2 = hexes[2][4];
-        const isCollision = service.areHexesSixEightCollision(hex1, hex2);
-        expect(isCollision).toBeTrue();
-    });
+    // it("areHexesSixEightCollision should detect diagonal collision top right odd to even row", () => {
+    //     const gridSize = 5;
+    //     const hexes = new Array<Array<Hex>>();
+    //     for (let row = 0; row < gridSize; row++) {
+    //         hexes[row] = new Array<Hex>(gridSize);
+    //         for (let col = 0; col < gridSize; col++) {
+    //             hexes[row][col] = new Hex(-1, -1, -1, "");
+    //         }
+    //     }
+    //     hexes[3][3] = new Hex(3, 3, 6, "rock");
+    //     hexes[2][4] = new Hex(2, 4, 8, "rock");
+    //     const hex1 = hexes[3][3];
+    //     const hex2 = hexes[2][4];
+    //     const isCollision = service.areHexesSixEightCollision(hex1, hex2);
+    //     expect(isCollision).toBeTrue();
+    // });
+
+    // it("generateWithNoCollisions board has collision it should generate brand new board", () => {
+    //     const originalHexes = service.generateWithNoCollisions();
+    //     // console.log(JSON.stringify(service.hexes, undefined, 2));
+    //     spyOn(service, "generate");
+    //     service.hexes[2][2].diceNumber = 6;
+    //     service.hexes[2][3].diceNumber = 8;
+    //     const regeneratedHexes = service.generateWithNoCollisions();
+    //     // console.log(JSON.stringify(service.hexes, undefined, 2));
+    //     // expect(regeneratedHexes === originalHexes).toBeFalse();
+    //     expect(service.generate).toHaveBeenCalled();
+    // });
+
+    // it("generateWithNoCollisions board has no collision should do nothing", () => {
+    //     const originalHexes = service.generateWithNoCollisions();
+    //     const regeneratedHexes = service.generateWithNoCollisions();
+    //     expect(regeneratedHexes === originalHexes).toBeTrue();
+    // });
 });

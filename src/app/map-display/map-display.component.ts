@@ -25,15 +25,16 @@ export class MapDisplayComponent implements OnInit, AfterViewInit {
     ngAfterViewInit() {
         console.log("ngAfterViewInit");
         this.drawBackground();
-        this.drawTiles();
+        this.drawHexes();
+        // this.drawTiles();
+        // this.drawNumbers();
         this.drawPorts();
-        this.drawNumbers();
         const timestampParagraph = this.renderer.createElement("p");
         this.renderer.setStyle(timestampParagraph, "font-family", "monospace");
         this.renderer.setStyle(timestampParagraph, "top", "50%");
         this.renderer.setStyle(timestampParagraph, "left", "2%");
         // const timestampText = this.renderer.createText(new Date().toISOString());
-        const timestampText = this.renderer.createText("v6 " + new Date().toISOString());
+        const timestampText = this.renderer.createText("v7 " + new Date().toISOString());
         this.renderer.appendChild(timestampParagraph, timestampText);
         this.renderer.appendChild(this.mainDiv.nativeElement, timestampParagraph);
     }
@@ -58,6 +59,109 @@ export class MapDisplayComponent implements OnInit, AfterViewInit {
         // this.backgroundHeight = Math.round(this.backgroundHeight);
         // console.log("background width (pixels):" + this.backgroundWidth);
         // console.log("background height (pixels):" + this.backgroundHeight);
+    }
+
+    drawHexes(): void {
+        const tileRow1TopOffset = 5;
+        const tileRow1LeftOffset = 31;
+        const numberRow1TopOffset = 8.75;
+        const numberRow1LeftOffset = 31.75;
+        for (let i = 0; i < 3; i++) {
+            const hexToDraw = this.mapDisplayService.getNextHex();
+            const tileLeftOffset = tileRow1LeftOffset + i * 17.25;
+            const tile = this.createTile(hexToDraw.resource, tileRow1TopOffset, tileLeftOffset);
+            this.renderer.appendChild(this.mainDiv.nativeElement, tile);
+            if (hexToDraw.diceNumber === -1) {
+                continue;
+            }
+            const numberLeftOffset = numberRow1LeftOffset + i * 15.2;
+            const numberImage = this.createNumber(
+                hexToDraw.diceNumber,
+                numberRow1TopOffset,
+                numberLeftOffset
+            );
+            this.renderer.appendChild(this.mainDiv.nativeElement, numberImage);
+        }
+        const tileRow2TopOffset = 12.75;
+        const tileRow2LeftOffset = 22.2;
+        const numberRow2TopOffset = 16.2;
+        const numberRow2LeftOffset = 24;
+        for (let i = 0; i < 4; i++) {
+            const hexToDraw = this.mapDisplayService.getNextHex();
+            const tileLeftOffset = tileRow2LeftOffset + i * 17.25;
+            const tile = this.createTile(hexToDraw.resource, tileRow2TopOffset, tileLeftOffset);
+            this.renderer.appendChild(this.mainDiv.nativeElement, tile);
+            if (hexToDraw.diceNumber === -1) {
+                continue;
+            }
+            const numberLeftOffset = numberRow2LeftOffset + i * 15.2;
+            const numberImage = this.createNumber(
+                hexToDraw.diceNumber,
+                numberRow2TopOffset,
+                numberLeftOffset
+            );
+            this.renderer.appendChild(this.mainDiv.nativeElement, numberImage);
+        }
+        const row3TopOffset = 20.4;
+        const row3LeftOffset = 13.65;
+        const numberRow3TopOffset = 24;
+        const numberRow3LeftOffset = 16.5;
+        for (let i = 0; i < 5; i++) {
+            const hexToDraw = this.mapDisplayService.getNextHex();
+            const leftOffset = row3LeftOffset + i * 17.25;
+            const tile = this.createTile(hexToDraw.resource, row3TopOffset, leftOffset);
+            this.renderer.appendChild(this.mainDiv.nativeElement, tile);
+            if (hexToDraw.diceNumber === -1) {
+                continue;
+            }
+            const numberLeftOffset = numberRow3LeftOffset + i * 15.2;
+            const numberImage = this.createNumber(
+                hexToDraw.diceNumber,
+                numberRow3TopOffset,
+                numberLeftOffset
+            );
+            this.renderer.appendChild(this.mainDiv.nativeElement, numberImage);
+        }
+        const tileRow4TopOffset = 28.15;
+        const tileRow4LeftOffset = 21.9;
+        const numberRow4TopOffset = 31.7;
+        const numberRow4LeftOffset = 24;
+        for (let i = 0; i < 4; i++) {
+            const hexToDraw = this.mapDisplayService.getNextHex();
+            const leftOffset = tileRow4LeftOffset + i * 17.25;
+            const tile = this.createTile(hexToDraw.resource, tileRow4TopOffset, leftOffset);
+            this.renderer.appendChild(this.mainDiv.nativeElement, tile);
+            if (hexToDraw.diceNumber === -1) {
+                continue;
+            }
+            const numberLeftOffset = numberRow4LeftOffset + i * 15.2;
+            const numberImage = this.createNumber(
+                hexToDraw.diceNumber,
+                numberRow4TopOffset,
+                numberLeftOffset
+            );
+            this.renderer.appendChild(this.mainDiv.nativeElement, numberImage);
+        }
+        const tileRow5TopOffset = 36;
+        const tileRow5LeftOffset = 30.4;
+        const numberRow5TopOffset = 39.5;
+        const numberRow5LeftOffset = 31.5;
+        for (let i = 0; i < 3; i++) {
+            const hexToDraw = this.mapDisplayService.getNextHex();
+            const leftOffset = tileRow5LeftOffset + i * 17.25;
+            const tile = this.createTile(hexToDraw.resource, tileRow5TopOffset, leftOffset);
+            this.renderer.appendChild(this.mainDiv.nativeElement, tile);
+            if (hexToDraw.diceNumber === -1) {
+                continue;
+            }
+            const numberLeftOffset = numberRow5LeftOffset + i * 15.2;
+            const numberImage = this.createNumber(
+                hexToDraw.diceNumber,
+                numberRow5TopOffset,
+                numberLeftOffset
+            );
+            this.renderer.appendChild(this.mainDiv.nativeElement, numberImage);
+        }
     }
 
     drawTiles(): void {

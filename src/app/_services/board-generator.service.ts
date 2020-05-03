@@ -8,32 +8,24 @@ import { Hex } from "./Hex";
     providedIn: "root",
 })
 export class BoardGeneratorService {
-    private tiles: Map<string, number>;
-    private diceNumbers: Map<number, number>;
+    hexes: Hex[][];
 
     constructor() {
-        this.tiles = new Map<string, number>();
-        this.tiles.set("rock", 3);
-        this.tiles.set("wheat", 4);
-        this.tiles.set("brick", 3);
-        this.tiles.set("tree", 4);
-        this.tiles.set("sheep", 4);
-        this.tiles.set("desert", 1);
-        this.diceNumbers = new Map<number, number>();
-        this.diceNumbers.set(2, 1);
-        this.diceNumbers.set(3, 2);
-        this.diceNumbers.set(4, 2);
-        this.diceNumbers.set(5, 2);
-        this.diceNumbers.set(6, 2);
-        this.diceNumbers.set(8, 2);
-        this.diceNumbers.set(9, 2);
-        this.diceNumbers.set(10, 2);
-        this.diceNumbers.set(11, 2);
-        this.diceNumbers.set(12, 1);
+        const gridSize = 5;
+        this.hexes = new Array<Array<Hex>>();
+        for (let row = 0; row < gridSize; row++) {
+            this.hexes[row] = new Array<Hex>(gridSize);
+            for (let col = 0; col < gridSize; col++) {
+                this.hexes[row][col] = new Hex(-1, -1, -1, "");
+            }
+        }
     }
 
     public areHexesSixEightCollision(hex1: Hex, hex2: Hex): boolean {
         if (hex1.diceNumber === -1 || hex2.diceNumber === -1) {
+            return false;
+        }
+        if (hex1.row === -1 || hex2.row === -1 || hex1.col === -1 || hex2.col === -1) {
             return false;
         }
         if (hex1.diceNumber !== 6 && hex1.diceNumber !== 8) {
@@ -64,24 +56,29 @@ export class BoardGeneratorService {
                 [0, 1],
             ],
         };
-        console.log("hex1: " + JSON.stringify(hex1));
-        console.log("hex2: " + JSON.stringify(hex2));
+        // console.log("hex1: " + JSON.stringify(hex1));
+        // console.log("hex2: " + JSON.stringify(hex2));
         const isOddRow = hex1.row % 2 === 1;
         let neighborDirections: number[][];
         if (isOddRow) {
-            // hex1col = hex1col + 1;
-            console.log("is odd row");
+            // console.log("is odd row");
             neighborDirections = oddrDirections.odd;
         } else {
-            console.log("is even row");
+            // console.log("is even row");
             neighborDirections = oddrDirections.even;
         }
-        console.log("hex1 coords: " + hex1.row + "," + hex1.col);
+        // console.log("hex1 coords: " + hex1.row + "," + hex1.col);
         for (const direction of neighborDirections) {
             const neighborRow = hex1.row + direction[0];
             const neighborCol = hex1.col + direction[1];
-            console.log("checking neighbor coords: " + neighborRow + "," + neighborCol);
+            // console.log("checking neighbor coords: " + neighborRow + "," + neighborCol);
             if (neighborRow === hex2.row && neighborCol === hex2.col) {
+                console.log(
+                    "!!! COLLISION !!! between these two hexes: " +
+                        JSON.stringify(hex1) +
+                        " and " +
+                        JSON.stringify(hex2)
+                );
                 return true;
             }
         }
@@ -89,58 +86,154 @@ export class BoardGeneratorService {
     }
 
     public generate(): Hex[][] {
+        // const tiles: Map<string, number>;
+        // const diceNumbers: Map<number, number>;
+
+        const tiles = new Map<string, number>();
+        tiles.set("rock", 3);
+        tiles.set("wheat", 4);
+        tiles.set("brick", 3);
+        tiles.set("tree", 4);
+        tiles.set("sheep", 4);
+        tiles.set("desert", 1);
+        const diceNumbers = new Map<number, number>();
+        diceNumbers.set(2, 1);
+        diceNumbers.set(3, 2);
+        diceNumbers.set(4, 2);
+        diceNumbers.set(5, 2);
+        diceNumbers.set(6, 2);
+        diceNumbers.set(8, 2);
+        diceNumbers.set(9, 2);
+        diceNumbers.set(10, 2);
+        diceNumbers.set(11, 2);
+        diceNumbers.set(12, 1);
+
         const gridSize = 5;
-        const hexes = new Array<Array<Hex>>();
+        const generatedHexes = new Array<Array<Hex>>();
         for (let row = 0; row < gridSize; row++) {
-            hexes[row] = new Array<Hex>(gridSize);
+            generatedHexes[row] = new Array<Hex>(gridSize);
             for (let col = 0; col < gridSize; col++) {
-                hexes[row][col] = new Hex(-1, -1, -1, "");
+                generatedHexes[row][col] = new Hex(-1, -1, -1, "");
             }
         }
         // assign resources
         for (let row = 0; row < gridSize; row++) {
             for (let col = 0; col < gridSize; col++) {
                 if (this.shouldCreateHexForPosition(row, col)) {
-                    hexes[row][col].row = row;
-                    hexes[row][col].col = col;
-                    hexes[row][col].resource = this.assignResource();
+                    generatedHexes[row][col].row = row;
+                    generatedHexes[row][col].col = col;
+                    generatedHexes[row][col].resource = this.assignResource(tiles);
                 }
             }
         }
         // assign dice numbers
         for (let row = 0; row < gridSize; row++) {
             for (let col = 0; col < gridSize; col++) {
-                if (hexes[row][col].resource !== "" && hexes[row][col].resource !== "desert") {
-                    hexes[row][col].diceNumber = this.assignDiceNumber();
+                if (
+                    generatedHexes[row][col].resource !== "" &&
+                    generatedHexes[row][col].resource !== "desert"
+                ) {
+                    generatedHexes[row][col].diceNumber = this.assignDiceNumber(diceNumbers);
                 }
             }
         }
-        return hexes;
+        this.hexes = generatedHexes;
+        return generatedHexes;
     }
 
-    private assignResource(): string {
-        const remainingTileResources = new Set<string>();
-        this.tiles.forEach((numRemaining, tileResource) => {
+    public generateWithNoCollisions(): Hex[][] {
+        // console.log("generateWithNoCollisions " + JSON.stringify(this.hexes, undefined, 2));
+        if (!this.hexesHaveAlreadyBeenGenerated()) {
+            console.log("generateWithNoCollisions: generating new board");
+            this.generate();
+            // console.log(JSON.stringify(this.hexes, undefined, 2));
+        }
+        // let numTimesRegenerated = 0;
+        while (this.areThereAnyCollisions(this.hexes)) {
+            console.log("generateWithNoCollisions: detected board collision. regenerating...");
+            this.generate();
+            // numTimesRegenerated++;
+            // if (numTimesRegenerated > 9) {
+                // console.log("tried to regenerate too many times. giving up.");
+                // break;
+            // }
+            // console.log(JSON.stringify(this.hexes, undefined, 2));
+        }
+        console.log("generateWithNoCollisions: no collisions, good to go");
+        return this.hexes;
+    }
+
+    private hexesHaveAlreadyBeenGenerated(): boolean {
+        return this.hexes[2][2].resource !== "";
+    }
+
+    private areThereAnyCollisions(hexes: Hex[][]): boolean {
+        for (let i = 0; i < hexes.length; i++) {
+            for (let j = 0; j < hexes[i].length; j++) {
+                if (this.checkHexForCollisions(hexes[i][j], hexes)) {
+                    return true;
+                }
+            }
+        }
+        // this.hexes.forEach((row) => {
+        //     row.forEach((hex) => {
+        //         if (this.checkHexForCollisions(hex)) {
+        //             return true;
+        //         }
+        //     });
+        // });
+        return false;
+    }
+
+    private checkHexForCollisions(hex1: Hex, hexes: Hex[][]): boolean {
+        for (let i = 0; i < hexes.length; i++) {
+            for (let j = 0; j < hexes[i].length; j++) {
+                if (this.areHexesSixEightCollision(hex1, hexes[i][j])) {
+                    return true;
+                }
+            }
+        }
+        // this.hexes.forEach((row) => {
+        //     row.forEach((hex2) => {
+        //         if (this.areHexesSixEightCollision(hex1, hex2)) {
+        //             return true;
+        //         }
+        //     });
+        // });
+        return false;
+    }
+
+    private assignResource(tiles: Map<string, number>): string {
+        // const remainingTileResources = new Set<string>();
+        const remainingTileResources = [];
+        tiles.forEach((numRemaining, tileResource) => {
             if (numRemaining > 0) {
-                remainingTileResources.add(tileResource);
+                // remainingTileResources.add(tileResource);
+                remainingTileResources.push(tileResource);
             }
         });
-        const randomIndex = Math.floor(Math.random() * remainingTileResources.size);
-        const assignedResource = [...remainingTileResources][randomIndex];
-        this.tiles.set(assignedResource, this.tiles.get(assignedResource) - 1);
+        // const randomIndex = Math.floor(Math.random() * remainingTileResources.size);
+        const randomIndex = Math.floor(Math.random() * remainingTileResources.length);
+        // const assignedResource = [...remainingTileResources][randomIndex];
+        const assignedResource = remainingTileResources[randomIndex];
+        tiles.set(assignedResource, tiles.get(assignedResource) - 1);
         return assignedResource;
     }
 
-    private assignDiceNumber(): number {
-        const remainingDiceNumbers = new Set<number>();
-        this.diceNumbers.forEach((numRemaining, diceNumber) => {
+    private assignDiceNumber(diceNumbers: Map<number, number>): number {
+        // const remainingDiceNumbers = new Set<number>();
+        const remainingDiceNumbers = [];
+        diceNumbers.forEach((numRemaining, diceNumber) => {
             if (numRemaining > 0) {
-                remainingDiceNumbers.add(diceNumber);
+                // remainingDiceNumbers.add(diceNumber);
+                remainingDiceNumbers.push(diceNumber);
             }
         });
-        const randomIndex = Math.floor(Math.random() * remainingDiceNumbers.size);
-        const assignedDiceNumber = [...remainingDiceNumbers][randomIndex];
-        this.diceNumbers.set(assignedDiceNumber, this.diceNumbers.get(assignedDiceNumber) - 1);
+        // const randomIndex = Math.floor(Math.random() * remainingDiceNumbers.size);
+        const randomIndex = Math.floor(Math.random() * remainingDiceNumbers.length);
+        // const assignedDiceNumber = [...remainingDiceNumbers][randomIndex];
+        const assignedDiceNumber = remainingDiceNumbers[randomIndex];
+        diceNumbers.set(assignedDiceNumber, diceNumbers.get(assignedDiceNumber) - 1);
         return assignedDiceNumber;
     }
 

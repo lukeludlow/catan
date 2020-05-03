@@ -53,7 +53,7 @@ export class MapDisplayService {
         console.log("map display service generate: " + this.gameOption);
     }
 
-    getNextHex() {
+    getNextHex(): Hex {
         if (this.hexList.length === 0) {
             const hexes = this.boardGeneratorService.generateWithNoCollisions();
             for (let i = 0; i < 5; i++) {

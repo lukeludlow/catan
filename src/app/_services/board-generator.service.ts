@@ -4,6 +4,31 @@ import { Hex } from "./Hex";
 // https://www.redblobgames.com/grids/hexagons/
 // https://www.redblobgames.com/grids/hexagons/implementation.html
 
+// num rock tiles: 3
+// num wheat tiles: 4
+// num brick tiles: 3
+// num tree tiles: 4
+// num sheep tiles: 4
+// num desert tiles: 1
+
+// num 2s: 1 (1dot)
+// num 3s: 2 (2dot)
+// num 4s: 2 (3dot)
+// num 5s: 2 (4dot)
+// num 6s: 2 (5dot)
+// num 8s: 2 (5dot)
+// num 9s: 2 (4dot)
+// num 10s: 2 (3dot)
+// num 11s: 2 (2dot)
+// num 12s: 1 (1dot)
+
+// num rock ports: 1
+// num wheat ports: 1
+// num tree ports: 1
+// num sheep ports: 1
+// num brick ports: 1
+// num port slots needed (the question marks): 4
+
 @Injectable({
     providedIn: "root",
 })
@@ -19,6 +44,20 @@ export class BoardGeneratorService {
                 this.hexes[row][col] = new Hex(-1, -1, -1, "");
             }
         }
+    }
+
+    public generatePorts(): string[] {
+        const ports = ["rock", "wheat", "brick", "tree", "sheep"];
+        // shuffle using fisher-yates algorithm
+        const startingIndex = ports.length - 1;
+        for (let i = startingIndex; i > 0; i--) {
+            const j = Math.floor(Math.random() * i);
+            const temp = ports[i];
+            ports[i] = ports[j];
+            ports[j] = temp;
+        }
+        ports.pop();
+        return ports;
     }
 
     public areHexesSixEightCollision(hex1: Hex, hex2: Hex): boolean {
@@ -154,8 +193,8 @@ export class BoardGeneratorService {
             this.generate();
             // numTimesRegenerated++;
             // if (numTimesRegenerated > 9) {
-                // console.log("tried to regenerate too many times. giving up.");
-                // break;
+            // console.log("tried to regenerate too many times. giving up.");
+            // break;
             // }
             // console.log(JSON.stringify(this.hexes, undefined, 2));
         }

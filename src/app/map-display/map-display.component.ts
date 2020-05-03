@@ -1,5 +1,4 @@
 import { Component, OnInit, Renderer2, ElementRef, ViewChild, AfterViewInit } from "@angular/core";
-import { MapDisplayService } from "../_services/map-display.service";
 import { Hex } from "../_services/Hex";
 import { BoardGeneratorService } from "../_services/board-generator.service";
 
@@ -13,7 +12,6 @@ export class MapDisplayComponent implements OnInit, AfterViewInit {
     @ViewChild("mainDiv") mainDiv: ElementRef;
 
     constructor(
-        private mapDisplayService: MapDisplayService,
         private renderer: Renderer2, // private el: ElementRef
         private boardGeneratorService: BoardGeneratorService
     ) {}
@@ -26,7 +24,8 @@ export class MapDisplayComponent implements OnInit, AfterViewInit {
         this.drawBackground();
         this.drawHexResources(hexes);
         this.drawDiceNumbers(hexes);
-        this.drawPorts();
+        const ports: string[] = this.boardGeneratorService.generatePorts();
+        this.drawPorts(ports);
         this.drawVersionInfo();
     }
 
@@ -112,18 +111,18 @@ export class MapDisplayComponent implements OnInit, AfterViewInit {
         return tileImage;
     }
 
-    drawPorts(): void {
-        const port1 = this.createPort(this.mapDisplayService.getPort(), 1.75, 29.5, 160);
+    drawPorts(ports: string[]): void {
+        const port1 = this.createPortImage(ports[0], 1.75, 29.5, 160);
         this.renderer.appendChild(this.mainDiv.nativeElement, port1);
-        const port2 = this.createPort(this.mapDisplayService.getPort(), 46, 27.5, 45);
+        const port2 = this.createPortImage(ports[1], 46, 27.5, 45);
         this.renderer.appendChild(this.mainDiv.nativeElement, port2);
-        const port3 = this.createPort(this.mapDisplayService.getPort(), 46.4, 61, -30);
+        const port3 = this.createPortImage(ports[2], 46.4, 61, -30);
         this.renderer.appendChild(this.mainDiv.nativeElement, port3);
-        const port4 = this.createPort(this.mapDisplayService.getPort(), 24.25, 103, -75);
+        const port4 = this.createPortImage(ports[3], 24.25, 103, -75);
         this.renderer.appendChild(this.mainDiv.nativeElement, port4);
     }
 
-    createPort(resource: string, top: number, left: number, rotation: number): any {
+    createPortImage(resource: string, top: number, left: number, rotation: number): any {
         const portImage = this.renderer.createElement("img");
         this.renderer.setAttribute(portImage, "src", `assets/images/port_${resource}.png`);
         this.renderer.setStyle(portImage, "position", "absolute");

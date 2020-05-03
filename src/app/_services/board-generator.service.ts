@@ -279,18 +279,18 @@ export class BoardGeneratorService {
     }
 
     private assignDiceNumber(diceNumbers: Map<number, number>): number {
-        // const remainingDiceNumbers = new Set<number>();
-        const remainingDiceNumbers = [];
+        const remainingDiceNumbers = new Set<number>();
+        // const remainingDiceNumbers = [];
         diceNumbers.forEach((numRemaining, diceNumber) => {
             if (numRemaining > 0) {
-                // remainingDiceNumbers.add(diceNumber);
-                remainingDiceNumbers.push(diceNumber);
+                remainingDiceNumbers.add(diceNumber);
+                // remainingDiceNumbers.push(diceNumber);
             }
         });
-        // const randomIndex = Math.floor(Math.random() * remainingDiceNumbers.size);
-        const randomIndex = Math.floor(Math.random() * remainingDiceNumbers.length);
-        // const assignedDiceNumber = [...remainingDiceNumbers][randomIndex];
-        const assignedDiceNumber = remainingDiceNumbers[randomIndex];
+        const randomIndex = Math.floor(Math.random() * remainingDiceNumbers.size);
+        // const randomIndex = Math.floor(Math.random() * remainingDiceNumbers.length);
+        const assignedDiceNumber = [...remainingDiceNumbers][randomIndex];
+        // const assignedDiceNumber = remainingDiceNumbers[randomIndex];
         diceNumbers.set(assignedDiceNumber, diceNumbers.get(assignedDiceNumber) - 1);
         return assignedDiceNumber;
     }

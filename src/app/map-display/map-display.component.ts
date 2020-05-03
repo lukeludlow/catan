@@ -39,7 +39,7 @@ export class MapDisplayComponent implements OnInit, AfterViewInit {
         this.renderer.setStyle(timestampParagraph, "font-family", "monospace");
         this.renderer.setStyle(timestampParagraph, "top", "50%");
         this.renderer.setStyle(timestampParagraph, "left", "2%");
-        const timestampText = this.renderer.createText("v1.9 " + new Date().toISOString());
+        const timestampText = this.renderer.createText("v1.10 " + new Date().toISOString());
         this.renderer.appendChild(timestampParagraph, timestampText);
         this.renderer.appendChild(this.versionInfoDiv.nativeElement, timestampParagraph);
     }

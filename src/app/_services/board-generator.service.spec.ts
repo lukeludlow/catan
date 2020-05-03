@@ -164,9 +164,9 @@ describe("BoardGeneratorService", () => {
                 hexes[row][col] = new Hex(-1, -1, -1, "");
             }
         }
-        hexes[0][2] = new Hex(0, 2, 6, "rock");
-        hexes[1][2] = new Hex(1, 2, 8, "rock");
-        const hex1 = hexes[0][2];
+        hexes[0][3] = new Hex(0, 3, 6, "rock");
+        hexes[1][2] = new Hex(1, 2, 8, "brick");
+        const hex1 = hexes[0][3];
         const hex2 = hexes[1][2];
         const isCollision = service.areHexesSixEightCollision(hex1, hex2);
         expect(isCollision).toBeTrue();
@@ -182,9 +182,9 @@ describe("BoardGeneratorService", () => {
             }
         }
         hexes[1][2] = new Hex(1, 2, 6, "rock");
-        hexes[2][1] = new Hex(2, 1, 8, "rock");
+        hexes[2][2] = new Hex(2, 2, 8, "rock");
         const hex1 = hexes[1][2];
-        const hex2 = hexes[2][1];
+        const hex2 = hexes[2][2];
         const isCollision = service.areHexesSixEightCollision(hex1, hex2);
         expect(isCollision).toBeTrue();
     });
@@ -215,9 +215,9 @@ describe("BoardGeneratorService", () => {
                 hexes[row][col] = new Hex(-1, -1, -1, "");
             }
         }
-        hexes[1][4] = new Hex(1, 4, 6, "rock");
+        hexes[1][3] = new Hex(1, 3, 6, "rock");
         hexes[2][4] = new Hex(2, 4, 8, "rock");
-        const hex1 = hexes[1][4];
+        const hex1 = hexes[1][3];
         const hex2 = hexes[2][4];
         const isCollision = service.areHexesSixEightCollision(hex1, hex2);
         expect(isCollision).toBeTrue();
@@ -274,22 +274,28 @@ describe("BoardGeneratorService", () => {
         expect(isCollision).toBeTrue();
     });
 
-    // it("areHexesSixEightCollision should detect diagonal collision top right odd to even row", () => {
-    //     const gridSize = 5;
-    //     const hexes = new Array<Array<Hex>>();
-    //     for (let row = 0; row < gridSize; row++) {
-    //         hexes[row] = new Array<Hex>(gridSize);
-    //         for (let col = 0; col < gridSize; col++) {
-    //             hexes[row][col] = new Hex(-1, -1, -1, "");
-    //         }
-    //     }
-    //     hexes[3][3] = new Hex(3, 3, 6, "rock");
-    //     hexes[2][4] = new Hex(2, 4, 8, "rock");
-    //     const hex1 = hexes[3][3];
-    //     const hex2 = hexes[2][4];
-    //     const isCollision = service.areHexesSixEightCollision(hex1, hex2);
-    //     expect(isCollision).toBeTrue();
-    // });
+    it("areHexesSixEightCollision should detect diagonal collision top right odd to even row", () => {
+        const gridSize = 5;
+        const hexes = new Array<Array<Hex>>();
+        for (let row = 0; row < gridSize; row++) {
+            hexes[row] = new Array<Hex>(gridSize);
+            for (let col = 0; col < gridSize; col++) {
+                hexes[row][col] = new Hex(-1, -1, -1, "");
+            }
+        }
+        hexes[1][2] = new Hex(1, 2, 6, "rock");
+        hexes[0][3] = new Hex(0, 3, 8, "rock");
+        const hex1 = hexes[1][2];
+        const hex2 = hexes[0][3];
+        const isCollision = service.areHexesSixEightCollision(hex1, hex2);
+        expect(isCollision).toBeTrue();
+    });
+
+    it("generateWithNoCollisions should call generate", () => {
+        spyOn(service, "generate");
+        service.generateWithNoCollisions();
+        expect(service.generate).toHaveBeenCalled();
+    });
 
     // it("generateWithNoCollisions board has collision it should generate brand new board", () => {
     //     const originalHexes = service.generateWithNoCollisions();

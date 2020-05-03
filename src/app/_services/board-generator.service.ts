@@ -78,7 +78,7 @@ export class BoardGeneratorService {
             return false;
         }
         const oddrDirections = {
-            odd: [
+            even: [
                 [1, 0],
                 [1, -1],
                 [0, -1],
@@ -86,7 +86,7 @@ export class BoardGeneratorService {
                 [0, 1],
                 [1, 1],
             ],
-            even: [
+            odd: [
                 [1, 0],
                 [0, -1],
                 [-1, -1],
@@ -95,6 +95,16 @@ export class BoardGeneratorService {
                 [0, 1],
             ],
         };
+        const allDirections = [
+            [1, 1],
+            [1, 0],
+            [1, -1],
+            [0, 1],
+            [0, -1],
+            [-1, 1],
+            [-1, 0],
+            [-1, -1],
+        ];
         // console.log("hex1: " + JSON.stringify(hex1));
         // console.log("hex2: " + JSON.stringify(hex2));
         const isOddRow = hex1.row % 2 === 1;
@@ -107,17 +117,22 @@ export class BoardGeneratorService {
             neighborDirections = oddrDirections.even;
         }
         // console.log("hex1 coords: " + hex1.row + "," + hex1.col);
-        for (const direction of neighborDirections) {
+        for (const direction of allDirections) {
             const neighborRow = hex1.row + direction[0];
             const neighborCol = hex1.col + direction[1];
+            // if (isOddRow) {
+            // hex1.col = hex1.col - 1;
+            // } else {
+            // hex1.col = hex1.col + 1;
+            // }
             // console.log("checking neighbor coords: " + neighborRow + "," + neighborCol);
             if (neighborRow === hex2.row && neighborCol === hex2.col) {
-                console.log(
-                    "!!! COLLISION !!! between these two hexes: " +
-                        JSON.stringify(hex1) +
-                        " and " +
-                        JSON.stringify(hex2)
-                );
+                // console.log(
+                //     "!!! COLLISION !!! between these two hexes: " +
+                //         JSON.stringify(hex1) +
+                //         " and " +
+                //         JSON.stringify(hex2)
+                // );
                 return true;
             }
         }
@@ -187,18 +202,22 @@ export class BoardGeneratorService {
             this.generate();
             // console.log(JSON.stringify(this.hexes, undefined, 2));
         }
-        // let numTimesRegenerated = 0;
+        let numTimesRegenerated = 0;
         while (this.areThereAnyCollisions(this.hexes)) {
             console.log("generateWithNoCollisions: detected board collision. regenerating...");
             this.generate();
-            // numTimesRegenerated++;
+            numTimesRegenerated++;
             // if (numTimesRegenerated > 9) {
             // console.log("tried to regenerate too many times. giving up.");
             // break;
             // }
             // console.log(JSON.stringify(this.hexes, undefined, 2));
         }
-        console.log("generateWithNoCollisions: no collisions, good to go");
+        console.log(
+            "generateWithNoCollisions: good to go. it took " +
+                numTimesRegenerated +
+                " tries to generate a map with no collisions."
+        );
         return this.hexes;
     }
 

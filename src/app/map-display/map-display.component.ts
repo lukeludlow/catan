@@ -9,17 +9,21 @@ import { BoardGeneratorService } from "../_services/board-generator.service";
 })
 export class MapDisplayComponent implements OnInit, AfterViewInit {
     private widthHeightRatio = 878 / 1000;
+    private initialTopOffset = 10;
     @ViewChild("mainDiv") mainDiv: ElementRef;
+    @ViewChild("versionInfoDiv") versionInfoDiv: ElementRef;
 
     constructor(
         private renderer: Renderer2, // private el: ElementRef
         private boardGeneratorService: BoardGeneratorService
     ) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        console.log("map display component ngOnInit");
+    }
 
     ngAfterViewInit() {
-        console.log("ngAfterViewInit");
+        console.log("map display componenet ngAfterViewInit");
         const hexes: Hex[][] = this.boardGeneratorService.generateWithNoCollisions();
         this.drawBackground();
         this.drawHexResources(hexes);
@@ -37,14 +41,14 @@ export class MapDisplayComponent implements OnInit, AfterViewInit {
         this.renderer.setStyle(timestampParagraph, "left", "2%");
         const timestampText = this.renderer.createText("v1.9 " + new Date().toISOString());
         this.renderer.appendChild(timestampParagraph, timestampText);
-        this.renderer.appendChild(this.mainDiv.nativeElement, timestampParagraph);
+        this.renderer.appendChild(this.versionInfoDiv.nativeElement, timestampParagraph);
     }
 
     drawBackground(): void {
         const backgroundImage = this.renderer.createElement("img");
         this.renderer.setAttribute(backgroundImage, "src", "assets/images/background.png");
         this.renderer.setStyle(backgroundImage, "position", "absolute");
-        this.renderer.setStyle(backgroundImage, "top", "15%");
+        this.renderer.setStyle(backgroundImage, "top", `${this.initialTopOffset}%`);
         this.renderer.setStyle(backgroundImage, "left", "0%");
         this.renderer.setStyle(backgroundImage, "width", "100%");
         this.renderer.appendChild(this.mainDiv.nativeElement, backgroundImage);
@@ -52,7 +56,7 @@ export class MapDisplayComponent implements OnInit, AfterViewInit {
     }
 
     drawHexResources(hexes: Hex[][]): void {
-        const topRowOffsetStart = 5 + 15;
+        const topRowOffsetStart = 5 + this.initialTopOffset;
         const topRowOffsetIncrement = 7.75;
         const leftRowOffsetStart = 11.85;
         const leftRowOffsetIncrement = 7.5;
@@ -77,7 +81,7 @@ export class MapDisplayComponent implements OnInit, AfterViewInit {
     }
 
     drawDiceNumbers(hexes: Hex[][]): void {
-        const topRowOffsetStart = 8.75 + 15;
+        const topRowOffsetStart = 8.75 + this.initialTopOffset;
         const topRowOffsetIncrement = 7.75;
         const leftRowOffsetStart = 16.5;
         const leftRowOffsetIncrement = 7.5;
@@ -126,7 +130,7 @@ export class MapDisplayComponent implements OnInit, AfterViewInit {
         const portImage = this.renderer.createElement("img");
         this.renderer.setAttribute(portImage, "src", `assets/images/port_${resource}.png`);
         this.renderer.setStyle(portImage, "position", "absolute");
-        const topCoord = top + 15;
+        const topCoord = top + this.initialTopOffset;
         const leftCoord = left * this.widthHeightRatio;
         this.renderer.setStyle(portImage, "top", `${topCoord}%`);
         this.renderer.setStyle(portImage, "left", `${leftCoord}%`);
@@ -158,7 +162,8 @@ export class MapDisplayComponent implements OnInit, AfterViewInit {
         return circleDiv;
     }
 
-    generate(): void {
-        console.log("map display component generate");
+    reload(): void {
+        console.log("map display component reload");
+        location.reload();
     }
 }

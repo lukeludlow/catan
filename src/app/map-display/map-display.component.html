@@ -1,3 +1,12 @@
-<div #mainDiv class="container" width="device-width">
+<div #mainDiv class="container" width="device-width"></div>
+<div #buttonDiv class="container" style="position: absolute; top: 80%; text-align: center;">
+    <button type="button" class="btn btn-success btn-lg" (click)="reload()" onclick="this.blur()">
+        regenerate
+    </button>
 </div>
+<div
+    #versionInfoDiv
+    class="container"
+    style="position: absolute; top: 95%; text-align: center;"
+></div>
 <!-- <meta #mainDiv name="viewport" content="width=device-width, initial-scale=1"/> -->

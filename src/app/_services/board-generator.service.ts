@@ -47,7 +47,7 @@ export class BoardGeneratorService {
     }
 
     public generatePorts(): string[] {
-        const ports = ["rock", "wheat", "brick", "tree", "sheep"];
+        const ports = ["rock", "wheat", "brick", "tree", "sheep", "any", "any", "any", "any"];
         // shuffle using fisher-yates algorithm
         const startingIndex = ports.length - 1;
         for (let i = startingIndex; i > 0; i--) {
@@ -56,7 +56,6 @@ export class BoardGeneratorService {
             ports[i] = ports[j];
             ports[j] = temp;
         }
-        ports.pop();
         return ports;
     }
 
@@ -204,7 +203,7 @@ export class BoardGeneratorService {
         }
         let numTimesRegenerated = 0;
         while (this.areThereAnyCollisions(this.hexes)) {
-            console.log("generateWithNoCollisions: detected board collision. regenerating...");
+            // console.log("generateWithNoCollisions: detected board collision. regenerating...");
             this.generate();
             numTimesRegenerated++;
             // if (numTimesRegenerated > 9) {

@@ -5,18 +5,14 @@ import { ButtonsModule } from "ngx-bootstrap/buttons";
 import { RouterModule } from "@angular/router";
 
 import { AppComponent } from "./app.component";
-import { CatanComponent } from "./catan/catan.component";
-import { MapDisplayComponent } from "./map-display/map-display.component";
+import { HomeComponent } from "./home/home.component";
+import { BaseGameComponent } from "./base-game/base-game.component";
 import { appRoutes } from "./routes";
+import { SeafarersComponent } from "./seafarers/seafarers.component";
 
 @NgModule({
-    declarations: [AppComponent, CatanComponent, MapDisplayComponent],
-    imports: [
-        BrowserModule,
-        FormsModule,
-        ButtonsModule.forRoot(),
-        RouterModule.forRoot(appRoutes),
-    ],
+    declarations: [AppComponent, HomeComponent, BaseGameComponent, SeafarersComponent],
+    imports: [BrowserModule, FormsModule, ButtonsModule.forRoot(), RouterModule.forRoot(appRoutes)],
     providers: [],
     bootstrap: [AppComponent],
 })

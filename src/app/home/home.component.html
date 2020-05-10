@@ -1,5 +1,4 @@
 <div class="container">
-    <!-- <h3>catan random map generator</h3> -->
     <legend>catan random map generator</legend>
     <fieldset class="form-group">
         <div class="form-check">
@@ -10,10 +9,10 @@
                     class="form-check-input"
                     name="optionsRadios"
                     id="optionsRadios1"
-                    value="base"
+                    value="basegame"
                     checked=""
                 />
-                base game (3-4 players)
+                base game
             </label>
         </div>
         <div class="form-check">
@@ -26,18 +25,12 @@
                     id="optionsRadios2"
                     value="seafarers"
                 />
-                seafarers (3-4 players)
+                seafarers
             </label>
         </div>
     </fieldset>
-    <button
-        type="button"
-        class="btn btn-success"
-        (click)="generate()"
-        onclick="this.blur()"
-    >
+    <button type="button" class="btn btn-success" (click)="generate()" onclick="this.blur()">
         generate
     </button>
     <br />
 </div>
-<!-- <app-map-display></app-map-display> -->

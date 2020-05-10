@@ -1,9 +1,11 @@
 import { Routes } from "@angular/router";
-import { CatanComponent } from "./catan/catan.component";
-import { MapDisplayComponent } from "./map-display/map-display.component";
+import { HomeComponent } from "./home/home.component";
+import { BaseGameComponent } from "./base-game/base-game.component";
+import { SeafarersComponent } from "./seafarers/seafarers.component";
 
 export const appRoutes: Routes = [
-    { path: "", component: CatanComponent, pathMatch: "full" },
-    { path: "map", component: MapDisplayComponent, pathMatch: "full" },
-    { path: "**", redirectTo: "", pathMatch: "full" },
+    { path: "home", component: HomeComponent, pathMatch: "full" },
+    { path: "basegame", component: BaseGameComponent, pathMatch: "full" },
+    { path: "seafarers", component: SeafarersComponent, pathMatch: "full" },
+    { path: "**", redirectTo: "home", pathMatch: "full" },
 ];

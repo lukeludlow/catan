@@ -5,11 +5,11 @@ import { BoardGeneratorService } from "../_services/board-generator.service";
 // developer tools, responsive, 414x705
 
 @Component({
-    selector: "app-map-display",
-    templateUrl: "./map-display.component.html",
-    styleUrls: ["./map-display.component.css"],
+    selector: "app-base-game",
+    templateUrl: "./base-game.component.html",
+    styleUrls: ["./base-game.component.css"],
 })
-export class MapDisplayComponent implements OnInit, AfterViewInit {
+export class BaseGameComponent implements OnInit, AfterViewInit {
     private widthHeightRatio = 878 / 1000;
     initialTopOffset = 10;
     @ViewChild("mapDiv") mapDiv: ElementRef;

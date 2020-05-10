@@ -2,4 +2,4 @@
 
 init 
 
-ng deploy --base-href=/catan-generator/
+ng deploy --base-href=/catan/

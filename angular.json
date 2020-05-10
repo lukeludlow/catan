@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "catan-generator": {
+    "catan": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/catan-generator",
+            "outputPath": "dist/catan",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -62,18 +62,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "catan-generator:build"
+            "browserTarget": "catan:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "catan-generator:build:production"
+              "browserTarget": "catan:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "catan-generator:build"
+            "browserTarget": "catan:build"
           }
         },
         "test": {
@@ -110,11 +110,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "catan-generator:serve"
+            "devServerTarget": "catan:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "catan-generator:serve:production"
+              "devServerTarget": "catan:serve:production"
             }
           }
         },
@@ -125,5 +125,5 @@
       }
     }
   },
-  "defaultProject": "catan-generator"
+  "defaultProject": "catan"
 }

@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Hex } from "./Hex";
+import { BasicHex } from "./BasicHex";
 
 // https://www.redblobgames.com/grids/hexagons/
 // https://www.redblobgames.com/grids/hexagons/implementation.html
@@ -33,15 +33,15 @@ import { Hex } from "./Hex";
     providedIn: "root",
 })
 export class BoardGeneratorService {
-    hexes: Hex[][];
+    hexes: BasicHex[][];
 
     constructor() {
         const gridSize = 5;
-        this.hexes = new Array<Array<Hex>>();
+        this.hexes = new Array<Array<BasicHex>>();
         for (let row = 0; row < gridSize; row++) {
-            this.hexes[row] = new Array<Hex>(gridSize);
+            this.hexes[row] = new Array<BasicHex>(gridSize);
             for (let col = 0; col < gridSize; col++) {
-                this.hexes[row][col] = new Hex(-1, -1, -1, "");
+                this.hexes[row][col] = new BasicHex(-1, -1, -1, "");
             }
         }
     }
@@ -59,7 +59,7 @@ export class BoardGeneratorService {
         return ports;
     }
 
-    public areHexesSixEightCollision(hex1: Hex, hex2: Hex): boolean {
+    public areHexesSixEightCollision(hex1: BasicHex, hex2: BasicHex): boolean {
         if (hex1.diceNumber === -1 || hex2.diceNumber === -1) {
             return false;
         }
@@ -138,7 +138,7 @@ export class BoardGeneratorService {
         return false;
     }
 
-    public generate(): Hex[][] {
+    public generate(): BasicHex[][] {
         // const tiles: Map<string, number>;
         // const diceNumbers: Map<number, number>;
 
@@ -162,11 +162,11 @@ export class BoardGeneratorService {
         diceNumbers.set(12, 1);
 
         const gridSize = 5;
-        const generatedHexes = new Array<Array<Hex>>();
+        const generatedHexes = new Array<Array<BasicHex>>();
         for (let row = 0; row < gridSize; row++) {
-            generatedHexes[row] = new Array<Hex>(gridSize);
+            generatedHexes[row] = new Array<BasicHex>(gridSize);
             for (let col = 0; col < gridSize; col++) {
-                generatedHexes[row][col] = new Hex(-1, -1, -1, "");
+                generatedHexes[row][col] = new BasicHex(-1, -1, -1, "");
             }
         }
         // assign resources
@@ -194,7 +194,7 @@ export class BoardGeneratorService {
         return generatedHexes;
     }
 
-    public generateWithNoCollisions(): Hex[][] {
+    public generateWithNoCollisions(): BasicHex[][] {
         // console.log("generateWithNoCollisions " + JSON.stringify(this.hexes, undefined, 2));
         if (!this.hexesHaveAlreadyBeenGenerated()) {
             console.log("generateWithNoCollisions: generating new board");
@@ -224,7 +224,7 @@ export class BoardGeneratorService {
         return this.hexes[2][2].resource !== "";
     }
 
-    private areThereAnyCollisions(hexes: Hex[][]): boolean {
+    private areThereAnyCollisions(hexes: BasicHex[][]): boolean {
         for (let i = 0; i < hexes.length; i++) {
             for (let j = 0; j < hexes[i].length; j++) {
                 if (this.checkHexForCollisions(hexes[i][j], hexes)) {
@@ -242,7 +242,7 @@ export class BoardGeneratorService {
         return false;
     }
 
-    private checkHexForCollisions(hex1: Hex, hexes: Hex[][]): boolean {
+    private checkHexForCollisions(hex1: BasicHex, hexes: BasicHex[][]): boolean {
         for (let i = 0; i < hexes.length; i++) {
             for (let j = 0; j < hexes[i].length; j++) {
                 if (this.areHexesSixEightCollision(hex1, hexes[i][j])) {

@@ -1,5 +1,5 @@
 import { Component, OnInit, Renderer2, ElementRef, ViewChild, AfterViewInit } from "@angular/core";
-import { Hex } from "../_services/Hex";
+import { BasicHex } from "../_services/BasicHex";
 import { BoardGeneratorService } from "../_services/board-generator.service";
 
 // developer tools, responsive, 414x705
@@ -32,7 +32,7 @@ export class BaseGameComponent implements OnInit, AfterViewInit {
         console.log("updated mapDiv height: " + this.mapDiv.nativeElement.clientHeight);
         this.mapDiv.nativeElement.style.top = `${this.initialTopOffset}%`;
 
-        const hexes: Hex[][] = this.boardGeneratorService.generateWithNoCollisions();
+        const hexes: BasicHex[][] = this.boardGeneratorService.generateWithNoCollisions();
         this.drawBackground();
         this.drawHexResources(hexes);
         this.drawDiceNumbers(hexes);
@@ -65,7 +65,7 @@ export class BaseGameComponent implements OnInit, AfterViewInit {
         const loadedImage = backgroundImage as HTMLImageElement;
     }
 
-    drawHexResources(hexes: Hex[][]): void {
+    drawHexResources(hexes: BasicHex[][]): void {
         const topRowOffsetStart = 10;
         const topRowOffsetIncrement = 15;
         const leftRowOffsetStart = 12;
@@ -90,7 +90,7 @@ export class BaseGameComponent implements OnInit, AfterViewInit {
         }
     }
 
-    drawDiceNumbers(hexes: Hex[][]): void {
+    drawDiceNumbers(hexes: BasicHex[][]): void {
         const topRowOffsetStart = 17;
         const topRowOffsetIncrement = 15;
         const leftRowOffsetStart = 16.5;

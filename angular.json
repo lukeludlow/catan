@@ -125,5 +125,8 @@
       }
     }
   },
-  "defaultProject": "catan"
+  "defaultProject": "catan",
+  "cli": {
+    "analytics": "744cb014-1655-4853-b05c-f11752adb49e"
+  }
 }

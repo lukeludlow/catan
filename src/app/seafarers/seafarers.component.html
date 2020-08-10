@@ -1,1 +1,17 @@
 <p>seafarers works! xd</p>
+<div
+    #mapDiv
+    class="container"
+    width="device-width"
+    style="width: 100%; display: block; position: absolute;"
+></div>
+<div #buttonDiv class="container" style="position: absolute; top: 80%; text-align: center;">
+    <button type="button" class="btn btn-success btn-lg" (click)="reload()" onclick="this.blur()">
+        regenerate
+    </button>
+</div>
+<div
+    #versionInfoDiv
+    class="container"
+    style="position: absolute; top: 95%; text-align: center;"
+></div>

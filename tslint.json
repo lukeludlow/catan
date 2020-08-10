@@ -81,9 +81,9 @@
       "double"
     ],
     "semicolon": {
-      "options": [
-        "never"
-      ]
+        "options": [
+            "always"
+        ]
     },
     "space-before-function-paren": {
       "options": {

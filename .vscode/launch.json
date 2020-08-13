@@ -5,6 +5,82 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "ng serve",
+            "type": "chrome",
+            "request": "launch",
+            "preLaunchTask": "npm: start",
+            "url": "http://localhost:4200/#",
+            "webRoot": "${workspaceFolder}",
+            "sourceMapPathOverrides": {
+                "webpack:/*": "${webRoot}/*",
+                "/./*": "${webRoot}/*",
+                "/src/*": "${webRoot}/*",
+                "/*": "*",
+                "/./~/*": "${webRoot}/node_modules/*"
+            }
+        },
+        {
+            "name": "ng test",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:9876/debug.html",
+            "webRoot": "${workspaceFolder}",
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+                "webpack:/*": "${webRoot}/*",
+                "/./*": "${webRoot}/*",
+                "/src/*": "${webRoot}/*",
+                "/*": "*",
+                "/./~/*": "${webRoot}/node_modules/*"
+            }
+        },
+        {
+            "name": "ng e2e",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/node_modules/protractor/bin/protractor",
+            "protocol": "inspector",
+            "args": ["${workspaceFolder}/e2e/protractor.conf.js"]
+        },
+        {
+            "name": "debug tests",
+            "type": "chrome",
+            "request": "attach",
+            "address": "localhost",
+            "port": 9222,
+            "sourceMaps": true,
+            "webRoot": "${workspaceFolder}",
+            "pathMapping": {
+                "/_karma_webpack_": "${webRoot}"
+            }
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Debug karma tests",
+            "url": "http://localhost:9877/",
+            "webRoot": "${workspaceFolder}",
+            "runtimeArgs": ["--headless"],
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+                "webpack:/*": "${webRoot}/*",
+                "/./*": "${webRoot}/*",
+                "/src/*": "${webRoot}/*",
+                "/*": "*",
+                "/./~/*": "${webRoot}/node_modules/*"
+            },
+            "port": 9223
+        },
+        {
+            "name": "Debug tests in Chrome",
+            "type": "chrome",
+            "request": "attach",
+            "port": 9222,
+            "sourceMaps": true,
+            "webRoot": "${workspaceRoot}"
+        },
+
+        {
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome against localhost",

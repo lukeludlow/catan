@@ -16,21 +16,24 @@ ng generate service my-service
 # hexagon grid theory
 https://www.redblobgames.com/grids/hexagons/  
 
+# jasmine tests
+https://jasmine.github.io/2.5/introduction
+
 
 # catan game details
 
 ## seafarers
 ### grid
-5
+
 ### tiles (total)
-sea: 19
-gold: 2
-desert: 3
-wheat: 5  
-tree: 5  
-sheep: 5  
-rock: 5  
 brick: 5  
+desert: 3
+gold: 2
+rock: 5  
+sea: 19
+sheep: 5  
+tree: 5  
+wheat: 5  
 ### numbers
 2s: 2  
 3s: 3
@@ -46,12 +49,12 @@ brick: 5
 // todo
 
 ## base game 
-num rock tiles: 3  
-num wheat tiles: 4  
 num brick tiles: 3  
-num tree tiles: 4  
-num sheep tiles: 4  
 num desert tiles: 1
+num rock tiles: 3  
+num sheep tiles: 4  
+num tree tiles: 4  
+num wheat tiles: 4  
 
 num 2s: 1 (1dot)  
 num 3s: 2 (2dot)  

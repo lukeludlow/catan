@@ -21,22 +21,12 @@ export class DiceNumberGeneratorService {
             const randomCoords = this.getRandomUnusedCoords(hexes);
             hexes[randomCoords.randomRow][randomCoords.randomCol].setDiceNumber(diceNumber);
         }
-        // hexes = this.assignDiceNumber(hexes, 2, 1, 2);
-        // hexes = this.assignDiceNumber(hexes, 3, 2, 3);
-        // hexes = this.assignDiceNumber(hexes, 4, 2, 3);
-        // hexes = this.assignDiceNumber(hexes, 5, 2, 3);
-        // hexes = this.assignDiceNumber(hexes, 6, 2, 3);
-        // hexes = this.assignDiceNumber(hexes, 8, 2, 3);
-        // hexes = this.assignDiceNumber(hexes, 9, 2, 3);
-        // hexes = this.assignDiceNumber(hexes, 10, 2, 3);
-        // hexes = this.assignDiceNumber(hexes, 11, 2, 3);
-        // hexes = this.assignDiceNumber(hexes, 12, 1, 2);
         return hexes;
     }
 
     private removeFirstOccurrence(array: number[], diceNumberToRemove: number): number[] {
         const index: number = array.findIndex((x) => x === diceNumberToRemove);
-        array = array.splice(index, 1);
+        array.splice(index, 1);
         return array;
     }
 

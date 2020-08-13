@@ -93,9 +93,12 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
             const topCoord: number = topRowOffsetStart;
             const leftCoord: number = leftOffsetStart + leftOffsetIncrement * col;
             const image = this.createResourceTileImage(hexRow[col].getTerrain(), topCoord, leftCoord);
-            const diceNumberImage = this.createDiceNumberImage(9, topCoord, leftCoord);
             this.renderer.appendChild(this.mapDiv.nativeElement, image);
-            // this.renderer.appendChild(this.mapDiv.nativeElement, diceNumberImage);
+            if (hexRow[col].getTerrain() === "desert") {
+                continue;
+            }
+            const diceNumberImage = this.createDiceNumberImage(hexRow[col].getDiceNumber(), topCoord, leftCoord);
+            this.renderer.appendChild(this.mapDiv.nativeElement, diceNumberImage);
         }
     }
 
@@ -113,9 +116,9 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
         const diceNumberImage = this.renderer.createElement("img");
         this.renderer.setAttribute(diceNumberImage, "src", `assets/images/seafarers/${diceNumber}.png`);
         this.renderer.setStyle(diceNumberImage, "position", "absolute");
-        this.renderer.setStyle(diceNumberImage, "top", `${topCoord + 5}%`);
-        this.renderer.setStyle(diceNumberImage, "left", `${leftCoord + 5}%`);
-        this.renderer.setStyle(diceNumberImage, "width", "5%");
+        this.renderer.setStyle(diceNumberImage, "top", `${topCoord + 6}%`);
+        this.renderer.setStyle(diceNumberImage, "left", `${leftCoord + 5.5}%`);
+        this.renderer.setStyle(diceNumberImage, "width", "4.5%");
         return diceNumberImage;
     }
 

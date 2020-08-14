@@ -1,27 +1,50 @@
 import { Injectable } from "@angular/core";
-import { Hex } from "./Hex";
+import { Hex } from "./model/Hex";
 import { RandomNumberService } from "./random-number.service";
+import { CollisionDetectorService } from "./collision-detector.service";
+import { SeafarersMap } from "./model/SeafarersMap";
+import { Terrain } from "./model/Terrain";
 
 @Injectable({
     providedIn: "root",
 })
 export class DiceNumberGeneratorService {
     private randomNumberService: RandomNumberService;
+    private collisionDetecter: CollisionDetectorService;
 
-    constructor(randomNumberService: RandomNumberService) {
+    constructor(randomNumberService: RandomNumberService, collisionDetector: CollisionDetectorService) {
         this.randomNumberService = randomNumberService;
+        this.collisionDetecter = collisionDetector;
     }
 
-    public assignDiceNumbers(hexes: Hex[][]): Hex[][] {
+    public generateDiceNumbers(map: SeafarersMap): SeafarersMap {
+        map = this.tryGenerateDiceNumbers(map);
+        while (this.collisionDetecter.detectCollisions(map)) {
+            map = this.tryGenerateDiceNumbers(map);
+        }
+        return map;
+    }
+
+    public tryGenerateDiceNumbers(map: SeafarersMap): SeafarersMap {
+        map = this.resetDiceNumbers(map);
         let diceNumbers: number[] = this.getStartingDiceNumberPool();
-        const numTerrainsToAssign: number = this.countTerrainsToAssign(hexes);
+        const numTerrainsToAssign: number = this.countTerrainsToAssign(map);
         for (let i = 0; i < numTerrainsToAssign; i++) {
             const diceNumber: number = this.randomNumberService.getRandomElementFromArray(diceNumbers);
             diceNumbers = this.removeFirstOccurrence(diceNumbers, diceNumber);
-            const randomCoords = this.getRandomUnusedCoords(hexes);
-            hexes[randomCoords.randomRow][randomCoords.randomCol].setDiceNumber(diceNumber);
+            const randomCoords = this.getRandomUnusedCoords(map);
+            map.setHexDiceNumber(randomCoords.randomRow, randomCoords.randomCol, diceNumber);
         }
-        return hexes;
+        return map;
+    }
+
+    private resetDiceNumbers(map: SeafarersMap): SeafarersMap {
+        map.getRows().forEach((row) => {
+            row.forEach((hex) => {
+                map.setHexDiceNumber(hex.getRow(), hex.getCol(), 0);
+            });
+        });
+        return map;
     }
 
     private removeFirstOccurrence(array: number[], diceNumberToRemove: number): number[] {
@@ -30,9 +53,9 @@ export class DiceNumberGeneratorService {
         return array;
     }
 
-    private countTerrainsToAssign(hexes: Hex[][]): number {
+    private countTerrainsToAssign(map: SeafarersMap): number {
         let numTerrainsToAssign: number = 0;
-        hexes.forEach((row) => {
+        map.getRows().forEach((row) => {
             row.forEach((hex) => {
                 if (this.isValidTerrain(hex)) {
                     numTerrainsToAssign++;
@@ -64,43 +87,24 @@ export class DiceNumberGeneratorService {
         return array;
     }
 
-    private assignDiceNumber(
-        hexes: Hex[][],
-        diceNumber: number,
-        minPiecesToCreate: number,
-        maxPiecesToCreate: number
-    ): Hex[][] {
-        const numPiecesToCreate = this.randomNumberService.getRandomNumberInclusive(
-            minPiecesToCreate,
-            maxPiecesToCreate
-        );
-        for (let i = 0; i < numPiecesToCreate; i++) {
-            if (this.areThereAnyAvailableCoords(hexes)) {
-                const randomCoords = this.getRandomUnusedCoords(hexes);
-                hexes[randomCoords.randomRow][randomCoords.randomCol].setDiceNumber(diceNumber);
-            }
-        }
-        return hexes;
+    private areThereAnyAvailableCoords(map: SeafarersMap): boolean {
+        return map.getRows().some((row) => row.some((hex) => this.isValidTerrain(hex) && hex.getDiceNumber() === 0));
     }
 
-    private areThereAnyAvailableCoords(hexes: Hex[][]): boolean {
-        return hexes.some((row) => row.some((hex) => this.isValidTerrain(hex) && hex.getDiceNumber() === 0));
-    }
-
-    private getRandomUnusedCoords(hexes: Hex[][]): any {
-        let randomRow: number = this.randomNumberService.getRandomNumberExclusive(0, hexes.length);
-        let randomCol: number = this.randomNumberService.getRandomNumberExclusive(0, hexes[randomRow].length);
-        let hexHasNoDiceNumber: boolean = hexes[randomRow][randomCol].getDiceNumber() === 0;
-        let hexIsResourceTerrain: boolean = this.isValidTerrain(hexes[randomRow][randomCol]);
+    private getRandomUnusedCoords(map: SeafarersMap): any {
+        let randomRow: number = this.randomNumberService.getRandomNumberExclusive(0, map.getRows().length);
+        let randomCol: number = this.randomNumberService.getRandomNumberExclusive(0, map.getRow(randomRow).length);
+        let hexHasNoDiceNumber: boolean = map.getHex(randomRow, randomCol).getDiceNumber() === 0;
+        let hexIsResourceTerrain: boolean = this.isValidTerrain(map.getHex(randomRow, randomCol));
         let okay: boolean = hexHasNoDiceNumber && hexIsResourceTerrain;
         if (okay) {
             return { randomRow, randomCol };
         } else {
             while (!okay) {
-                randomRow = this.randomNumberService.getRandomNumberExclusive(0, hexes.length);
-                randomCol = this.randomNumberService.getRandomNumberExclusive(0, hexes[randomRow].length);
-                hexHasNoDiceNumber = hexes[randomRow][randomCol].getDiceNumber() === 0;
-                hexIsResourceTerrain = this.isValidTerrain(hexes[randomRow][randomCol]);
+                randomRow = this.randomNumberService.getRandomNumberExclusive(0, map.getRows().length);
+                randomCol = this.randomNumberService.getRandomNumberExclusive(0, map.getRow(randomRow).length);
+                hexHasNoDiceNumber = map.getHex(randomRow, randomCol).getDiceNumber() === 0;
+                hexIsResourceTerrain = this.isValidTerrain(map.getHex(randomRow, randomCol));
                 okay = hexHasNoDiceNumber && hexIsResourceTerrain;
             }
             return { randomRow, randomCol };
@@ -108,7 +112,11 @@ export class DiceNumberGeneratorService {
     }
 
     private isValidTerrain(hex: Hex): boolean {
-        if (hex.getTerrain() !== "" && hex.getTerrain() !== "sea" && hex.getTerrain() !== "desert") {
+        if (
+            hex.getTerrain() !== Terrain.Empty &&
+            hex.getTerrain() !== Terrain.Sea &&
+            hex.getTerrain() !== Terrain.Desert
+        ) {
             return true;
         } else {
             return false;

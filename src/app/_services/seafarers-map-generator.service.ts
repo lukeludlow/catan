@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
-import { Hex } from "./Hex";
+import { Hex } from "./model/Hex";
 import { RandomNumberService } from "./random-number.service";
 import { DiceNumberGeneratorService } from "./dice-number-generator.service";
 import { TerrainGeneratorService } from "./terrain-generator.service";
+import { SeafarersMap } from "./model/SeafarersMap";
 
 @Injectable({
     providedIn: "root",
@@ -34,40 +35,15 @@ export class SeafarersMapGenerator {
         this.terrainGenerator = terrainGenerator;
     }
 
-    public generateMap(): Hex[][] {
-        const map: Hex[][] = this.generateNewMap();
+    public generateMap(): SeafarersMap {
+        const map: SeafarersMap = this.generateNewMap();
         return map;
     }
 
-    private generateNewMap(): Hex[][] {
-        let map: Hex[][] = this.createBlankMap();
+    private generateNewMap(): SeafarersMap {
+        let map: SeafarersMap = new SeafarersMap();
         map = this.terrainGenerator.generateTerrain(map);
-        map = this.diceNumberGenerator.assignDiceNumbers(map);
+        map = this.diceNumberGenerator.generateDiceNumbers(map);
         return map;
-    }
-
-   
-
-    private createBlankMap(): Hex[][] {
-        const blankMap: Hex[][] = new Array<Array<Hex>>(SeafarersMapGenerator.numRows);
-        blankMap[0] = new Array<Hex>(2);
-        blankMap[1] = new Array<Hex>(3);
-        blankMap[2] = new Array<Hex>(4);
-        blankMap[3] = new Array<Hex>(3);
-        blankMap[4] = new Array<Hex>(4);
-        blankMap[5] = new Array<Hex>(3);
-        blankMap[6] = new Array<Hex>(4);
-        blankMap[7] = new Array<Hex>(3);
-        blankMap[8] = new Array<Hex>(4);
-        blankMap[9] = new Array<Hex>(3);
-        blankMap[10] = new Array<Hex>(4);
-        blankMap[11] = new Array<Hex>(3);
-        blankMap[12] = new Array<Hex>(2);
-        for (let row = 0; row < SeafarersMapGenerator.numRows; row++) {
-            for (let col = 0; col < blankMap[row].length; col++) {
-                blankMap[row][col] = new Hex();
-            }
-        }
-        return blankMap;
     }
 }

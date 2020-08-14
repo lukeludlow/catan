@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { BasicHex } from "./BasicHex";
+import { BasicHex } from "./model/BasicHex";
 
 // https://www.redblobgames.com/grids/hexagons/
 // https://www.redblobgames.com/grids/hexagons/implementation.html

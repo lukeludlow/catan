@@ -1,5 +1,5 @@
 import { Component, OnInit, Renderer2, ElementRef, ViewChild, AfterViewInit } from "@angular/core";
-import { BasicHex } from "../_services/BasicHex";
+import { BasicHex } from "../_services/model/BasicHex";
 import { BoardGeneratorService } from "../_services/board-generator.service";
 
 // developer tools, responsive, 414x705

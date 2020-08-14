@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, Renderer2, AfterViewInit } from "@angular/core";
 import { SeafarersMapGenerator } from "../_services/seafarers-map-generator.service";
-import { Hex } from "../_services/Hex";
+import { Hex } from "../_services/model/Hex";
+import { SeafarersMap } from "../_services/model/SeafarersMap";
+import { Terrain } from "../_services/model/Terrain";
 
 @Component({
     selector: "app-seafarers",
@@ -41,20 +43,20 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
     }
 
     drawHexes(): void {
-        const hexes: Hex[][] = this.seafarersMapGenerator.generateMap();
+        const hexes: SeafarersMap = this.seafarersMapGenerator.generateMap();
         this.drawFirstAndLastRows(hexes);
         this.drawOddRows(hexes);
         this.drawEvenRows(hexes);
     }
 
-    drawFirstAndLastRows(hexes: Hex[][]): void {
+    drawFirstAndLastRows(hexes: SeafarersMap): void {
         const leftOffsetStart: number = 30.15;
-        this.drawRow(hexes[0], 2, 9.45, leftOffsetStart, this.horizontalHexOffsetIncrement);
-        this.drawRow(hexes[12], 2, 101.85, leftOffsetStart, this.horizontalHexOffsetIncrement);
+        this.drawRow(hexes.getRow(0), 2, 9.45, leftOffsetStart, this.horizontalHexOffsetIncrement);
+        this.drawRow(hexes.getRow(12), 2, 101.85, leftOffsetStart, this.horizontalHexOffsetIncrement);
     }
 
     // (odd means rows that have 3 columns)
-    private drawOddRows(hexes: Hex[][]): void {
+    private drawOddRows(hexes: SeafarersMap): void {
         const numHexes: number = 3;
         const numRows: number = 6;
         const topOffsetStart: number = 17;
@@ -62,12 +64,18 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
         for (let i = 0; i < numRows; i++) {
             const rowIndex: number = i * 2 + 1;
             const topOffset: number = topOffsetStart + this.verticalRowOffsetIncrement * i;
-            this.drawRow(hexes[rowIndex], numHexes, topOffset, leftOffsetStart, this.horizontalHexOffsetIncrement);
+            this.drawRow(
+                hexes.getRow(rowIndex),
+                numHexes,
+                topOffset,
+                leftOffsetStart,
+                this.horizontalHexOffsetIncrement
+            );
         }
     }
 
     // (even means rows that have 4 columns)
-    private drawEvenRows(hexes: Hex[][]): void {
+    private drawEvenRows(hexes: SeafarersMap): void {
         const numHexes: number = 4;
         const numRows: number = 5;
         const topOffsetStart: number = 24.75;
@@ -75,7 +83,13 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
         for (let i = 0; i < numRows; i++) {
             const rowIndex: number = i * 2 + 2;
             const topOffset: number = topOffsetStart + this.verticalRowOffsetIncrement * i;
-            this.drawRow(hexes[rowIndex], numHexes, topOffset, leftOffsetStart, this.horizontalHexOffsetIncrement);
+            this.drawRow(
+                hexes.getRow(rowIndex),
+                numHexes,
+                topOffset,
+                leftOffsetStart,
+                this.horizontalHexOffsetIncrement
+            );
         }
     }
 
@@ -87,14 +101,14 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
         leftOffsetIncrement: number
     ) {
         for (let col = 0; col < numColumns; col++) {
-            if (hexRow[col].getTerrain() === "sea") {
+            if (hexRow[col].getTerrain() === Terrain.Sea) {
                 continue;
             }
             const topCoord: number = topRowOffsetStart;
             const leftCoord: number = leftOffsetStart + leftOffsetIncrement * col;
-            const image = this.createResourceTileImage(hexRow[col].getTerrain(), topCoord, leftCoord);
+            const image = this.createResourceTileImage(hexRow[col].getTerrain().toString(), topCoord, leftCoord);
             this.renderer.appendChild(this.mapDiv.nativeElement, image);
-            if (hexRow[col].getTerrain() === "desert") {
+            if (hexRow[col].getTerrain() === Terrain.Desert) {
                 continue;
             }
             const diceNumberImage = this.createDiceNumberImage(hexRow[col].getDiceNumber(), topCoord, leftCoord);

@@ -1,7 +1,7 @@
 import { TestBed } from "@angular/core/testing";
 
 import { BoardGeneratorService } from "./board-generator.service";
-import { BasicHex } from "./BasicHex";
+import { BasicHex } from "./model/BasicHex";
 
 describe("BoardGeneratorService", () => {
     let service: BoardGeneratorService;

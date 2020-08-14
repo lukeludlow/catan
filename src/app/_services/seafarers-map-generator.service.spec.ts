@@ -1,10 +1,11 @@
 import { TestBed } from "@angular/core/testing";
 
 import { SeafarersMapGenerator } from "./seafarers-map-generator.service";
-import { Hex } from "./Hex";
+import { Hex } from "./model/Hex";
 import { RandomNumberService } from "./random-number.service";
 import { DiceNumberGeneratorService } from "./dice-number-generator.service";
 import { TerrainGeneratorService } from "./terrain-generator.service";
+import { SeafarersMap } from "./model/SeafarersMap";
 
 describe("SeafarersMapGenerator", () => {
     let seafarersMapGenerator: SeafarersMapGenerator;
@@ -29,8 +30,8 @@ describe("SeafarersMapGenerator", () => {
     });
 
     it("should have no undefined hexes", () => {
-        const result: Hex[][] = seafarersMapGenerator.generateMap();
-        result.forEach((row) => {
+        const result: SeafarersMap = seafarersMapGenerator.generateMap();
+        result.getRows().forEach((row) => {
             row.forEach((hex) => {
                 expect(hex).toBeDefined();
             });
@@ -38,8 +39,8 @@ describe("SeafarersMapGenerator", () => {
     });
 
     it("each hex should have terrain type defined", () => {
-        const result: Hex[][] = seafarersMapGenerator.generateMap();
-        result.forEach((row) => {
+        const result: SeafarersMap = seafarersMapGenerator.generateMap();
+        result.getRows().forEach((row) => {
             row.forEach((hex) => {
                 expect(hex.getTerrain()).toBeDefined();
                 expect(hex.getTerrain()).not.toEqual("");
@@ -48,54 +49,54 @@ describe("SeafarersMapGenerator", () => {
     });
 
     it("should call dice number generator", () => {
-        spyOn(diceNumberGenerator, "assignDiceNumbers").and.callThrough();
-        const result: Hex[][] = seafarersMapGenerator.generateMap();
-        expect(diceNumberGenerator.assignDiceNumbers).toHaveBeenCalled();
+        spyOn(diceNumberGenerator, "generateDiceNumbers").and.callThrough();
+        const result: SeafarersMap = seafarersMapGenerator.generateMap();
+        expect(diceNumberGenerator.generateDiceNumbers).toHaveBeenCalled();
     });
 
     it("should call terrain generator", () => {
         spyOn(terrainGenerator, "generateTerrain").and.callThrough();
-        const result: Hex[][] = seafarersMapGenerator.generateMap();
+        const result: SeafarersMap = seafarersMapGenerator.generateMap();
         expect(terrainGenerator.generateTerrain).toHaveBeenCalled();
     });
 
     describe("test map hex counts", () => {
         it("should provide 13 rows", () => {
-            expect(seafarersMapGenerator.generateMap().length).toEqual(13);
+            expect(seafarersMapGenerator.generateMap().getRows().length).toEqual(13);
         });
 
         it("first and thirteenth should have two hexes", () => {
-            expect(seafarersMapGenerator.generateMap()[0].length).toEqual(2);
-            expect(seafarersMapGenerator.generateMap()[12].length).toEqual(2);
+            expect(seafarersMapGenerator.generateMap().getRow(0).length).toEqual(2);
+            expect(seafarersMapGenerator.generateMap().getRow(12).length).toEqual(2);
         });
 
         it("second and twelfth should have three hexes", () => {
-            expect(seafarersMapGenerator.generateMap()[1].length).toEqual(3);
-            expect(seafarersMapGenerator.generateMap()[11].length).toEqual(3);
+            expect(seafarersMapGenerator.generateMap().getRow(1).length).toEqual(3);
+            expect(seafarersMapGenerator.generateMap().getRow(11).length).toEqual(3);
         });
 
         it("third and eleventh should have four hexes", () => {
-            expect(seafarersMapGenerator.generateMap()[2].length).toEqual(4);
-            expect(seafarersMapGenerator.generateMap()[10].length).toEqual(4);
+            expect(seafarersMapGenerator.generateMap().getRow(2).length).toEqual(4);
+            expect(seafarersMapGenerator.generateMap().getRow(10).length).toEqual(4);
         });
 
         it("fourth and tenth should have three hexes", () => {
-            expect(seafarersMapGenerator.generateMap()[3].length).toEqual(3);
-            expect(seafarersMapGenerator.generateMap()[9].length).toEqual(3);
+            expect(seafarersMapGenerator.generateMap().getRow(3).length).toEqual(3);
+            expect(seafarersMapGenerator.generateMap().getRow(9).length).toEqual(3);
         });
 
         it("fifth and ninth should have four hexes", () => {
-            expect(seafarersMapGenerator.generateMap()[4].length).toEqual(4);
-            expect(seafarersMapGenerator.generateMap()[8].length).toEqual(4);
+            expect(seafarersMapGenerator.generateMap().getRow(4).length).toEqual(4);
+            expect(seafarersMapGenerator.generateMap().getRow(8).length).toEqual(4);
         });
 
         it("sixth and eighth should have three hexes", () => {
-            expect(seafarersMapGenerator.generateMap()[5].length).toEqual(3);
-            expect(seafarersMapGenerator.generateMap()[7].length).toEqual(3);
+            expect(seafarersMapGenerator.generateMap().getRow(5).length).toEqual(3);
+            expect(seafarersMapGenerator.generateMap().getRow(7).length).toEqual(3);
         });
 
         it("seventh should have four hexes", () => {
-            expect(seafarersMapGenerator.generateMap()[6].length).toEqual(4);
+            expect(seafarersMapGenerator.generateMap().getRow(6).length).toEqual(4);
         });
     });
 });

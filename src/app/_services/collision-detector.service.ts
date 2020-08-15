@@ -8,38 +8,21 @@ import { SeafarersMap } from "./model/SeafarersMap";
 export class CollisionDetectorService {
     constructor() {}
 
-    public detectCollisions(hexes: SeafarersMap): boolean {
+    public detectCollisions(map: SeafarersMap): boolean {
+        for (const row of map.getRows()) {
+            for (const hex of row) {
+                if (this.isHexSixOrEight(hex)) {
+                    const neighbors: Hex[] = map.listNeighbors(hex);
+                    if (neighbors.some((neighborHex) => this.isHexSixOrEight(neighborHex))) {
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 
-    // public listNeighbors(map: SeafarersMap, row: number, col: number): number[] {
-    //     let offset: number = 0;
-    //     if (this.isEven(row)) {
-    //         offset = -1;
-    //     } else {
-    //         offset = 0;
-    //     }
-    //     let topNeighbor: number = 0;
-    //     if (this.isSpecialRow(row - 2)) {
-    //         topNeighbor = map.getHex(row - 2, col + offset).getDiceNumber();
-    //     } else {
-    //         topNeighbor = map.getHex(row - 2, col).getDiceNumber();
-    //     }
-    //     const bottomNeighbor: number = map.getHex(row + 2, col).getDiceNumber();
-    //     const topLeftNeighbor: number = map.getHex(row - 1, col + offset).getDiceNumber();
-    //     const topRightNeighbor: number = map.getHex(row - 1, col + 1 + offset).getDiceNumber();
-    //     const bottomLeftNeighbor: number = map.getHex(row + 1, col + offset).getDiceNumber();
-    //     const bottomRightNeighbor: number = map.getHex(row + 1, col + 1 + offset).getDiceNumber();
-    //     const neighbors: number[] = [
-    //         topNeighbor,
-    //         bottomNeighbor,
-    //         topLeftNeighbor,
-    //         topRightNeighbor,
-    //         bottomLeftNeighbor,
-    //         bottomRightNeighbor,
-    //     ];
-    //     return neighbors;
-    // }
-
-
+    private isHexSixOrEight(hex: Hex): boolean {
+        return hex.getDiceNumber() === 6 || hex.getDiceNumber() === 8;
+    }
 }

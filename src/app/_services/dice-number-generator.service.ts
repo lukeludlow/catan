@@ -19,9 +19,14 @@ export class DiceNumberGeneratorService {
 
     public generateDiceNumbers(map: SeafarersMap): SeafarersMap {
         map = this.tryGenerateDiceNumbers(map);
+        let numTimesGenerated: number = 1;
         while (this.collisionDetecter.detectCollisions(map)) {
             map = this.tryGenerateDiceNumbers(map);
+            numTimesGenerated++;
         }
+        console.log(
+            `successfully generated dice numbeers. it took ${numTimesGenerated} times to generate a map with no collisions`
+        );
         return map;
     }
 

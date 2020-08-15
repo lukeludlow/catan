@@ -22,11 +22,11 @@ describe("CollisionDetectorService", () => {
         expect(result).toBeFalse();
     });
 
-    // it("detect vertical collisions", () => {
-    //     const input: SeafarersMap = new SeafarersMap();
-    //     input.getHex(1, 1).setDiceNumber(6);
-    //     input.getHex(3, 1).setDiceNumber(6);
-    //     const result: boolean = collisionDetector.detectCollisions(input);
-    //     expect(result).toBeTrue();
-    // });
+    it("detect vertical collisions", () => {
+        const input: SeafarersMap = new SeafarersMap();
+        input.setHexDiceNumber(1, 1, 6);
+        input.setHexDiceNumber(3, 1, 6);
+        const result: boolean = collisionDetector.detectCollisions(input);
+        expect(result).toBeTrue();
+    });
 });

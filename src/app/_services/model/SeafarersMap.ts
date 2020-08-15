@@ -14,21 +14,33 @@ export class SeafarersMap {
         const convertedHex: HexBlob = this.convertHexCoordsToHexBlobCube(hex);
         for (let i = 0; i < HexBlob.directions.length; i++) {
             const neighbor: HexBlob = convertedHex.neighbor(i);
-            const deconvertedNeighbor: Hex = this.convertHexBlobToHexCoords(neighbor);
-            if (this.isWithinBounds(deconvertedNeighbor)) {
+            const deconvertedNeighbor: Hex = this.deconvertHexBlobToHex(neighbor);
+            if (deconvertedNeighbor !== undefined) {
                 neighbors.push(this.hexes[deconvertedNeighbor.getRow()][deconvertedNeighbor.getCol()]);
             }
         }
         return neighbors;
     }
 
-    private isWithinBounds(hex: Hex): boolean {
-        if (hex.getRow() < 0 || hex.getCol() < 0) {
+    private isWithinBounds(row: number, col: number): boolean {
+        if (row < 0 || col < 0) {
             return false;
-        } else if (hex.getRow() > 12 || hex.getCol() > 3) {
+        } else if (row > 12) {
             return false;
         } else {
-            return true;
+            if (this.isEven(row)) {
+                if (col > 3) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                if (col > 2) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
         }
     }
 
@@ -64,15 +76,15 @@ export class SeafarersMap {
         return new HexBlob(q, r, -q - r);
     }
 
-    private convertHexBlobToHexCoords(hexBlob: HexBlob): Hex {
+    private deconvertHexBlobToHex(hexBlob: HexBlob): Hex {
         const q: number = hexBlob.q;
         const r: number = hexBlob.r;
         const row: number = this.figureOutRow(q, r);
         const col: number = this.figureOutCol(q, r);
-        if (this.isWithinBounds(new Hex(row, col))) {
+        if (this.isWithinBounds(row, col)) {
             return this.getHex(row, col);
         } else {
-            return new Hex(-1, -1);
+            return undefined;
         }
     }
 
@@ -214,7 +226,12 @@ export class SeafarersMap {
     }
 
     public getHex(row: number, col: number): Hex {
-        return this.hexes[row][col];
+        const hex: Hex = this.hexes[row][col];
+        if (hex) {
+            return hex;
+        } else {
+            throw new Error(`hexes[${row}][${col}] does not exist`);
+        }
     }
 
     public getRows(): Hex[][] {

@@ -4,6 +4,7 @@ import { RandomNumberService } from "./random-number.service";
 import { DiceNumberGeneratorService } from "./dice-number-generator.service";
 import { TerrainGeneratorService } from "./terrain-generator.service";
 import { SeafarersMap } from "./model/SeafarersMap";
+import { PortGeneratorService } from "./port-generator.service";
 
 @Injectable({
     providedIn: "root",
@@ -24,26 +25,25 @@ export class SeafarersMapGenerator {
     private randomNumberService: RandomNumberService;
     private diceNumberGenerator: DiceNumberGeneratorService;
     private terrainGenerator: TerrainGeneratorService;
+    private portGenerator: PortGeneratorService;
 
     constructor(
         randomNumberService: RandomNumberService,
         diceNumberGenerator: DiceNumberGeneratorService,
-        terrainGenerator: TerrainGeneratorService
+        terrainGenerator: TerrainGeneratorService,
+        portGenerator: PortGeneratorService
     ) {
         this.randomNumberService = randomNumberService;
         this.diceNumberGenerator = diceNumberGenerator;
         this.terrainGenerator = terrainGenerator;
+        this.portGenerator = portGenerator;
     }
 
     public generateMap(): SeafarersMap {
-        const map: SeafarersMap = this.generateNewMap();
-        return map;
-    }
-
-    private generateNewMap(): SeafarersMap {
         let map: SeafarersMap = new SeafarersMap();
         map = this.terrainGenerator.generateTerrain(map);
         map = this.diceNumberGenerator.generateDiceNumbers(map);
+        map = this.portGenerator.generatePorts(map);
         return map;
     }
 }

@@ -1,6 +1,7 @@
 import { Hex } from "./Hex";
 import { Terrain } from "./Terrain";
 import { HexBlob, OffsetCoord } from "./HexBlob";
+import { Port } from "./Port";
 
 export class SeafarersMap {
     private hexes: Hex[][];
@@ -98,7 +99,7 @@ export class SeafarersMap {
         } else if (q === 1 && r === 5) {
             return 12;
         }
-        let row: number = -1;
+        const row: number = -1;
         const col: number = this.figureOutCol(q, r);
         const rStart: number = r + col;
         if (rStart === 1) {
@@ -225,6 +226,10 @@ export class SeafarersMap {
         this.hexes[row][col].setDiceNumber(diceNumber);
     }
 
+    public setHexPort(hex: Hex, port: Port): void {
+        this.hexes[hex.getRow()][hex.getCol()].setPort(port);
+    }
+
     public getHex(row: number, col: number): Hex {
         const hex: Hex = this.hexes[row][col];
         if (hex) {
@@ -232,6 +237,13 @@ export class SeafarersMap {
         } else {
             throw new Error(`hexes[${row}][${col}] does not exist`);
         }
+    }
+
+    public getHexNeighbor(hex: Hex, neighborDirection: HexBlob): Hex {
+        const convertedHex: HexBlob = this.convertHexCoordsToHexBlobCube(hex);
+        const calculatedNeighbor: HexBlob = convertedHex.add(neighborDirection);
+        const deconvertedNeighbor: Hex = this.deconvertHexBlobToHex(calculatedNeighbor);
+        return deconvertedNeighbor;
     }
 
     public getRows(): Hex[][] {

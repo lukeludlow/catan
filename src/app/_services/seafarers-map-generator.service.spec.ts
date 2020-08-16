@@ -6,12 +6,14 @@ import { RandomNumberService } from "./random-number.service";
 import { DiceNumberGeneratorService } from "./dice-number-generator.service";
 import { TerrainGeneratorService } from "./terrain-generator.service";
 import { SeafarersMap } from "./model/SeafarersMap";
+import { PortGeneratorService } from "./port-generator.service";
 
 describe("SeafarersMapGenerator", () => {
     let seafarersMapGenerator: SeafarersMapGenerator;
     let randomNumberService: RandomNumberService;
     let diceNumberGenerator: DiceNumberGeneratorService;
     let terrainGenerator: TerrainGeneratorService;
+    let portGenerator: PortGeneratorService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
@@ -19,6 +21,7 @@ describe("SeafarersMapGenerator", () => {
         randomNumberService = TestBed.inject(RandomNumberService);
         diceNumberGenerator = TestBed.inject(DiceNumberGeneratorService);
         terrainGenerator = TestBed.inject(TerrainGeneratorService);
+        portGenerator = TestBed.inject(PortGeneratorService);
     });
 
     it("should be created", () => {
@@ -58,6 +61,12 @@ describe("SeafarersMapGenerator", () => {
         spyOn(terrainGenerator, "generateTerrain").and.callThrough();
         const result: SeafarersMap = seafarersMapGenerator.generateMap();
         expect(terrainGenerator.generateTerrain).toHaveBeenCalled();
+    });
+
+    it("should call port generator", () => {
+        spyOn(portGenerator, "generatePorts").and.callThrough();
+        const result: SeafarersMap = seafarersMapGenerator.generateMap();
+        expect(portGenerator.generatePorts).toHaveBeenCalled();
     });
 
     describe("test map hex counts", () => {

@@ -3,6 +3,8 @@ import { SeafarersMapGenerator } from "../_services/seafarers-map-generator.serv
 import { Hex } from "../_services/model/Hex";
 import { SeafarersMap } from "../_services/model/SeafarersMap";
 import { Terrain } from "../_services/model/Terrain";
+import { Port } from "../_services/model/Port";
+import { HexSide } from "../_services/model/HexSide";
 
 @Component({
     selector: "app-seafarers",
@@ -101,18 +103,24 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
         leftOffsetIncrement: number
     ) {
         for (let col = 0; col < numColumns; col++) {
-            if (hexRow[col].getTerrain() === Terrain.Sea) {
+            const hex: Hex = hexRow[col];
+            if (hex.getTerrain() === Terrain.Sea) {
                 continue;
             }
             const topCoord: number = topRowOffsetStart;
             const leftCoord: number = leftOffsetStart + leftOffsetIncrement * col;
-            const image = this.createResourceTileImage(hexRow[col].getTerrain().toString(), topCoord, leftCoord);
+            const image = this.createResourceTileImage(hex.getTerrain().toString(), topCoord, leftCoord);
             this.renderer.appendChild(this.mapDiv.nativeElement, image);
-            if (hexRow[col].getTerrain() === Terrain.Desert) {
+            if (hex.getTerrain() === Terrain.Desert) {
                 continue;
             }
-            const diceNumberImage = this.createDiceNumberImage(hexRow[col].getDiceNumber(), topCoord, leftCoord);
+            const diceNumberImage = this.createDiceNumberImage(hex.getDiceNumber(), topCoord, leftCoord);
             this.renderer.appendChild(this.mapDiv.nativeElement, diceNumberImage);
+            if (hex.getPort()) {
+                console.log(`hex at ${hex.getRow()}${hex.getCol()} has port ${HexSide[hex.getPort().getSide()]}`);
+                const portImage = this.createPortImage(hex.getPort(), topCoord, leftCoord);
+                this.renderer.appendChild(this.mapDiv.nativeElement, portImage);
+            }
         }
     }
 
@@ -134,6 +142,43 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
         this.renderer.setStyle(diceNumberImage, "left", `${leftCoord + 5.5}%`);
         this.renderer.setStyle(diceNumberImage, "width", "4.5%");
         return diceNumberImage;
+    }
+
+    createPortImage(port: Port, topCoord: number, leftCoord: number): any {
+        const portImage = this.renderer.createElement("img");
+        this.renderer.setAttribute(portImage, "src", `assets/images/seafarers/${port.getTerrain().toString()}port.png`);
+        let rotation: number = 0;
+        if (port.getSide() === HexSide.Top) {
+            rotation = 180;
+            topCoord = topCoord - 6.5;
+            leftCoord = leftCoord + 4;
+        } else if (port.getSide() === HexSide.Bottom) {
+            rotation = 0;
+            topCoord = topCoord + 15;
+            leftCoord = leftCoord + 4;
+        } else if (port.getSide() === HexSide.TopRight) {
+            rotation = -120;
+            topCoord = topCoord - 1.25;
+            leftCoord = leftCoord + 12.3;
+        } else if (port.getSide() === HexSide.BottomRight) {
+            rotation = -60;
+            topCoord = topCoord + 10;
+            leftCoord = leftCoord + 12;
+        } else if (port.getSide() === HexSide.TopLeft) {
+            rotation = 120;
+            topCoord = topCoord - 1;
+            leftCoord = leftCoord - 4.15;
+        } else if (port.getSide() === HexSide.BottomLeft) {
+            rotation = 60;
+            topCoord = topCoord + 10;
+            leftCoord = leftCoord - 4.2;
+        }
+        this.renderer.setStyle(portImage, "position", "absolute");
+        this.renderer.setStyle(portImage, "top", `${topCoord}%`);
+        this.renderer.setStyle(portImage, "left", `${leftCoord}%`);
+        this.renderer.setStyle(portImage, "width", "8%");
+        this.renderer.setStyle(portImage, "transform", `rotate(${rotation}deg)`);
+        return portImage;
     }
 
     ngOnInit(): void {}

@@ -8,4 +8,5 @@ export enum Terrain {
     Sheep = "sheep",
     Tree = "tree",
     Wheat = "wheat",
+    Any = "any",
 }

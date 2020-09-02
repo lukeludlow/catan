@@ -1,3 +1,3 @@
 # catan generator
 
-init 
+visit [lukeludlow.github.io/catan](https://lukeludlow.github.io/catan/)

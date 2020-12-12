@@ -1,20 +1,23 @@
 import { Injectable } from "@angular/core";
 import { Hex } from "./model/Hex";
-import { RandomNumberService } from "./random-number.service";
+import { RandomService } from "./random.service";
 import { CollisionDetectorService } from "./collision-detector.service";
 import { SeafarersMap } from "./model/SeafarersMap";
 import { Terrain } from "./model/Terrain";
+import { ArrayService } from "./array.service";
 
 @Injectable({
     providedIn: "root",
 })
 export class DiceNumberGeneratorService {
-    private randomNumberService: RandomNumberService;
+    private randomService: RandomService;
     private collisionDetecter: CollisionDetectorService;
+    private arrayService: ArrayService;
 
-    constructor(randomNumberService: RandomNumberService, collisionDetector: CollisionDetectorService) {
-        this.randomNumberService = randomNumberService;
+    constructor(randomService: RandomService, collisionDetector: CollisionDetectorService, arrayService: ArrayService) {
+        this.randomService = randomService;
         this.collisionDetecter = collisionDetector;
+        this.arrayService = arrayService;
     }
 
     public generateDiceNumbers(map: SeafarersMap): SeafarersMap {
@@ -35,8 +38,8 @@ export class DiceNumberGeneratorService {
         let diceNumbers: number[] = this.getStartingDiceNumberPool();
         const numTerrainsToAssign: number = this.countTerrainsToAssign(map);
         for (let i = 0; i < numTerrainsToAssign; i++) {
-            const diceNumber: number = this.randomNumberService.getRandomElementFromArray(diceNumbers);
-            diceNumbers = this.removeFirstOccurrence(diceNumbers, diceNumber);
+            const diceNumber: number = this.randomService.getRandomElementFromArray(diceNumbers);
+            diceNumbers = this.arrayService.removeFirstOccurrence(diceNumbers, (x) => x === diceNumber);
             const randomCoords = this.getRandomUnusedCoords(map);
             map.setHexDiceNumber(randomCoords.randomRow, randomCoords.randomCol, diceNumber);
         }
@@ -50,12 +53,6 @@ export class DiceNumberGeneratorService {
             });
         });
         return map;
-    }
-
-    private removeFirstOccurrence(array: number[], diceNumberToRemove: number): number[] {
-        const index: number = array.findIndex((x) => x === diceNumberToRemove);
-        array.splice(index, 1);
-        return array;
     }
 
     private countTerrainsToAssign(map: SeafarersMap): number {
@@ -97,8 +94,8 @@ export class DiceNumberGeneratorService {
     }
 
     private getRandomUnusedCoords(map: SeafarersMap): any {
-        let randomRow: number = this.randomNumberService.getRandomNumberExclusive(0, map.getRows().length);
-        let randomCol: number = this.randomNumberService.getRandomNumberExclusive(0, map.getRow(randomRow).length);
+        let randomRow: number = this.randomService.getRandomNumberExclusive(0, map.getRows().length);
+        let randomCol: number = this.randomService.getRandomNumberExclusive(0, map.getRow(randomRow).length);
         let hexHasNoDiceNumber: boolean = map.getHex(randomRow, randomCol).getDiceNumber() === 0;
         let hexIsResourceTerrain: boolean = this.isValidTerrain(map.getHex(randomRow, randomCol));
         let okay: boolean = hexHasNoDiceNumber && hexIsResourceTerrain;
@@ -106,8 +103,8 @@ export class DiceNumberGeneratorService {
             return { randomRow, randomCol };
         } else {
             while (!okay) {
-                randomRow = this.randomNumberService.getRandomNumberExclusive(0, map.getRows().length);
-                randomCol = this.randomNumberService.getRandomNumberExclusive(0, map.getRow(randomRow).length);
+                randomRow = this.randomService.getRandomNumberExclusive(0, map.getRows().length);
+                randomCol = this.randomService.getRandomNumberExclusive(0, map.getRow(randomRow).length);
                 hexHasNoDiceNumber = map.getHex(randomRow, randomCol).getDiceNumber() === 0;
                 hexIsResourceTerrain = this.isValidTerrain(map.getHex(randomRow, randomCol));
                 okay = hexHasNoDiceNumber && hexIsResourceTerrain;

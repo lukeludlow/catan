@@ -2,8 +2,9 @@ import { Hex } from "./Hex";
 import { Terrain } from "./Terrain";
 import { HexBlob, OffsetCoord } from "./HexBlob";
 import { Port } from "./Port";
+import { ICatanMap } from "./ICatanMap";
 
-export class SeafarersMap {
+export class SeafarersMap implements ICatanMap {
     private hexes: Hex[][];
 
     constructor() {

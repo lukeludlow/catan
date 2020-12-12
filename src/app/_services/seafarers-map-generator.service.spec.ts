@@ -2,7 +2,7 @@ import { TestBed } from "@angular/core/testing";
 
 import { SeafarersMapGenerator } from "./seafarers-map-generator.service";
 import { Hex } from "./model/Hex";
-import { RandomNumberService } from "./random-number.service";
+import { RandomService } from "./random.service";
 import { DiceNumberGeneratorService } from "./dice-number-generator.service";
 import { TerrainGeneratorService } from "./terrain-generator.service";
 import { SeafarersMap } from "./model/SeafarersMap";
@@ -10,7 +10,7 @@ import { PortGeneratorService } from "./port-generator.service";
 
 describe("SeafarersMapGenerator", () => {
     let seafarersMapGenerator: SeafarersMapGenerator;
-    let randomNumberService: RandomNumberService;
+    let randomService: RandomService;
     let diceNumberGenerator: DiceNumberGeneratorService;
     let terrainGenerator: TerrainGeneratorService;
     let portGenerator: PortGeneratorService;
@@ -18,7 +18,7 @@ describe("SeafarersMapGenerator", () => {
     beforeEach(() => {
         TestBed.configureTestingModule({});
         seafarersMapGenerator = TestBed.inject(SeafarersMapGenerator);
-        randomNumberService = TestBed.inject(RandomNumberService);
+        randomService = TestBed.inject(RandomService);
         diceNumberGenerator = TestBed.inject(DiceNumberGeneratorService);
         terrainGenerator = TestBed.inject(TerrainGeneratorService);
         portGenerator = TestBed.inject(PortGeneratorService);

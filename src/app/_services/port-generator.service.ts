@@ -4,17 +4,20 @@ import { Hex } from "./model/Hex";
 import { Terrain } from "./model/Terrain";
 import { HexSide } from "./model/HexSide";
 import { HexDirection } from "./model/HexDirection";
-import { RandomNumberService } from "./random-number.service";
+import { RandomService } from "./random.service";
 import { Port } from "./model/Port";
+import { ArrayService } from "./array.service";
 
 @Injectable({
     providedIn: "root",
 })
 export class PortGeneratorService {
-    private randomNumberService: RandomNumberService;
+    private randomService: RandomService;
+    private arrayService: ArrayService;
 
-    constructor(randomNumberService: RandomNumberService) {
-        this.randomNumberService = randomNumberService;
+    constructor(randomService: RandomService, arrayService: ArrayService) {
+        this.randomService = randomService;
+        this.arrayService = arrayService;
     }
 
     public generatePorts(map: SeafarersMap): SeafarersMap {
@@ -42,22 +45,16 @@ export class PortGeneratorService {
             if (availableHexes.length === 0) {
                 break;
             }
-            const portTerrain: Terrain = this.randomNumberService.getRandomElementFromArray(availablePorts);
-            availablePorts = this.removeFirstOccurrence(availablePorts, portTerrain);
-            const chosenHex: Hex = this.randomNumberService.getRandomElementFromArray(availableHexes);
-            availableHexes = this.removeFirstOccurrence(availableHexes, chosenHex);
+            const portTerrain: Terrain = this.randomService.getRandomElementFromArray(availablePorts);
+            availablePorts = this.arrayService.removeFirstOccurrence(availablePorts, (x: Terrain) => x === portTerrain);
+            const chosenHex: Hex = this.randomService.getRandomElementFromArray(availableHexes);
+            availableHexes = this.arrayService.removeFirstOccurrence(availableHexes, (x: Hex) => x === chosenHex);
             const availableSides: HexSide[] = this.findHexSidesTouchingSea(map, chosenHex);
-            const side: HexSide = this.randomNumberService.getRandomElementFromArray(availableSides);
+            const side: HexSide = this.randomService.getRandomElementFromArray(availableSides);
             const generatedPort: Port = new Port(portTerrain, side);
             map.setHexPort(chosenHex, generatedPort);
         }
         return map;
-    }
-
-    private removeFirstOccurrence(array: any[], itemToRemove: any): any[] {
-        const index: number = array.findIndex((x) => x === itemToRemove);
-        array.splice(index, 1);
-        return array;
     }
 
     public findHexSidesTouchingSea(map: SeafarersMap, hex: Hex): HexSide[] {

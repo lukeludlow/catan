@@ -1,8 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Hex } from "./model/Hex";
-import { RandomNumberService } from "./random-number.service";
+import { RandomService } from "./random.service";
 import { SeafarersMap } from "./model/SeafarersMap";
 import { Terrain } from "./model/Terrain";
+import { removeFromArrayCondition } from "./model/delegates";
+import { ArrayService } from "./array.service";
 
 @Injectable({
     providedIn: "root",
@@ -20,7 +22,6 @@ export class TerrainGeneratorService {
         "tree",
         "wheat",
     ];
-    private randomNumberService: RandomNumberService;
     private terrainCounts = {
         brick: {
             min: 3,
@@ -55,9 +56,12 @@ export class TerrainGeneratorService {
             max: 5,
         },
     };
+    private randomService: RandomService;
+    private arrayService: ArrayService;
 
-    constructor(randomNumberService: RandomNumberService) {
-        this.randomNumberService = randomNumberService;
+    constructor(randomService: RandomService, arrayService: ArrayService) {
+        this.randomService = randomService;
+        this.arrayService = arrayService;
     }
 
     public generateTerrain(map: SeafarersMap): SeafarersMap {
@@ -68,8 +72,11 @@ export class TerrainGeneratorService {
             i < TerrainGeneratorService.requiredHexesCount - TerrainGeneratorService.minimumResourcesCount;
             i++
         ) {
-            const terrain: Terrain = this.randomNumberService.getRandomElementFromArray(availableTerrains);
-            availableTerrains = this.removeFirstOccurrence(availableTerrains, terrain);
+            const terrain: Terrain = this.randomService.getRandomElementFromArray(availableTerrains);
+            availableTerrains = this.arrayService.removeFirstOccurrence(
+                availableTerrains,
+                (x: Terrain) => x === terrain
+            );
             const randomCoords = this.getRandomUnusedCoords(map);
             map.setHexTerrain(randomCoords.randomRow, randomCoords.randomCol, terrain);
         }
@@ -120,10 +127,13 @@ export class TerrainGeneratorService {
         map: SeafarersMap,
         availableTerrains: Terrain[],
         terrain: Terrain,
-        x: number
+        numTimesToGenerate: number
     ): Terrain[] {
-        for (let i = 0; i < x; i++) {
-            availableTerrains = this.removeFirstOccurrence(availableTerrains, terrain);
+        for (let i = 0; i < numTimesToGenerate; i++) {
+            availableTerrains = this.arrayService.removeFirstOccurrence(
+                availableTerrains,
+                (x: Terrain) => x === terrain
+            );
             const randomCoords = this.getRandomUnusedCoords(map);
             map.setHexTerrain(randomCoords.randomRow, randomCoords.randomCol, terrain);
         }
@@ -175,12 +185,6 @@ export class TerrainGeneratorService {
         return allAvailableTerrains;
     }
 
-    private removeFirstOccurrence(array: Terrain[], terrain: Terrain): Terrain[] {
-        const index: number = array.findIndex((x) => x === terrain);
-        array.splice(index, 1);
-        return array;
-    }
-
     private addTerrainToArrayXTimes(array: Terrain[], terrain: Terrain, x: number): Terrain[] {
         for (let i = 0; i < x; i++) {
             array.push(terrain);
@@ -189,15 +193,15 @@ export class TerrainGeneratorService {
     }
 
     private getRandomUnusedCoords(map: SeafarersMap): any {
-        let randomRow: number = this.randomNumberService.getRandomNumberExclusive(0, map.getRows().length);
-        let randomCol: number = this.randomNumberService.getRandomNumberExclusive(0, map.getRow(randomRow).length);
+        let randomRow: number = this.randomService.getRandomNumberExclusive(0, map.getRows().length);
+        let randomCol: number = this.randomService.getRandomNumberExclusive(0, map.getRow(randomRow).length);
         let hexIsEmptyTerrain: boolean = map.getHex(randomRow, randomCol).getTerrain() === Terrain.Empty;
         if (hexIsEmptyTerrain) {
             return { randomRow, randomCol };
         } else {
             while (!hexIsEmptyTerrain) {
-                randomRow = this.randomNumberService.getRandomNumberExclusive(0, map.getRows().length);
-                randomCol = this.randomNumberService.getRandomNumberExclusive(0, map.getRow(randomRow).length);
+                randomRow = this.randomService.getRandomNumberExclusive(0, map.getRows().length);
+                randomCol = this.randomService.getRandomNumberExclusive(0, map.getRow(randomRow).length);
                 hexIsEmptyTerrain = map.getHex(randomRow, randomCol).getTerrain() === Terrain.Empty;
             }
             return { randomRow, randomCol };

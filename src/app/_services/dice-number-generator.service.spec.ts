@@ -2,20 +2,20 @@ import { TestBed } from "@angular/core/testing";
 
 import { DiceNumberGeneratorService } from "./dice-number-generator.service";
 import { Hex } from "./model/Hex";
-import { RandomNumberService } from "./random-number.service";
+import { RandomService } from "./random.service";
 import { CollisionDetectorService } from "./collision-detector.service";
 import { SeafarersMap } from "./model/SeafarersMap";
 import { Terrain } from "./model/Terrain";
 
 describe("DiceNumberGeneratorService", () => {
     let diceNumberGeneratorService: DiceNumberGeneratorService;
-    let randomNumberService: RandomNumberService;
+    let randomService: RandomService;
     let collisionDetector: CollisionDetectorService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
         diceNumberGeneratorService = TestBed.inject(DiceNumberGeneratorService);
-        randomNumberService = TestBed.inject(RandomNumberService);
+        randomService = TestBed.inject(RandomService);
         collisionDetector = TestBed.inject(CollisionDetectorService);
     });
 
@@ -58,7 +58,7 @@ describe("DiceNumberGeneratorService", () => {
     });
 
     it("should choose dice number from pool", () => {
-        spyOn(randomNumberService, "getRandomElementFromArray").and.returnValue(9);
+        spyOn(randomService, "getRandomElementFromArray").and.returnValue(9);
         const input: SeafarersMap = new SeafarersMap();
         input.setHex(new Hex(0, 0, Terrain.Rock));
         const result: SeafarersMap = diceNumberGeneratorService.generateDiceNumbers(input);

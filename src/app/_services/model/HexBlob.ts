@@ -84,22 +84,6 @@ export class HexBlob {
         }
         return new HexBlob(qi, ri, si);
     }
-
-    public lerp(b: HexBlob, t: number): HexBlob {
-        return new HexBlob(this.q * (1.0 - t) + b.q * t, this.r * (1.0 - t) + b.r * t, this.s * (1.0 - t) + b.s * t);
-    }
-
-    public linedraw(b: HexBlob): HexBlob[] {
-        const N: number = this.distance(b);
-        const aNudge: HexBlob = new HexBlob(this.q + 1e-6, this.r + 1e-6, this.s - 2e-6);
-        const bNudge: HexBlob = new HexBlob(b.q + 1e-6, b.r + 1e-6, b.s - 2e-6);
-        const results: HexBlob[] = [];
-        const step: number = 1.0 / Math.max(N, 1);
-        for (let i = 0; i <= N; i++) {
-            results.push(aNudge.lerp(bNudge, step * i).round());
-        }
-        return results;
-    }
 }
 
 export class OffsetCoord {
@@ -140,114 +124,8 @@ export class OffsetCoord {
         var r: number = h.row;
         var s: number = -q - r;
         if (offset !== OffsetCoord.EVEN && offset !== OffsetCoord.ODD) {
-            throw "offset must be EVEN (+1) or ODD (-1)";
+            throw new Error("offset must be EVEN (+1) or ODD (-1)");
         }
         return new HexBlob(q, r, s);
-    }
-}
-
-export class DoubledCoord {
-    constructor(public col: number, public row: number) {}
-
-    public static qdoubledFromCube(h: HexBlob): DoubledCoord {
-        var col: number = h.q;
-        var row: number = 2 * h.r + h.q;
-        return new DoubledCoord(col, row);
-    }
-
-    public qdoubledToCube(): HexBlob {
-        var q: number = this.col;
-        var r: number = (this.row - this.col) / 2;
-        var s: number = -q - r;
-        return new HexBlob(q, r, s);
-    }
-
-    public static rdoubledFromCube(h: HexBlob): DoubledCoord {
-        var col: number = 2 * h.q + h.r;
-        var row: number = h.r;
-        return new DoubledCoord(col, row);
-    }
-
-    public rdoubledToCube(): HexBlob {
-        var q: number = (this.col - this.row) / 2;
-        var r: number = this.row;
-        var s: number = -q - r;
-        return new HexBlob(q, r, s);
-    }
-}
-
-export class Orientation {
-    constructor(
-        public f0: number,
-        public f1: number,
-        public f2: number,
-        public f3: number,
-        public b0: number,
-        public b1: number,
-        public b2: number,
-        public b3: number,
-        public start_angle: number
-    ) {}
-}
-
-export class Layout {
-    constructor(public orientation: Orientation, public size: Point, public origin: Point) {}
-    public static pointy: Orientation = new Orientation(
-        Math.sqrt(3.0),
-        Math.sqrt(3.0) / 2.0,
-        0.0,
-        3.0 / 2.0,
-        Math.sqrt(3.0) / 3.0,
-        -1.0 / 3.0,
-        0.0,
-        2.0 / 3.0,
-        0.5
-    );
-    public static flat: Orientation = new Orientation(
-        3.0 / 2.0,
-        0.0,
-        Math.sqrt(3.0) / 2.0,
-        Math.sqrt(3.0),
-        2.0 / 3.0,
-        0.0,
-        -1.0 / 3.0,
-        Math.sqrt(3.0) / 3.0,
-        0.0
-    );
-
-    public hexToPixel(h: HexBlob): Point {
-        var M: Orientation = this.orientation;
-        var size: Point = this.size;
-        var origin: Point = this.origin;
-        var x: number = (M.f0 * h.q + M.f1 * h.r) * size.x;
-        var y: number = (M.f2 * h.q + M.f3 * h.r) * size.y;
-        return new Point(x + origin.x, y + origin.y);
-    }
-
-    public pixelToHexBlob(p: Point): HexBlob {
-        var M: Orientation = this.orientation;
-        var size: Point = this.size;
-        var origin: Point = this.origin;
-        var pt: Point = new Point((p.x - origin.x) / size.x, (p.y - origin.y) / size.y);
-        var q: number = M.b0 * pt.x + M.b1 * pt.y;
-        var r: number = M.b2 * pt.x + M.b3 * pt.y;
-        return new HexBlob(q, r, -q - r);
-    }
-
-    public hexCornerOffset(corner: number): Point {
-        var M: Orientation = this.orientation;
-        var size: Point = this.size;
-        var angle: number = (2.0 * Math.PI * (M.start_angle - corner)) / 6.0;
-        return new Point(size.x * Math.cos(angle), size.y * Math.sin(angle));
-    }
-
-    public polygonCorners(h: HexBlob): Point[] {
-        var corners: Point[] = [];
-        var center: Point = this.hexToPixel(h);
-        for (var i = 0; i < 6; i++) {
-            var offset: Point = this.hexCornerOffset(i);
-            corners.push(new Point(center.x + offset.x, center.y + offset.y));
-        }
-        return corners;
     }
 }

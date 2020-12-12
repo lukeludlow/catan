@@ -2,19 +2,19 @@ import { TestBed } from "@angular/core/testing";
 
 import { TerrainGeneratorService } from "./terrain-generator.service";
 import { Hex } from "./model/Hex";
-import { RandomNumberService } from "./random-number.service";
+import { RandomService } from "./random.service";
 import { SeafarersMap } from "./model/SeafarersMap";
 import { Terrain } from "./model/Terrain";
 
 describe("TerrainGeneratorService", () => {
     let terrainGenerator: TerrainGeneratorService;
-    let randomNumberService: RandomNumberService;
+    let randomService: RandomService;
     let map: SeafarersMap;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
         terrainGenerator = TestBed.inject(TerrainGeneratorService);
-        randomNumberService = TestBed.inject(RandomNumberService);
+        randomService = TestBed.inject(RandomService);
         map = new SeafarersMap();
     });
 

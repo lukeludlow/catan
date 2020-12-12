@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Hex } from "./model/Hex";
-import { RandomNumberService } from "./random-number.service";
+import { RandomService } from "./random.service";
 import { DiceNumberGeneratorService } from "./dice-number-generator.service";
 import { TerrainGeneratorService } from "./terrain-generator.service";
 import { SeafarersMap } from "./model/SeafarersMap";
@@ -22,18 +22,18 @@ export class SeafarersMapGenerator {
         "wheat",
     ];
     private terrainCounts: Map<string, number>;
-    private randomNumberService: RandomNumberService;
+    private randomService: RandomService;
     private diceNumberGenerator: DiceNumberGeneratorService;
     private terrainGenerator: TerrainGeneratorService;
     private portGenerator: PortGeneratorService;
 
     constructor(
-        randomNumberService: RandomNumberService,
+        randomService: RandomService,
         diceNumberGenerator: DiceNumberGeneratorService,
         terrainGenerator: TerrainGeneratorService,
         portGenerator: PortGeneratorService
     ) {
-        this.randomNumberService = randomNumberService;
+        this.randomService = randomService;
         this.diceNumberGenerator = diceNumberGenerator;
         this.terrainGenerator = terrainGenerator;
         this.portGenerator = portGenerator;

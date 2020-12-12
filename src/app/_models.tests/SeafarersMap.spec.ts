@@ -1,7 +1,7 @@
 import { TestBed } from "@angular/core/testing";
-import { SeafarersMap } from "./SeafarersMap";
-import { Hex } from "./Hex";
-import { Terrain } from "./Terrain";
+import { SeafarersMap } from "../_models/SeafarersMap";
+import { Hex } from "../_models/Hex";
+import { Terrain } from "../_models/Terrain";
 
 describe("SeafarersMap", () => {
     beforeEach(() => {

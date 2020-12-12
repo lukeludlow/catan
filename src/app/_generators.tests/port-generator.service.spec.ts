@@ -1,16 +1,16 @@
 import { TestBed } from "@angular/core/testing";
 
-import { PortGeneratorService } from "./port-generator.service";
-import { SeafarersMap } from "./model/SeafarersMap";
-import { Terrain } from "./model/Terrain";
-import { HexSide } from "./model/HexSide";
+import { PortGenerator } from "../_generators/port-generator.service";
+import { SeafarersMap } from "../_models/SeafarersMap";
+import { Terrain } from "../_models/Terrain";
+import { HexSide } from "../_models/HexSide";
 
-describe("PortGeneratorService", () => {
-    let portGenerator: PortGeneratorService;
+describe("PortGenerator", () => {
+    let portGenerator: PortGenerator;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
-        portGenerator = TestBed.inject(PortGeneratorService);
+        portGenerator = TestBed.inject(PortGenerator);
     });
 
     it("should be created", () => {

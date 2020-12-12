@@ -1,15 +1,14 @@
 import { TestBed } from "@angular/core/testing";
 
-import { CollisionDetectorService } from "./collision-detector.service";
-import { Hex } from "./model/Hex";
-import { SeafarersMap } from "./model/SeafarersMap";
+import { CollisionDetector } from "../_validators/collision-detector.service";
+import { SeafarersMap } from "../_models/SeafarersMap";
 
-describe("CollisionDetectorService", () => {
-    let collisionDetector: CollisionDetectorService;
+describe("CollisionDetector", () => {
+    let collisionDetector: CollisionDetector;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
-        collisionDetector = TestBed.inject(CollisionDetectorService);
+        collisionDetector = TestBed.inject(CollisionDetector);
     });
 
     it("should be created", () => {

@@ -1,17 +1,17 @@
 import { Injectable } from "@angular/core";
-import { SeafarersMap } from "./model/SeafarersMap";
-import { Hex } from "./model/Hex";
-import { Terrain } from "./model/Terrain";
-import { HexSide } from "./model/HexSide";
-import { HexDirection } from "./model/HexDirection";
-import { RandomService } from "./random.service";
-import { Port } from "./model/Port";
-import { ArrayService } from "./array.service";
+import { SeafarersMap } from "../_models/SeafarersMap";
+import { Hex } from "../_models/Hex";
+import { Terrain } from "../_models/Terrain";
+import { HexSide } from "../_models/HexSide";
+import { HexDirection } from "../_models/HexDirection";
+import { RandomService } from "../_services/random.service";
+import { Port } from "../_models/Port";
+import { ArrayService } from "../_services/array.service";
 
 @Injectable({
     providedIn: "root",
 })
-export class PortGeneratorService {
+export class PortGenerator {
     private randomService: RandomService;
     private arrayService: ArrayService;
 

@@ -1,6 +1,6 @@
 import { TestBed } from "@angular/core/testing";
 
-import { ArrayService } from "./array.service";
+import { ArrayService } from "../_services/array.service";
 
 describe("ArrayService", () => {
     let service: ArrayService;

@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
-import { Hex } from "./model/Hex";
-import { RandomService } from "./random.service";
-import { DiceNumberGeneratorService } from "./dice-number-generator.service";
-import { TerrainGeneratorService } from "./terrain-generator.service";
-import { SeafarersMap } from "./model/SeafarersMap";
-import { PortGeneratorService } from "./port-generator.service";
+import { Hex } from "../_models/Hex";
+import { RandomService } from "../_services/random.service";
+import { DiceNumberGenerator } from "./dice-number-generator.service";
+import { TerrainGenerator } from "./terrain-generator.service";
+import { SeafarersMap } from "../_models/SeafarersMap";
+import { PortGenerator } from "../_generators/port-generator.service";
 
 @Injectable({
     providedIn: "root",
@@ -23,15 +23,15 @@ export class SeafarersMapGenerator {
     ];
     private terrainCounts: Map<string, number>;
     private randomService: RandomService;
-    private diceNumberGenerator: DiceNumberGeneratorService;
-    private terrainGenerator: TerrainGeneratorService;
-    private portGenerator: PortGeneratorService;
+    private diceNumberGenerator: DiceNumberGenerator;
+    private terrainGenerator: TerrainGenerator;
+    private portGenerator: PortGenerator;
 
     constructor(
         randomService: RandomService,
-        diceNumberGenerator: DiceNumberGeneratorService,
-        terrainGenerator: TerrainGeneratorService,
-        portGenerator: PortGeneratorService
+        diceNumberGenerator: DiceNumberGenerator,
+        terrainGenerator: TerrainGenerator,
+        portGenerator: PortGenerator
     ) {
         this.randomService = randomService;
         this.diceNumberGenerator = diceNumberGenerator;

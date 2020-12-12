@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { removeFromArrayCondition } from "./model/delegates";
+import { removeFromArrayIf } from "../_models/delegates";
 
 @Injectable({
     providedIn: "root",
@@ -7,8 +7,8 @@ import { removeFromArrayCondition } from "./model/delegates";
 export class ArrayService {
     constructor() {}
 
-    public removeFirstOccurrence(array: any[], removeConditionDelegate: removeFromArrayCondition): any[] {
-        const index: number = array.findIndex((x) => removeConditionDelegate(x));
+    public removeFirstOccurrence(array: any[], shouldRemove: removeFromArrayIf): any[] {
+        const index: number = array.findIndex((x) => shouldRemove(x));
         array.splice(index, 1);
         return array;
     }

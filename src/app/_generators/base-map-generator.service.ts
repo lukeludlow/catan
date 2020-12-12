@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
-import { BasicHex } from "./model/BasicHex";
+import { BasicHex } from "../_models/BasicHex";
 
 @Injectable({
     providedIn: "root",
 })
-export class BoardGeneratorService {
+export class BaseMapGenerator {
     hexes: BasicHex[][];
 
     constructor() {

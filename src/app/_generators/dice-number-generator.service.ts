@@ -1,20 +1,20 @@
 import { Injectable } from "@angular/core";
-import { Hex } from "./model/Hex";
-import { RandomService } from "./random.service";
-import { CollisionDetectorService } from "./collision-detector.service";
-import { SeafarersMap } from "./model/SeafarersMap";
-import { Terrain } from "./model/Terrain";
-import { ArrayService } from "./array.service";
+import { Hex } from "../_models/Hex";
+import { RandomService } from "../_services/random.service";
+import { CollisionDetector } from "../_validators/collision-detector.service";
+import { SeafarersMap } from "../_models/SeafarersMap";
+import { Terrain } from "../_models/Terrain";
+import { ArrayService } from "../_services/array.service";
 
 @Injectable({
     providedIn: "root",
 })
-export class DiceNumberGeneratorService {
+export class DiceNumberGenerator {
     private randomService: RandomService;
-    private collisionDetecter: CollisionDetectorService;
+    private collisionDetecter: CollisionDetector;
     private arrayService: ArrayService;
 
-    constructor(randomService: RandomService, collisionDetector: CollisionDetectorService, arrayService: ArrayService) {
+    constructor(randomService: RandomService, collisionDetector: CollisionDetector, arrayService: ArrayService) {
         this.randomService = randomService;
         this.collisionDetecter = collisionDetector;
         this.arrayService = arrayService;

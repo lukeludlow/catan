@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef, Renderer2, AfterViewInit } from "@angular/core";
-import { SeafarersMapGenerator } from "../_services/seafarers-map-generator.service";
-import { Hex } from "../_services/model/Hex";
-import { SeafarersMap } from "../_services/model/SeafarersMap";
-import { Terrain } from "../_services/model/Terrain";
-import { Port } from "../_services/model/Port";
-import { HexSide } from "../_services/model/HexSide";
+import { SeafarersMapGenerator } from "../_generators/seafarers-map-generator.service";
+import { Hex } from "../_models/Hex";
+import { SeafarersMap } from "../_models/SeafarersMap";
+import { Terrain } from "../_models/Terrain";
+import { Port } from "../_models/Port";
+import { HexSide } from "../_models/HexSide";
 
 @Component({
     selector: "app-seafarers",
@@ -23,12 +23,12 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
         const width = this.mapDiv.nativeElement.clientWidth;
-        console.log("mapDiv width: " + width);
-        console.log("mapDiv height: " + this.mapDiv.nativeElement.clientHeight);
+        // console.log("mapDiv width: " + width);
+        // console.log("mapDiv height: " + this.mapDiv.nativeElement.clientHeight);
         this.renderer.setStyle(this.mapDiv.nativeElement, "height", `${width}`);
         const newHeight = width * this.widthHeightRatio;
         this.mapDiv.nativeElement.style.height = `${newHeight}px`;
-        console.log("updated mapDiv height: " + this.mapDiv.nativeElement.clientHeight);
+        // console.log("updated mapDiv height: " + this.mapDiv.nativeElement.clientHeight);
         this.mapDiv.nativeElement.style.top = `${this.initialTopOffset}%`;
         this.drawBackground();
         this.drawHexes();
@@ -117,7 +117,7 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
             const diceNumberImage = this.createDiceNumberImage(hex.getDiceNumber(), topCoord, leftCoord);
             this.renderer.appendChild(this.mapDiv.nativeElement, diceNumberImage);
             if (hex.getPort()) {
-                console.log(`hex at ${hex.getRow()}${hex.getCol()} has port ${HexSide[hex.getPort().getSide()]}`);
+                // console.log(`hex at ${hex.getRow()}${hex.getCol()} has port ${HexSide[hex.getPort().getSide()]}`);
                 const portImage = this.createPortImage(hex.getPort(), topCoord, leftCoord);
                 this.renderer.appendChild(this.mapDiv.nativeElement, portImage);
             }
@@ -184,7 +184,7 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {}
 
     reload(): void {
-        console.log("map display component reload");
+        // console.log("map display component reload");
         // reload
         window.location.href = window.location.href;
     }

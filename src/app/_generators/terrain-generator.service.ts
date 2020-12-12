@@ -1,15 +1,15 @@
 import { Injectable } from "@angular/core";
-import { Hex } from "./model/Hex";
-import { RandomService } from "./random.service";
-import { SeafarersMap } from "./model/SeafarersMap";
-import { Terrain } from "./model/Terrain";
-import { removeFromArrayCondition } from "./model/delegates";
-import { ArrayService } from "./array.service";
+import { Hex } from "../_models/Hex";
+import { RandomService } from "../_services/random.service";
+import { SeafarersMap } from "../_models/SeafarersMap";
+import { Terrain } from "../_models/Terrain";
+import { removeFromArrayIf } from "../_models/delegates";
+import { ArrayService } from "../_services/array.service";
 
 @Injectable({
     providedIn: "root",
 })
-export class TerrainGeneratorService {
+export class TerrainGenerator {
     private static readonly minimumResourcesCount: number = 20;
     private static readonly requiredHexesCount: number = 42;
     private static readonly terrainTypes: string[] = [
@@ -69,7 +69,7 @@ export class TerrainGeneratorService {
         availableTerrains = this.generateMinimumResourceTerrains(map, availableTerrains);
         for (
             let i = 0;
-            i < TerrainGeneratorService.requiredHexesCount - TerrainGeneratorService.minimumResourcesCount;
+            i < TerrainGenerator.requiredHexesCount - TerrainGenerator.minimumResourcesCount;
             i++
         ) {
             const terrain: Terrain = this.randomService.getRandomElementFromArray(availableTerrains);

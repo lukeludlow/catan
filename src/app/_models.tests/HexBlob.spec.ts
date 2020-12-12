@@ -1,4 +1,4 @@
-import { HexBlob, OffsetCoord, Point } from "./HexBlob";
+import { HexBlob, OffsetCoord, Point } from "../_models/HexBlob";
 
 describe("HexBlob", () => {
     it("testHexBlobArithmetic", () => {

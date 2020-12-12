@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { ICatanMap } from "./model/ICatanMap";
-import { hexMatchCondition } from "./model/delegates";
-import { HexCoords } from "./model/HexCoords";
+import { ICatanMap } from "../_models/ICatanMap";
+import { matchHexIf } from "../_models/delegates";
+import { HexCoords } from "../_models/HexCoords";
 
 @Injectable({
     providedIn: "root",
@@ -23,10 +23,10 @@ export class RandomService {
         return array[Math.floor(Math.random() * array.length)];
     }
 
-    public getRandomCoords(map: ICatanMap, hexMatchCondition: hexMatchCondition): HexCoords {
+    public getRandomCoords(map: ICatanMap, shouldMatchHex: matchHexIf): HexCoords {
         let randomRow: number = this.getRandomNumberExclusive(0, map.getRows().length);
         let randomCol: number = this.getRandomNumberExclusive(0, map.getRow(randomRow).length);
-        while (!hexMatchCondition(map.getHex(randomRow, randomCol))) {
+        while (!shouldMatchHex(map.getHex(randomRow, randomCol))) {
             randomRow = this.getRandomNumberExclusive(0, map.getRows().length);
             randomCol = this.getRandomNumberExclusive(0, map.getRow(randomRow).length);
         }

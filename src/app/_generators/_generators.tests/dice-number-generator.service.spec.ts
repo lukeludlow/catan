@@ -1,20 +1,20 @@
 import { TestBed } from "@angular/core/testing";
 
-import { DiceNumberGeneratorService } from "./dice-number-generator.service";
-import { Hex } from "./model/Hex";
-import { RandomService } from "./random.service";
-import { CollisionDetectorService } from "./collision-detector.service";
-import { SeafarersMap } from "./model/SeafarersMap";
-import { Terrain } from "./model/Terrain";
+import { DiceNumberGenerator } from "../dice-number-generator.service";
+import { Hex } from "../../_models/Hex";
+import { RandomService } from "../../_services/random.service";
+import { CollisionDetectorService } from "../../_validators/collision-detector.service";
+import { SeafarersMap } from "../../_models/SeafarersMap";
+import { Terrain } from "../../_models/Terrain";
 
 describe("DiceNumberGeneratorService", () => {
-    let diceNumberGeneratorService: DiceNumberGeneratorService;
+    let diceNumberGeneratorService: DiceNumberGenerator;
     let randomService: RandomService;
     let collisionDetector: CollisionDetectorService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
-        diceNumberGeneratorService = TestBed.inject(DiceNumberGeneratorService);
+        diceNumberGeneratorService = TestBed.inject(DiceNumberGenerator);
         randomService = TestBed.inject(RandomService);
         collisionDetector = TestBed.inject(CollisionDetectorService);
     });

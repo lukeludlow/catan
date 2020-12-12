@@ -1,27 +1,27 @@
 import { TestBed } from "@angular/core/testing";
 
-import { SeafarersMapGenerator } from "./seafarers-map-generator.service";
-import { Hex } from "./model/Hex";
-import { RandomService } from "./random.service";
-import { DiceNumberGeneratorService } from "./dice-number-generator.service";
-import { TerrainGeneratorService } from "./terrain-generator.service";
-import { SeafarersMap } from "./model/SeafarersMap";
-import { PortGeneratorService } from "./port-generator.service";
+import { SeafarersMapGenerator } from "../seafarers-map-generator.service";
+import { Hex } from "../../_models/Hex";
+import { RandomService } from "../../_services/random.service";
+import { DiceNumberGenerator } from "../dice-number-generator.service";
+import { TerrainGenerator } from "../terrain-generator.service";
+import { SeafarersMap } from "../../_models/SeafarersMap";
+import { PortGenerator } from "../port-generator.service";
 
 describe("SeafarersMapGenerator", () => {
     let seafarersMapGenerator: SeafarersMapGenerator;
     let randomService: RandomService;
-    let diceNumberGenerator: DiceNumberGeneratorService;
-    let terrainGenerator: TerrainGeneratorService;
-    let portGenerator: PortGeneratorService;
+    let diceNumberGenerator: DiceNumberGenerator;
+    let terrainGenerator: TerrainGenerator;
+    let portGenerator: PortGenerator;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
         seafarersMapGenerator = TestBed.inject(SeafarersMapGenerator);
         randomService = TestBed.inject(RandomService);
-        diceNumberGenerator = TestBed.inject(DiceNumberGeneratorService);
-        terrainGenerator = TestBed.inject(TerrainGeneratorService);
-        portGenerator = TestBed.inject(PortGeneratorService);
+        diceNumberGenerator = TestBed.inject(DiceNumberGenerator);
+        terrainGenerator = TestBed.inject(TerrainGenerator);
+        portGenerator = TestBed.inject(PortGenerator);
     });
 
     it("should be created", () => {

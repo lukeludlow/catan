@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
-import { Hex } from "./model/Hex";
-import { SeafarersMap } from "./model/SeafarersMap";
+import { Hex } from "../_models/Hex";
+import { SeafarersMap } from "../_models/SeafarersMap";
 
 @Injectable({
     providedIn: "root",
 })
-export class CollisionDetectorService {
+export class CollisionDetector {
     constructor() {}
 
     public detectCollisions(map: SeafarersMap): boolean {

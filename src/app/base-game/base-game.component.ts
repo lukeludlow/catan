@@ -1,6 +1,6 @@
 import { Component, OnInit, Renderer2, ElementRef, ViewChild, AfterViewInit } from "@angular/core";
-import { BasicHex } from "../_services/model/BasicHex";
-import { BoardGeneratorService } from "../_services/board-generator.service";
+import { BasicHex } from "../_models/BasicHex";
+import { BaseMapGenerator } from "../_generators/base-map-generator.service";
 
 // developer tools, responsive, 414x705
 
@@ -17,7 +17,7 @@ export class BaseGameComponent implements OnInit, AfterViewInit {
 
     constructor(
         private renderer: Renderer2, // private el: ElementRef
-        private boardGeneratorService: BoardGeneratorService
+        private boardGeneratorService: BaseMapGenerator
     ) {}
 
     ngOnInit(): void {}

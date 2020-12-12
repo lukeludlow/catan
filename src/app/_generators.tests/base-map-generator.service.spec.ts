@@ -1,14 +1,14 @@
 import { TestBed } from "@angular/core/testing";
 
-import { BoardGeneratorService } from "./board-generator.service";
-import { BasicHex } from "./model/BasicHex";
+import { BaseMapGenerator } from "../_generators/base-map-generator.service";
+import { BasicHex } from "../_models/BasicHex";
 
-describe("BoardGeneratorService", () => {
-    let service: BoardGeneratorService;
+describe("BoardGenerator", () => {
+    let service: BaseMapGenerator;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
-        service = TestBed.inject(BoardGeneratorService);
+        service = TestBed.inject(BaseMapGenerator);
     });
 
     it("should be created", () => {

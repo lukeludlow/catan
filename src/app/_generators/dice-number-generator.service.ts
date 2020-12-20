@@ -28,7 +28,7 @@ export class DiceNumberGenerator {
             numTimesGenerated++;
         }
         console.log(
-            `successfully generated dice numbeers. it took ${numTimesGenerated} times to generate a map with no collisions`
+            `successfully generated dice numbers. it took ${numTimesGenerated} times to generate a map with no collisions`
         );
         return map;
     }

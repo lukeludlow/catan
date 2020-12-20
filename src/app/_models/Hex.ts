@@ -55,4 +55,12 @@ export class Hex {
     public setPort(port: Port): void {
         this.port = port;
     }
+
+    public hasTerrain(): boolean {
+        if (this.terrain === Terrain.Empty || this.terrain === Terrain.Sea) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

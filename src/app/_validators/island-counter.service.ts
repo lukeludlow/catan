@@ -10,6 +10,7 @@ export class IslandCounter {
     constructor() {}
 
     public countIslands(map: SeafarersMap): number {
+        return this.countIslands2(map);
         const rows = map.getRows();
         const visited = new Set<Hex>();
         const islands = new Array<Set<Hex>>();
@@ -17,11 +18,11 @@ export class IslandCounter {
             hexRow.forEach((hex) => {
                 if (hex.hasTerrain()) {
                     if (visited.has(hex)) {
-                        //
+                        console.log(`hex [${hex.getRow()}][${hex.getCol()}] already visited`);
                     } else {
                         visited.add(hex);
                         if (this.hexExistsInAnIsland(hex, islands)) {
-                            //
+                            console.log(`hex at [${hex.getRow()}][${hex.getCol}] exists in an island. skipping`);
                         } else {
                             if (this.anyNeighborExistsInAnIsland(map, hex, islands)) {
                                 const island = this.getIslandForHex(map, hex, islands);
@@ -36,7 +37,52 @@ export class IslandCounter {
                 }
             })
         );
+        console.log(`IslandCounter: countIslands=${islands.length}`);
         return islands.length;
+    }
+
+    private countIslands2(map: SeafarersMap): number {
+        // console.log("countIslands2");
+        const rows = map.getRows();
+        const visited = new Set<Hex>();
+        const islands = new Array<Set<Hex>>();
+        // console.log("counting islands...");
+        for (const hexRow of rows) {
+            for (const hex of hexRow) {
+                if (hex.hasTerrain()) {
+                    if (visited.has(hex)) {
+                        //
+                    } else {
+                        let island = new Set<Hex>();
+                        island = this.dfs(map, hex, visited, island);
+                        islands.push(island);
+                    }
+                }
+            }
+        }
+        const islandSizeRequirement = 3;
+        let islandsCount = 0;
+        for (const island of islands) {
+            if (island.size >= islandSizeRequirement) {
+                islandsCount++;
+            }
+        }
+        console.log(`IslandCounter: ${islandsCount} islands`);
+        return islandsCount;
+    }
+
+    private dfs(map: SeafarersMap, current: Hex, visited: Set<Hex>, island: Set<Hex>): Set<Hex> {
+        // console.log(`dfs on hex current = [${current.getRow()}][${current.getCol()}]`);
+        if (visited.has(current) || !current.hasTerrain()) {
+            return island;
+        }
+        visited.add(current);
+        island.add(current);
+        const neighbors = map.listNeighbors(current);
+        for (const neighborHex of neighbors) {
+            island = this.dfs(map, neighborHex, visited, island);
+        }
+        return island;
     }
 
     private hexExistsInAnIsland(hex: Hex, islands: Array<Set<Hex>>): boolean {

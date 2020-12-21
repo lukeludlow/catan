@@ -73,3 +73,12 @@ num tree ports: 1
 num sheep ports: 1  
 num brick ports: 1  
 num port slots needed (the question marks): 4
+
+
+
+
+## slider stuff
+
+https://github.com/angular-slider/ngx-slider
+
+https://github.com/angular-slider/ngx-slider/blob/master/STYLING.md

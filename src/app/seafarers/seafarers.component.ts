@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, Renderer2, AfterViewInit } from "@angular/core";
+import { ChangeContext, Options as SliderOptions } from "@angular-slider/ngx-slider";
 import { SeafarersMapGenerator } from "../_generators/seafarers-map-generator.service";
 import { Hex } from "../_models/Hex";
 import { SeafarersMap } from "../_models/SeafarersMap";
@@ -12,6 +13,11 @@ import { HexSide } from "../_models/HexSide";
     styleUrls: ["./seafarers.component.css"],
 })
 export class SeafarersComponent implements OnInit, AfterViewInit {
+    sliderOptions: SliderOptions = {
+        floor: 1,
+        ceil: 6,
+    };
+    sliderValue: number = 3;
     private readonly initialTopOffset: number = 10;
     private widthHeightRatio: number = 903 / 1024;
     private verticalRowOffsetIncrement: number = 15.42;
@@ -19,7 +25,10 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
     @ViewChild("mapDiv") mapDiv: ElementRef;
     @ViewChild("versionInfoDiv") versionInfoDiv: ElementRef;
 
-    constructor(private seafarersMapGenerator: SeafarersMapGenerator, private renderer: Renderer2) {}
+    constructor(private seafarersMapGenerator: SeafarersMapGenerator, private renderer: Renderer2) {
+        // console.log("constructor");
+        // this.sliderValue = 3;
+    }
 
     ngAfterViewInit() {
         const width = this.mapDiv.nativeElement.clientWidth;
@@ -45,7 +54,7 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
     }
 
     drawHexes(): void {
-        const hexes: SeafarersMap = this.seafarersMapGenerator.generateMap();
+        const hexes: SeafarersMap = this.seafarersMapGenerator.generateMap({ islands: this.sliderValue });
         this.drawFirstAndLastRows(hexes);
         this.drawOddRows(hexes);
         this.drawEvenRows(hexes);
@@ -183,9 +192,18 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {}
 
+    // onSliderValueChange(changeContext: ChangeContext): void {
+    //     this.sliderValue = changeContext.value;
+    //     console.log(`changing this.sliderValue=${this.sliderValue}`);
+    // }
+
     reload(): void {
-        // console.log("map display component reload");
+        console.log("map display component reload");
         // reload
-        window.location.href = window.location.href;
+        console.log(`1. this.sliderValue=${this.sliderValue}`);
+        // window.location.href = window.location.href;
+        this.drawBackground();
+        this.drawHexes();
+        console.log(`2. this.sliderValue=${this.sliderValue}`);
     }
 }

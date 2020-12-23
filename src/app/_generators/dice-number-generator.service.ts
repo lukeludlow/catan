@@ -27,9 +27,8 @@ export class DiceNumberGenerator {
             map = this.tryGenerateDiceNumbers(map);
             numTimesGenerated++;
         }
-        console.log(
-            `successfully generated dice numbers. it took ${numTimesGenerated} times to generate a map with no collisions`
-        );
+        // console.log(`successfully generated dice numbers. 
+        // it took ${numTimesGenerated} times to generate a map with no collisions`);
         return map;
     }
 

@@ -1,36 +1,14 @@
-
-:root {
-    --handleActiveColor: #451aff;
-    --labelTextColor: #55637d;
-    --handleBgColor: #0db9f0;
-    --handleInnerColor: #fff;
-    --limitLabelTextColor: #55637d;
-    --barFillColor: #0db9f0;
-    --barNormalColor: #d8e0f3;
-    --barLeftOutSelectionColor: #df002d;
-    --barRightOutSelectionColor: #03a688;
-}
-
 .custom-button .btn {
     background: #0db9f0;
-    /* background-color: #0db9f0; */
-    /* color: #0db9f0; */
 }
 
-/*
-::ng-deep .custom-slider .ngx-slider {
-}
-
-::ng-deep .custom-slider .ngx-slider .ngx-slider-selection {
-    background: rgb(255, 0, 0) !important;
-}
-
-::ng-deep .custom-slider .ngx-slider .ngx-slider-bar {
-    background: rgb(255, 0, 0) !important;
-}
-
-::ng-deep .custom-slider .ngx-slider .ngx-slider-pointer {
-    background: rgb(255, 0, 0) !important;
-    background-color: rgb(255, 0, 0) !important;
-}
-*/
+/* div #mapDiv { */
+    /* width: 100%; */
+    /* display: block; */
+    /* position: absolute; */
+    /* top: 0; */
+    /* bottom: 0; */
+    /* left: 0; */
+    /* right: 0; */
+    /* outline: 1px dashed red; */
+/* } */

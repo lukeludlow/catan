@@ -11,34 +11,6 @@ export class IslandCounter {
 
     public countIslands(map: SeafarersMap): number {
         return this.countIslands2(map);
-        const rows = map.getRows();
-        const visited = new Set<Hex>();
-        const islands = new Array<Set<Hex>>();
-        rows.forEach((hexRow) =>
-            hexRow.forEach((hex) => {
-                if (hex.hasTerrain()) {
-                    if (visited.has(hex)) {
-                        console.log(`hex [${hex.getRow()}][${hex.getCol()}] already visited`);
-                    } else {
-                        visited.add(hex);
-                        if (this.hexExistsInAnIsland(hex, islands)) {
-                            console.log(`hex at [${hex.getRow()}][${hex.getCol}] exists in an island. skipping`);
-                        } else {
-                            if (this.anyNeighborExistsInAnIsland(map, hex, islands)) {
-                                const island = this.getIslandForHex(map, hex, islands);
-                                island.add(hex);
-                            } else {
-                                const newIsland = new Set<Hex>();
-                                newIsland.add(hex);
-                                islands.push(newIsland);
-                            }
-                        }
-                    }
-                }
-            })
-        );
-        console.log(`IslandCounter: countIslands=${islands.length}`);
-        return islands.length;
     }
 
     private countIslands2(map: SeafarersMap): number {
@@ -67,7 +39,7 @@ export class IslandCounter {
                 islandsCount++;
             }
         }
-        console.log(`IslandCounter: ${islandsCount} islands`);
+        // console.log(`IslandCounter: ${islandsCount} islands`);
         return islandsCount;
     }
 

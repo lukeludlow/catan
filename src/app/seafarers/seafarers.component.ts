@@ -18,7 +18,7 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
         ceil: 6,
     };
     sliderValue: number = 3;
-    private readonly initialTopOffset: number = 10;
+    private readonly initialTopOffset: number = 0;
     private widthHeightRatio: number = 903 / 1024;
     private verticalRowOffsetIncrement: number = 15.42;
     private horizontalHexOffsetIncrement: number = 23.75;
@@ -32,12 +32,12 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
         const width = this.mapDiv.nativeElement.clientWidth;
-        // console.log("mapDiv width: " + width);
-        // console.log("mapDiv height: " + this.mapDiv.nativeElement.clientHeight);
+        console.log("mapDiv width: " + width);
+        console.log("mapDiv height: " + this.mapDiv.nativeElement.clientHeight);
         this.renderer.setStyle(this.mapDiv.nativeElement, "height", `${width}`);
         const newHeight = width * this.widthHeightRatio;
         this.mapDiv.nativeElement.style.height = `${newHeight}px`;
-        // console.log("updated mapDiv height: " + this.mapDiv.nativeElement.clientHeight);
+        console.log("updated mapDiv height: " + this.mapDiv.nativeElement.clientHeight);
         this.mapDiv.nativeElement.style.top = `${this.initialTopOffset}%`;
         this.drawBackground();
         this.drawHexes();
@@ -192,18 +192,16 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {}
 
-    // onSliderValueChange(changeContext: ChangeContext): void {
-    //     this.sliderValue = changeContext.value;
-    //     console.log(`changing this.sliderValue=${this.sliderValue}`);
-    // }
-
     reload(): void {
-        console.log("map display component reload");
-        // reload
-        console.log(`1. this.sliderValue=${this.sliderValue}`);
-        // window.location.href = window.location.href;
+        this.clearAllElements();
         this.drawBackground();
         this.drawHexes();
-        console.log(`2. this.sliderValue=${this.sliderValue}`);
+    }
+
+    private clearAllElements(): void {
+        const childElements = this.mapDiv.nativeElement.children;
+        for (const child of childElements) {
+            this.renderer.removeChild(this.mapDiv.nativeElement, child);
+        }
     }
 }

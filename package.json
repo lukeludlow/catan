@@ -14,10 +14,12 @@
   "dependencies": {
     "@angular-slider/ngx-slider": "^2.0.3",
     "@angular/animations": "^9.1.12",
+    "@angular/cdk": "^9.2.4",
     "@angular/common": "^9.1.12",
     "@angular/compiler": "^9.1.12",
     "@angular/core": "^9.1.12",
     "@angular/forms": "^9.1.12",
+    "@angular/material": "^9.2.4",
     "@angular/platform-browser": "^9.1.12",
     "@angular/platform-browser-dynamic": "^9.1.12",
     "@angular/router": "^9.1.12",
@@ -29,6 +31,7 @@
     "intl": "^1.2.5",
     "ngx-bootstrap": "^5.6.1",
     "rxjs": "~6.5.4",
+    "tns-core-modules": "^6.6.0-next-2020-05-08-112112-01",
     "tslib": "^1.13.0",
     "zone.js": "~0.10.2"
   },

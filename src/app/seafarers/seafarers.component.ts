@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer2, AfterViewInit } from "@angular/core";
-import { ChangeContext, Options as SliderOptions } from "@angular-slider/ngx-slider";
+import { Component, OnInit, ViewChild, ElementRef, Renderer2, AfterViewInit, ChangeDetectorRef } from "@angular/core";
+import { Options as SliderOptions } from "@angular-slider/ngx-slider";
 import { SeafarersMapGenerator } from "../_generators/seafarers-map-generator.service";
 import { Hex } from "../_models/Hex";
 import { SeafarersMap } from "../_models/SeafarersMap";
@@ -13,11 +13,14 @@ import { HexSide } from "../_models/HexSide";
     styleUrls: ["./seafarers.component.css"],
 })
 export class SeafarersComponent implements OnInit, AfterViewInit {
+    // ui binding stuff
     sliderOptions: SliderOptions = {
         floor: 1,
         ceil: 6,
     };
     sliderValue: number = 3;
+    loading = false;
+
     private readonly initialTopOffset: number = 0;
     private widthHeightRatio: number = 903 / 1024;
     private verticalRowOffsetIncrement: number = 15.42;
@@ -25,10 +28,11 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
     @ViewChild("mapDiv") mapDiv: ElementRef;
     @ViewChild("versionInfoDiv") versionInfoDiv: ElementRef;
 
-    constructor(private seafarersMapGenerator: SeafarersMapGenerator, private renderer: Renderer2) {
-        // console.log("constructor");
-        // this.sliderValue = 3;
-    }
+    constructor(
+        private seafarersMapGenerator: SeafarersMapGenerator,
+        private renderer: Renderer2,
+        private cdRef: ChangeDetectorRef
+    ) {}
 
     ngAfterViewInit() {
         const width = this.mapDiv.nativeElement.clientWidth;
@@ -39,8 +43,33 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
         this.mapDiv.nativeElement.style.height = `${newHeight}px`;
         console.log("updated mapDiv height: " + this.mapDiv.nativeElement.clientHeight);
         this.mapDiv.nativeElement.style.top = `${this.initialTopOffset}%`;
-        this.drawBackground();
-        this.drawHexes();
+        this.draw();
+    }
+
+    draw(): void {
+        this.loading = true;
+        this.cdRef.detectChanges();
+        console.log(`draw. loading=${this.loading}`);
+        this.asyncGenerateMap().then((map) => {
+            console.log("callback after asyncGenerateMap");
+            this.clearAllElements();
+            this.drawBackground();
+            this.drawHexes(map);
+            this.loading = false;
+            this.cdRef.detectChanges();
+            console.log(`end draw. loading=${this.loading}`);
+        });
+    }
+
+    async asyncGenerateMap(): Promise<SeafarersMap> {
+        console.log("asyncGenerateMap");
+        const promiseOne: Promise<SeafarersMap> = new Promise((resolve, reject) => {
+            console.log("inside promise");
+            setTimeout(() => resolve(this.seafarersMapGenerator.generateMap({ islands: this.sliderValue })), 500);
+            // resolve(this.seafarersMapGenerator.generateMap({ islands: this.sliderValue }));
+        });
+        const map = await promiseOne;
+        return map;
     }
 
     drawBackground(): void {
@@ -53,8 +82,7 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
         this.renderer.appendChild(this.mapDiv.nativeElement, backgroundImage);
     }
 
-    drawHexes(): void {
-        const hexes: SeafarersMap = this.seafarersMapGenerator.generateMap({ islands: this.sliderValue });
+    drawHexes(hexes: SeafarersMap): void {
         this.drawFirstAndLastRows(hexes);
         this.drawOddRows(hexes);
         this.drawEvenRows(hexes);
@@ -193,9 +221,7 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {}
 
     reload(): void {
-        this.clearAllElements();
-        this.drawBackground();
-        this.drawHexes();
+        this.draw();
     }
 
     private clearAllElements(): void {

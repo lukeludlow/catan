@@ -1,61 +1,14 @@
 import { Injectable } from "@angular/core";
-import { Hex } from "../_models/Hex";
 import { RandomService } from "../_services/random.service";
 import { SeafarersMap } from "../_models/SeafarersMap";
 import { Terrain } from "../_models/Terrain";
-import { removeFromArrayIf } from "../_models/delegates";
 import { ArrayService } from "../_services/array.service";
+import { MapSettings } from "../_maps/MapSettings";
 
 @Injectable({
     providedIn: "root",
 })
 export class TerrainGenerator {
-    private static readonly minimumResourcesCount: number = 20;
-    private static readonly requiredHexesCount: number = 42;
-    private static readonly terrainTypes: string[] = [
-        "brick",
-        "desert",
-        "gold",
-        "rock",
-        "sea",
-        "sheep",
-        "tree",
-        "wheat",
-    ];
-    private terrainCounts = {
-        brick: {
-            min: 3,
-            max: 5,
-        },
-        desert: {
-            min: 0,
-            max: 1,
-        },
-        gold: {
-            min: 2,
-            max: 2,
-        },
-        rock: {
-            min: 3,
-            max: 5,
-        },
-        sea: {
-            min: 12,
-            max: 19,
-        },
-        sheep: {
-            min: 4,
-            max: 5,
-        },
-        tree: {
-            min: 4,
-            max: 5,
-        },
-        wheat: {
-            min: 4,
-            max: 5,
-        },
-    };
     private randomService: RandomService;
     private arrayService: ArrayService;
 
@@ -63,124 +16,86 @@ export class TerrainGenerator {
         this.randomService = randomService;
         this.arrayService = arrayService;
     }
+    public generateTerrain(map: SeafarersMap, settings: MapSettings): SeafarersMap {
+        const minimums: Terrain[] = this.getMinimumResources(settings);
+        const minimumsCount: number = minimums.length;
+        map = this.addTerrainsToMap(map, minimums, minimumsCount);
+        const remaining: Terrain[] = this.getRemainingAvailableResources(settings);
+        const remainingHexesNeeded: number = settings.requiredHexesCount - minimumsCount;
+        map = this.addTerrainsToMap(map, remaining, remainingHexesNeeded);
+        return map;
+    }
 
-    public generateTerrain(map: SeafarersMap): SeafarersMap {
-        let availableTerrains: Terrain[] = this.getAllAvailableTerrainsPool();
-        availableTerrains = this.generateMinimumResourceTerrains(map, availableTerrains);
-        for (
-            let i = 0;
-            i < TerrainGenerator.requiredHexesCount - TerrainGenerator.minimumResourcesCount;
-            i++
-        ) {
-            const terrain: Terrain = this.randomService.getRandomElementFromArray(availableTerrains);
-            availableTerrains = this.arrayService.removeFirstOccurrence(
-                availableTerrains,
-                (x: Terrain) => x === terrain
-            );
+    private addTerrainsToMap(map: SeafarersMap, terrains: Terrain[], numHexesToAdd: number): SeafarersMap {
+        for (let i = 0; i < numHexesToAdd; i++) {
+            const terrain = this.randomService.getRandomElementFromArray(terrains);
+            terrains = this.arrayService.removeFirstOccurrence(terrains, (x: Terrain) => x === terrain);
             const randomCoords = this.getRandomUnusedCoords(map);
             map.setHexTerrain(randomCoords.randomRow, randomCoords.randomCol, terrain);
         }
         return map;
     }
 
-    private generateMinimumResourceTerrains(map: SeafarersMap, availableTerrains: Terrain[]): Terrain[] {
-        availableTerrains = this.generateTerrainXTimes(
-            map,
-            availableTerrains,
-            Terrain.Brick,
-            this.terrainCounts.brick.min
-        );
-        availableTerrains = this.generateTerrainXTimes(
-            map,
-            availableTerrains,
-            Terrain.Gold,
-            this.terrainCounts.gold.min
-        );
-        availableTerrains = this.generateTerrainXTimes(
-            map,
-            availableTerrains,
-            Terrain.Rock,
-            this.terrainCounts.rock.min
-        );
-        availableTerrains = this.generateTerrainXTimes(
-            map,
-            availableTerrains,
-            Terrain.Sheep,
-            this.terrainCounts.sheep.min
-        );
-        availableTerrains = this.generateTerrainXTimes(
-            map,
-            availableTerrains,
-            Terrain.Tree,
-            this.terrainCounts.tree.min
-        );
-        availableTerrains = this.generateTerrainXTimes(
-            map,
-            availableTerrains,
-            Terrain.Wheat,
-            this.terrainCounts.wheat.min
-        );
-        return availableTerrains;
-    }
-
-    private generateTerrainXTimes(
-        map: SeafarersMap,
-        availableTerrains: Terrain[],
-        terrain: Terrain,
-        numTimesToGenerate: number
-    ): Terrain[] {
-        for (let i = 0; i < numTimesToGenerate; i++) {
-            availableTerrains = this.arrayService.removeFirstOccurrence(
-                availableTerrains,
-                (x: Terrain) => x === terrain
-            );
-            const randomCoords = this.getRandomUnusedCoords(map);
-            map.setHexTerrain(randomCoords.randomRow, randomCoords.randomCol, terrain);
+    private getMinimumResources(settings: MapSettings): Terrain[] {
+        let minimums: Terrain[] = new Array<Terrain>();
+        for (const terrain of settings.terrainTypes) {
+            const minTerrainCount: number = settings.terrainCounts.get(terrain).min;
+            minimums = this.addTerrainToArrayXTimes(minimums, terrain, minTerrainCount);
         }
-        return availableTerrains;
+        return minimums;
     }
 
-    public getAllAvailableTerrainsPool(): Terrain[] {
+    private getRemainingAvailableResources(settings: MapSettings): Terrain[] {
+        let remaining: Terrain[] = new Array<Terrain>();
+        for (const terrain of settings.terrainTypes) {
+            const remainingTerrainCount: number =
+                settings.terrainCounts.get(terrain).max - settings.terrainCounts.get(terrain).min;
+            remaining = this.addTerrainToArrayXTimes(remaining, terrain, remainingTerrainCount);
+        }
+        return remaining;
+    }
+
+    public getAllAvailableTerrainsPool(settings: MapSettings): Terrain[] {
         let allAvailableTerrains: Terrain[] = new Array<Terrain>();
         allAvailableTerrains = this.addTerrainToArrayXTimes(
             allAvailableTerrains,
             Terrain.Brick,
-            this.terrainCounts.brick.max
+            settings.terrainCounts.get(Terrain.Brick).max
         );
         allAvailableTerrains = this.addTerrainToArrayXTimes(
             allAvailableTerrains,
             Terrain.Desert,
-            this.terrainCounts.desert.max
+            settings.terrainCounts.get(Terrain.Desert).max
         );
         allAvailableTerrains = this.addTerrainToArrayXTimes(
             allAvailableTerrains,
             Terrain.Gold,
-            this.terrainCounts.gold.max
+            settings.terrainCounts.get(Terrain.Gold).max
         );
         allAvailableTerrains = this.addTerrainToArrayXTimes(
             allAvailableTerrains,
             Terrain.Rock,
-            this.terrainCounts.rock.max
+            settings.terrainCounts.get(Terrain.Rock).max
         );
         allAvailableTerrains = this.addTerrainToArrayXTimes(
             allAvailableTerrains,
             Terrain.Sea,
-            this.terrainCounts.sea.max
+            settings.terrainCounts.get(Terrain.Sea).max
         );
         allAvailableTerrains = this.addTerrainToArrayXTimes(
             allAvailableTerrains,
             Terrain.Sheep,
-            this.terrainCounts.sheep.max
+            settings.terrainCounts.get(Terrain.Sheep).max
         );
         allAvailableTerrains = this.addTerrainToArrayXTimes(
             allAvailableTerrains,
             Terrain.Tree,
-            this.terrainCounts.tree.max
+            settings.terrainCounts.get(Terrain.Tree).max
         );
         allAvailableTerrains = this.addTerrainToArrayXTimes(
             allAvailableTerrains,
             Terrain.Wheat,
-            this.terrainCounts.wheat.max
+            settings.terrainCounts.get(Terrain.Wheat).max
         );
         return allAvailableTerrains;
     }

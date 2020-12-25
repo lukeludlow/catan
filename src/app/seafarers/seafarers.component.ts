@@ -19,7 +19,7 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
         ceil: 6,
     };
     sliderValue: number = 3;
-    loading = false;
+    loading = true;
 
     private readonly initialTopOffset: number = 0;
     private widthHeightRatio: number = 903 / 1024;
@@ -28,13 +28,11 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
     @ViewChild("mapDiv") mapDiv: ElementRef;
     @ViewChild("versionInfoDiv") versionInfoDiv: ElementRef;
 
-    constructor(
-        private seafarersMapGenerator: SeafarersMapGenerator,
-        private renderer: Renderer2,
-        private cdRef: ChangeDetectorRef
-    ) {}
+    constructor(private seafarersMapGenerator: SeafarersMapGenerator, private renderer: Renderer2) {}
 
-    ngAfterViewInit() {
+    ngOnInit(): void {}
+
+    async ngAfterViewInit() {
         const width = this.mapDiv.nativeElement.clientWidth;
         console.log("mapDiv width: " + width);
         console.log("mapDiv height: " + this.mapDiv.nativeElement.clientHeight);
@@ -43,33 +41,31 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
         this.mapDiv.nativeElement.style.height = `${newHeight}px`;
         console.log("updated mapDiv height: " + this.mapDiv.nativeElement.clientHeight);
         this.mapDiv.nativeElement.style.top = `${this.initialTopOffset}%`;
-        this.draw();
+        await this.draw();
     }
 
-    draw(): void {
+    async draw(): Promise<void> {
         this.loading = true;
-        this.cdRef.detectChanges();
-        console.log(`draw. loading=${this.loading}`);
-        this.asyncGenerateMap().then((map) => {
-            console.log("callback after asyncGenerateMap");
-            this.clearAllElements();
-            this.drawBackground();
-            this.drawHexes(map);
-            this.loading = false;
-            this.cdRef.detectChanges();
-            console.log(`end draw. loading=${this.loading}`);
-        });
+        let isValidMap = await this.generateMapAsync();
+        let numTimesGenerated = 0;
+        while (!isValidMap) {
+            isValidMap = await this.generateMapAsync();
+            numTimesGenerated++;
+        }
+        const map: SeafarersMap = this.seafarersMapGenerator.getMap();
+        console.log(`generated map after ${numTimesGenerated} validations`);
+        this.clearAllElements();
+        this.drawBackground();
+        this.drawHexes(map);
+        this.loading = false;
     }
 
-    async asyncGenerateMap(): Promise<SeafarersMap> {
-        console.log("asyncGenerateMap");
-        const promiseOne: Promise<SeafarersMap> = new Promise((resolve, reject) => {
-            console.log("inside promise");
-            setTimeout(() => resolve(this.seafarersMapGenerator.generateMap({ islands: this.sliderValue })), 500);
-            // resolve(this.seafarersMapGenerator.generateMap({ islands: this.sliderValue }));
+    async generateMapAsync(): Promise<boolean> {
+        return new Promise<boolean>((resolve) => {
+            setTimeout(() => {
+                resolve(this.seafarersMapGenerator.tryGenerateMapChunk({ islands: this.sliderValue }));
+            }, 1);
         });
-        const map = await promiseOne;
-        return map;
     }
 
     drawBackground(): void {
@@ -154,7 +150,6 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
             const diceNumberImage = this.createDiceNumberImage(hex.getDiceNumber(), topCoord, leftCoord);
             this.renderer.appendChild(this.mapDiv.nativeElement, diceNumberImage);
             if (hex.getPort()) {
-                // console.log(`hex at ${hex.getRow()}${hex.getCol()} has port ${HexSide[hex.getPort().getSide()]}`);
                 const portImage = this.createPortImage(hex.getPort(), topCoord, leftCoord);
                 this.renderer.appendChild(this.mapDiv.nativeElement, portImage);
             }
@@ -218,10 +213,8 @@ export class SeafarersComponent implements OnInit, AfterViewInit {
         return portImage;
     }
 
-    ngOnInit(): void {}
-
-    reload(): void {
-        this.draw();
+    async reload(): Promise<void> {
+        await this.draw();
     }
 
     private clearAllElements(): void {

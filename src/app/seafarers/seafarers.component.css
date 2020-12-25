@@ -32,6 +32,8 @@
     animation-fill-mode: both;
     -webkit-animation: load7 1.8s infinite ease-in-out;
     animation: load7 1.8s infinite ease-in-out;
+    top: 25vh;
+    position: absolute;
 }
 .loader {
     color: #ffffff;
@@ -44,7 +46,6 @@
     transform: translateZ(0);
     -webkit-animation-delay: -0.16s;
     animation-delay: -0.16s;
-    top: 60%;
 }
 .loader:before,
 .loader:after {

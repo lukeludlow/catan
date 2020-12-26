@@ -1,1 +1,31 @@
-<p>seafarers works!</p>
+<!-- <div -->
+    <!-- style="position: absolute; margin: 0; top: 0; left: 0; width: 100%; height: 100vh; background-color:
+    #ffffff;"></div> -->
+<div #mapDiv 
+    class="container" 
+    width="device-width" 
+    style="width: 100%; display: block; position: absolute;">
+</div>
+
+<div #sliderDiv class="container custom-slider" style="position: absolute; top: 70%;">
+    <legend>islands</legend>
+    <ngx-slider 
+        [(value)]="sliderValue" 
+        [options]="sliderOptions"
+        >
+    </ngx-slider>
+</div>
+
+<div #buttonDiv 
+    class="container custom-button" 
+    style="position: absolute; top: 89%; text-align: center;">
+    <button type="button" class="btn btn-success btn-lg" (click)="reload()" onclick="this.blur()">
+        regenerate
+    </button>
+</div>
+
+<div *ngIf="loading" class="dark-overlay">
+</div>
+
+<div *ngIf="loading" class="loader">
+</div>

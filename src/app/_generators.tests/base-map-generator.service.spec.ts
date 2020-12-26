@@ -1,14 +1,14 @@
 import { TestBed } from "@angular/core/testing";
 
-import { BoardGeneratorService } from "./board-generator.service";
-import { Hex } from "./Hex";
+import { BaseMapGenerator } from "../_generators/base-map-generator.service";
+import { BasicHex } from "../_models/BasicHex";
 
-describe("BoardGeneratorService", () => {
-    let service: BoardGeneratorService;
+describe("BoardGenerator", () => {
+    let service: BaseMapGenerator;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
-        service = TestBed.inject(BoardGeneratorService);
+        service = TestBed.inject(BaseMapGenerator);
     });
 
     it("should be created", () => {
@@ -125,11 +125,11 @@ describe("BoardGeneratorService", () => {
 
     it("areHexesSixEightCollision no assigned dice numbers should return false", () => {
         const gridSize = 5;
-        const hexes = new Array<Array<Hex>>();
+        const hexes = new Array<Array<BasicHex>>();
         for (let row = 0; row < gridSize; row++) {
-            hexes[row] = new Array<Hex>(gridSize);
+            hexes[row] = new Array<BasicHex>(gridSize);
             for (let col = 0; col < gridSize; col++) {
-                hexes[row][col] = new Hex(-1, -1, -1, "");
+                hexes[row][col] = new BasicHex(-1, -1, -1, "");
             }
         }
         const hex1 = hexes[2][1];
@@ -140,15 +140,15 @@ describe("BoardGeneratorService", () => {
 
     it("areHexesSixEightCollision should detect horizontal collision", () => {
         const gridSize = 5;
-        const hexes = new Array<Array<Hex>>();
+        const hexes = new Array<Array<BasicHex>>();
         for (let row = 0; row < gridSize; row++) {
-            hexes[row] = new Array<Hex>(gridSize);
+            hexes[row] = new Array<BasicHex>(gridSize);
             for (let col = 0; col < gridSize; col++) {
-                hexes[row][col] = new Hex(-1, -1, -1, "");
+                hexes[row][col] = new BasicHex(-1, -1, -1, "");
             }
         }
-        hexes[2][1] = new Hex(2, 1, 6, "rock");
-        hexes[2][2] = new Hex(2, 2, 8, "rock");
+        hexes[2][1] = new BasicHex(2, 1, 6, "rock");
+        hexes[2][2] = new BasicHex(2, 2, 8, "rock");
         const hex1 = hexes[2][1];
         const hex2 = hexes[2][2];
         const isCollision = service.areHexesSixEightCollision(hex1, hex2);
@@ -157,15 +157,15 @@ describe("BoardGeneratorService", () => {
 
     it("areHexesSixEightCollision should detect diagonal collision bottom left even to odd row", () => {
         const gridSize = 5;
-        const hexes = new Array<Array<Hex>>();
+        const hexes = new Array<Array<BasicHex>>();
         for (let row = 0; row < gridSize; row++) {
-            hexes[row] = new Array<Hex>(gridSize);
+            hexes[row] = new Array<BasicHex>(gridSize);
             for (let col = 0; col < gridSize; col++) {
-                hexes[row][col] = new Hex(-1, -1, -1, "");
+                hexes[row][col] = new BasicHex(-1, -1, -1, "");
             }
         }
-        hexes[0][3] = new Hex(0, 3, 6, "rock");
-        hexes[1][2] = new Hex(1, 2, 8, "brick");
+        hexes[0][3] = new BasicHex(0, 3, 6, "rock");
+        hexes[1][2] = new BasicHex(1, 2, 8, "brick");
         const hex1 = hexes[0][3];
         const hex2 = hexes[1][2];
         const isCollision = service.areHexesSixEightCollision(hex1, hex2);
@@ -174,15 +174,15 @@ describe("BoardGeneratorService", () => {
 
     it("areHexesSixEightCollision should detect diagonal collision bottom left odd to even row", () => {
         const gridSize = 5;
-        const hexes = new Array<Array<Hex>>();
+        const hexes = new Array<Array<BasicHex>>();
         for (let row = 0; row < gridSize; row++) {
-            hexes[row] = new Array<Hex>(gridSize);
+            hexes[row] = new Array<BasicHex>(gridSize);
             for (let col = 0; col < gridSize; col++) {
-                hexes[row][col] = new Hex(-1, -1, -1, "");
+                hexes[row][col] = new BasicHex(-1, -1, -1, "");
             }
         }
-        hexes[1][2] = new Hex(1, 2, 6, "rock");
-        hexes[2][2] = new Hex(2, 2, 8, "rock");
+        hexes[1][2] = new BasicHex(1, 2, 6, "rock");
+        hexes[2][2] = new BasicHex(2, 2, 8, "rock");
         const hex1 = hexes[1][2];
         const hex2 = hexes[2][2];
         const isCollision = service.areHexesSixEightCollision(hex1, hex2);
@@ -191,15 +191,15 @@ describe("BoardGeneratorService", () => {
 
     it("areHexesSixEightCollision should detect diagonal collision bottom right even to odd row", () => {
         const gridSize = 5;
-        const hexes = new Array<Array<Hex>>();
+        const hexes = new Array<Array<BasicHex>>();
         for (let row = 0; row < gridSize; row++) {
-            hexes[row] = new Array<Hex>(gridSize);
+            hexes[row] = new Array<BasicHex>(gridSize);
             for (let col = 0; col < gridSize; col++) {
-                hexes[row][col] = new Hex(-1, -1, -1, "");
+                hexes[row][col] = new BasicHex(-1, -1, -1, "");
             }
         }
-        hexes[0][3] = new Hex(0, 3, 6, "rock");
-        hexes[1][3] = new Hex(1, 3, 8, "rock");
+        hexes[0][3] = new BasicHex(0, 3, 6, "rock");
+        hexes[1][3] = new BasicHex(1, 3, 8, "rock");
         const hex1 = hexes[0][3];
         const hex2 = hexes[1][3];
         const isCollision = service.areHexesSixEightCollision(hex1, hex2);
@@ -208,15 +208,15 @@ describe("BoardGeneratorService", () => {
 
     it("areHexesSixEightCollision should detect diagonal collision bottom right odd to even row", () => {
         const gridSize = 5;
-        const hexes = new Array<Array<Hex>>();
+        const hexes = new Array<Array<BasicHex>>();
         for (let row = 0; row < gridSize; row++) {
-            hexes[row] = new Array<Hex>(gridSize);
+            hexes[row] = new Array<BasicHex>(gridSize);
             for (let col = 0; col < gridSize; col++) {
-                hexes[row][col] = new Hex(-1, -1, -1, "");
+                hexes[row][col] = new BasicHex(-1, -1, -1, "");
             }
         }
-        hexes[1][3] = new Hex(1, 3, 6, "rock");
-        hexes[2][4] = new Hex(2, 4, 8, "rock");
+        hexes[1][3] = new BasicHex(1, 3, 6, "rock");
+        hexes[2][4] = new BasicHex(2, 4, 8, "rock");
         const hex1 = hexes[1][3];
         const hex2 = hexes[2][4];
         const isCollision = service.areHexesSixEightCollision(hex1, hex2);
@@ -225,15 +225,15 @@ describe("BoardGeneratorService", () => {
 
     it("areHexesSixEightCollision should detect diagonal collision top left even to odd row", () => {
         const gridSize = 5;
-        const hexes = new Array<Array<Hex>>();
+        const hexes = new Array<Array<BasicHex>>();
         for (let row = 0; row < gridSize; row++) {
-            hexes[row] = new Array<Hex>(gridSize);
+            hexes[row] = new Array<BasicHex>(gridSize);
             for (let col = 0; col < gridSize; col++) {
-                hexes[row][col] = new Hex(-1, -1, -1, "");
+                hexes[row][col] = new BasicHex(-1, -1, -1, "");
             }
         }
-        hexes[4][1] = new Hex(4, 1, 6, "rock");
-        hexes[3][0] = new Hex(3, 0, 8, "rock");
+        hexes[4][1] = new BasicHex(4, 1, 6, "rock");
+        hexes[3][0] = new BasicHex(3, 0, 8, "rock");
         const hex1 = hexes[4][1];
         const hex2 = hexes[3][0];
         const isCollision = service.areHexesSixEightCollision(hex1, hex2);
@@ -242,15 +242,15 @@ describe("BoardGeneratorService", () => {
 
     it("areHexesSixEightCollision should detect diagonal collision top left odd to even row", () => {
         const gridSize = 5;
-        const hexes = new Array<Array<Hex>>();
+        const hexes = new Array<Array<BasicHex>>();
         for (let row = 0; row < gridSize; row++) {
-            hexes[row] = new Array<Hex>(gridSize);
+            hexes[row] = new Array<BasicHex>(gridSize);
             for (let col = 0; col < gridSize; col++) {
-                hexes[row][col] = new Hex(-1, -1, -1, "");
+                hexes[row][col] = new BasicHex(-1, -1, -1, "");
             }
         }
-        hexes[1][1] = new Hex(1, 1, 6, "rock");
-        hexes[0][1] = new Hex(0, 1, 8, "rock");
+        hexes[1][1] = new BasicHex(1, 1, 6, "rock");
+        hexes[0][1] = new BasicHex(0, 1, 8, "rock");
         const hex1 = hexes[1][1];
         const hex2 = hexes[0][1];
         const isCollision = service.areHexesSixEightCollision(hex1, hex2);
@@ -259,15 +259,15 @@ describe("BoardGeneratorService", () => {
 
     it("areHexesSixEightCollision should detect diagonal collision top right even to odd row", () => {
         const gridSize = 5;
-        const hexes = new Array<Array<Hex>>();
+        const hexes = new Array<Array<BasicHex>>();
         for (let row = 0; row < gridSize; row++) {
-            hexes[row] = new Array<Hex>(gridSize);
+            hexes[row] = new Array<BasicHex>(gridSize);
             for (let col = 0; col < gridSize; col++) {
-                hexes[row][col] = new Hex(-1, -1, -1, "");
+                hexes[row][col] = new BasicHex(-1, -1, -1, "");
             }
         }
-        hexes[2][2] = new Hex(2, 2, 6, "rock");
-        hexes[1][2] = new Hex(1, 2, 8, "rock");
+        hexes[2][2] = new BasicHex(2, 2, 6, "rock");
+        hexes[1][2] = new BasicHex(1, 2, 8, "rock");
         const hex1 = hexes[2][2];
         const hex2 = hexes[1][2];
         const isCollision = service.areHexesSixEightCollision(hex1, hex2);
@@ -276,15 +276,15 @@ describe("BoardGeneratorService", () => {
 
     it("areHexesSixEightCollision should detect diagonal collision top right odd to even row", () => {
         const gridSize = 5;
-        const hexes = new Array<Array<Hex>>();
+        const hexes = new Array<Array<BasicHex>>();
         for (let row = 0; row < gridSize; row++) {
-            hexes[row] = new Array<Hex>(gridSize);
+            hexes[row] = new Array<BasicHex>(gridSize);
             for (let col = 0; col < gridSize; col++) {
-                hexes[row][col] = new Hex(-1, -1, -1, "");
+                hexes[row][col] = new BasicHex(-1, -1, -1, "");
             }
         }
-        hexes[1][2] = new Hex(1, 2, 6, "rock");
-        hexes[0][3] = new Hex(0, 3, 8, "rock");
+        hexes[1][2] = new BasicHex(1, 2, 6, "rock");
+        hexes[0][3] = new BasicHex(0, 3, 8, "rock");
         const hex1 = hexes[1][2];
         const hex2 = hexes[0][3];
         const isCollision = service.areHexesSixEightCollision(hex1, hex2);

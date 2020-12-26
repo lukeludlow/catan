@@ -1,47 +1,19 @@
 import { Injectable } from "@angular/core";
-import { Hex } from "./Hex";
-
-// https://www.redblobgames.com/grids/hexagons/
-// https://www.redblobgames.com/grids/hexagons/implementation.html
-
-// num rock tiles: 3
-// num wheat tiles: 4
-// num brick tiles: 3
-// num tree tiles: 4
-// num sheep tiles: 4
-// num desert tiles: 1
-
-// num 2s: 1 (1dot)
-// num 3s: 2 (2dot)
-// num 4s: 2 (3dot)
-// num 5s: 2 (4dot)
-// num 6s: 2 (5dot)
-// num 8s: 2 (5dot)
-// num 9s: 2 (4dot)
-// num 10s: 2 (3dot)
-// num 11s: 2 (2dot)
-// num 12s: 1 (1dot)
-
-// num rock ports: 1
-// num wheat ports: 1
-// num tree ports: 1
-// num sheep ports: 1
-// num brick ports: 1
-// num port slots needed (the question marks): 4
+import { BasicHex } from "../_models/BasicHex";
 
 @Injectable({
     providedIn: "root",
 })
-export class BoardGeneratorService {
-    hexes: Hex[][];
+export class BaseMapGenerator {
+    hexes: BasicHex[][];
 
     constructor() {
         const gridSize = 5;
-        this.hexes = new Array<Array<Hex>>();
+        this.hexes = new Array<Array<BasicHex>>();
         for (let row = 0; row < gridSize; row++) {
-            this.hexes[row] = new Array<Hex>(gridSize);
+            this.hexes[row] = new Array<BasicHex>(gridSize);
             for (let col = 0; col < gridSize; col++) {
-                this.hexes[row][col] = new Hex(-1, -1, -1, "");
+                this.hexes[row][col] = new BasicHex(-1, -1, -1, "");
             }
         }
     }
@@ -59,7 +31,7 @@ export class BoardGeneratorService {
         return ports;
     }
 
-    public areHexesSixEightCollision(hex1: Hex, hex2: Hex): boolean {
+    public areHexesSixEightCollision(hex1: BasicHex, hex2: BasicHex): boolean {
         if (hex1.diceNumber === -1 || hex2.diceNumber === -1) {
             return false;
         }
@@ -138,7 +110,7 @@ export class BoardGeneratorService {
         return false;
     }
 
-    public generate(): Hex[][] {
+    public generate(): BasicHex[][] {
         // const tiles: Map<string, number>;
         // const diceNumbers: Map<number, number>;
 
@@ -162,11 +134,11 @@ export class BoardGeneratorService {
         diceNumbers.set(12, 1);
 
         const gridSize = 5;
-        const generatedHexes = new Array<Array<Hex>>();
+        const generatedHexes = new Array<Array<BasicHex>>();
         for (let row = 0; row < gridSize; row++) {
-            generatedHexes[row] = new Array<Hex>(gridSize);
+            generatedHexes[row] = new Array<BasicHex>(gridSize);
             for (let col = 0; col < gridSize; col++) {
-                generatedHexes[row][col] = new Hex(-1, -1, -1, "");
+                generatedHexes[row][col] = new BasicHex(-1, -1, -1, "");
             }
         }
         // assign resources
@@ -182,10 +154,7 @@ export class BoardGeneratorService {
         // assign dice numbers
         for (let row = 0; row < gridSize; row++) {
             for (let col = 0; col < gridSize; col++) {
-                if (
-                    generatedHexes[row][col].resource !== "" &&
-                    generatedHexes[row][col].resource !== "desert"
-                ) {
+                if (generatedHexes[row][col].resource !== "" && generatedHexes[row][col].resource !== "desert") {
                     generatedHexes[row][col].diceNumber = this.assignDiceNumber(diceNumbers);
                 }
             }
@@ -194,23 +163,15 @@ export class BoardGeneratorService {
         return generatedHexes;
     }
 
-    public generateWithNoCollisions(): Hex[][] {
-        // console.log("generateWithNoCollisions " + JSON.stringify(this.hexes, undefined, 2));
+    public generateWithNoCollisions(): BasicHex[][] {
         if (!this.hexesHaveAlreadyBeenGenerated()) {
             console.log("generateWithNoCollisions: generating new board");
             this.generate();
-            // console.log(JSON.stringify(this.hexes, undefined, 2));
         }
         let numTimesRegenerated = 0;
         while (this.areThereAnyCollisions(this.hexes)) {
-            // console.log("generateWithNoCollisions: detected board collision. regenerating...");
             this.generate();
             numTimesRegenerated++;
-            // if (numTimesRegenerated > 9) {
-            // console.log("tried to regenerate too many times. giving up.");
-            // break;
-            // }
-            // console.log(JSON.stringify(this.hexes, undefined, 2));
         }
         console.log(
             "generateWithNoCollisions: good to go. it took " +
@@ -224,7 +185,7 @@ export class BoardGeneratorService {
         return this.hexes[2][2].resource !== "";
     }
 
-    private areThereAnyCollisions(hexes: Hex[][]): boolean {
+    private areThereAnyCollisions(hexes: BasicHex[][]): boolean {
         for (let i = 0; i < hexes.length; i++) {
             for (let j = 0; j < hexes[i].length; j++) {
                 if (this.checkHexForCollisions(hexes[i][j], hexes)) {
@@ -232,17 +193,10 @@ export class BoardGeneratorService {
                 }
             }
         }
-        // this.hexes.forEach((row) => {
-        //     row.forEach((hex) => {
-        //         if (this.checkHexForCollisions(hex)) {
-        //             return true;
-        //         }
-        //     });
-        // });
         return false;
     }
 
-    private checkHexForCollisions(hex1: Hex, hexes: Hex[][]): boolean {
+    private checkHexForCollisions(hex1: BasicHex, hexes: BasicHex[][]): boolean {
         for (let i = 0; i < hexes.length; i++) {
             for (let j = 0; j < hexes[i].length; j++) {
                 if (this.areHexesSixEightCollision(hex1, hexes[i][j])) {
@@ -250,13 +204,6 @@ export class BoardGeneratorService {
                 }
             }
         }
-        // this.hexes.forEach((row) => {
-        //     row.forEach((hex2) => {
-        //         if (this.areHexesSixEightCollision(hex1, hex2)) {
-        //             return true;
-        //         }
-        //     });
-        // });
         return false;
     }
 

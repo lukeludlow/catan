@@ -1,4 +1,4 @@
-export class Hex {
+export class BasicHex {
     row: number;
     col: number;
     diceNumber: number;

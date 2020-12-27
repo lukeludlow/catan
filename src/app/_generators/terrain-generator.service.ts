@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { RandomService } from "../_services/random.service";
-import { SeafarersMap } from "../_maps/Seafarers/SeafarersMap";
 import { Terrain } from "../_models/Terrain";
 import { ArrayService } from "../_services/array.service";
 import { MapSettings } from "../_maps/MapSettings";
+import { CatanMap } from "../_maps/ICatanMap";
 
 @Injectable({
     providedIn: "root",
@@ -16,7 +16,7 @@ export class TerrainGenerator {
         this.randomService = randomService;
         this.arrayService = arrayService;
     }
-    public generateTerrain(map: SeafarersMap, settings: MapSettings): SeafarersMap {
+    public generateTerrain(map: CatanMap, settings: MapSettings): CatanMap {
         const minimums: Terrain[] = this.getMinimumResources(settings);
         const minimumsCount: number = minimums.length;
         map = this.addTerrainsToMap(map, minimums, minimumsCount);
@@ -26,7 +26,7 @@ export class TerrainGenerator {
         return map;
     }
 
-    private addTerrainsToMap(map: SeafarersMap, terrains: Terrain[], numHexesToAdd: number): SeafarersMap {
+    private addTerrainsToMap(map: CatanMap, terrains: Terrain[], numHexesToAdd: number): CatanMap {
         for (let i = 0; i < numHexesToAdd; i++) {
             const terrain = this.randomService.getRandomElementFromArray(terrains);
             terrains = this.arrayService.removeFirstOccurrence(terrains, (x: Terrain) => x === terrain);
@@ -100,7 +100,7 @@ export class TerrainGenerator {
         return allAvailableTerrains;
     }
 
-    private getRandomUnusedCoords(map: SeafarersMap): any {
+    private getRandomUnusedCoords(map: CatanMap): any {
         let randomRow: number = this.randomService.getRandomNumberExclusive(0, map.getRows().length);
         let randomCol: number = this.randomService.getRandomNumberExclusive(0, map.getRow(randomRow).length);
         let hexIsEmptyTerrain: boolean = map.getHex(randomRow, randomCol).getTerrain() === Terrain.Empty;

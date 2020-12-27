@@ -6,6 +6,7 @@ import { SeafarersMap } from "../_maps/Seafarers/SeafarersMap";
 import { Terrain } from "../_models/Terrain";
 import { MapSettings } from "../_maps/MapSettings";
 import { SeafarersSettings } from "../_maps/Seafarers/SeafarersSettings";
+import { CatanMap } from "../_maps/ICatanMap";
 
 describe("TerrainGenerator", () => {
     let terrainGenerator: TerrainGenerator;
@@ -22,7 +23,7 @@ describe("TerrainGenerator", () => {
     });
 
     it("each hex should have terrain type defined", () => {
-        const result: SeafarersMap = terrainGenerator.generateTerrain(map, settings);
+        const result: CatanMap = terrainGenerator.generateTerrain(map, settings);
         result.getRows().forEach((row) => {
             row.forEach((hex) => {
                 expect(hex.getTerrain()).toBeDefined();
@@ -36,7 +37,7 @@ describe("TerrainGenerator", () => {
     // test for when max is not enough tiles (throw exception)
 
     it("brick terrain count", () => {
-        const result: SeafarersMap = terrainGenerator.generateTerrain(map, settings);
+        const result: CatanMap = terrainGenerator.generateTerrain(map, settings);
         expect(countHexesThatHaveTerrainType(result, Terrain.Brick)).toBeGreaterThanOrEqual(
             settings.terrainCounts.get(Terrain.Brick).min
         );
@@ -46,7 +47,7 @@ describe("TerrainGenerator", () => {
     });
 
     it("desert terrain count", () => {
-        const result: SeafarersMap = terrainGenerator.generateTerrain(map, settings);
+        const result: CatanMap = terrainGenerator.generateTerrain(map, settings);
         expect(countHexesThatHaveTerrainType(result, Terrain.Desert)).toBeGreaterThanOrEqual(
             settings.terrainCounts.get(Terrain.Desert).min
         );
@@ -56,7 +57,7 @@ describe("TerrainGenerator", () => {
     });
 
     it("gold terrain count", () => {
-        const result: SeafarersMap = terrainGenerator.generateTerrain(map, settings);
+        const result: CatanMap = terrainGenerator.generateTerrain(map, settings);
         expect(countHexesThatHaveTerrainType(result, Terrain.Gold)).toBeGreaterThanOrEqual(
             settings.terrainCounts.get(Terrain.Gold).min
         );
@@ -66,7 +67,7 @@ describe("TerrainGenerator", () => {
     });
 
     it("rock terrain count", () => {
-        const result: SeafarersMap = terrainGenerator.generateTerrain(map, settings);
+        const result: CatanMap = terrainGenerator.generateTerrain(map, settings);
         expect(countHexesThatHaveTerrainType(result, Terrain.Rock)).toBeGreaterThanOrEqual(
             settings.terrainCounts.get(Terrain.Rock).min
         );
@@ -76,7 +77,7 @@ describe("TerrainGenerator", () => {
     });
 
     it("sea terrain count", () => {
-        const result: SeafarersMap = terrainGenerator.generateTerrain(map, settings);
+        const result: CatanMap = terrainGenerator.generateTerrain(map, settings);
         expect(countHexesThatHaveTerrainType(result, Terrain.Sea)).toBeGreaterThanOrEqual(
             settings.terrainCounts.get(Terrain.Sea).min
         );
@@ -86,7 +87,7 @@ describe("TerrainGenerator", () => {
     });
 
     it("sheep terrain count", () => {
-        const result: SeafarersMap = terrainGenerator.generateTerrain(map, settings);
+        const result: CatanMap = terrainGenerator.generateTerrain(map, settings);
         expect(countHexesThatHaveTerrainType(result, Terrain.Sheep)).toBeGreaterThanOrEqual(
             settings.terrainCounts.get(Terrain.Sheep).min
         );
@@ -96,7 +97,7 @@ describe("TerrainGenerator", () => {
     });
 
     it("tree terrain count", () => {
-        const result: SeafarersMap = terrainGenerator.generateTerrain(map, settings);
+        const result: CatanMap = terrainGenerator.generateTerrain(map, settings);
         expect(countHexesThatHaveTerrainType(result, Terrain.Tree)).toBeGreaterThanOrEqual(
             settings.terrainCounts.get(Terrain.Tree).min
         );
@@ -106,7 +107,7 @@ describe("TerrainGenerator", () => {
     });
 
     it("wheat terrain count", () => {
-        const result: SeafarersMap = terrainGenerator.generateTerrain(map, settings);
+        const result: CatanMap = terrainGenerator.generateTerrain(map, settings);
         expect(countHexesThatHaveTerrainType(result, Terrain.Wheat)).toBeGreaterThanOrEqual(
             settings.terrainCounts.get(Terrain.Wheat).min
         );
@@ -115,7 +116,7 @@ describe("TerrainGenerator", () => {
         );
     });
 
-    function countHexesThatHaveTerrainType(hexes: SeafarersMap, terrain: Terrain): number {
+    function countHexesThatHaveTerrainType(hexes: CatanMap, terrain: Terrain): number {
         return hexes.getRows().reduce((sum, row) => sum + row.filter((hex) => hex.getTerrain() === terrain).length, 0);
     }
 });

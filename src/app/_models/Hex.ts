@@ -56,11 +56,18 @@ export class Hex {
         this.port = port;
     }
 
-    public hasTerrain(): boolean {
-        if (this.terrain === Terrain.Empty || this.terrain === Terrain.Sea) {
-            return false;
-        } else {
+    public isResourceTerrain(): boolean {
+        if (
+            this.terrain === Terrain.Brick ||
+            this.terrain === Terrain.Gold ||
+            this.terrain === Terrain.Rock ||
+            this.terrain === Terrain.Sheep ||
+            this.terrain === Terrain.Tree ||
+            this.terrain === Terrain.Wheat
+        ) {
             return true;
+        } else {
+            return false;
         }
     }
 }

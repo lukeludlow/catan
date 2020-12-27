@@ -7,6 +7,9 @@ import { TerrainGenerator } from "../_generators/terrain-generator.service";
 import { SeafarersMap } from "../_maps/Seafarers/SeafarersMap";
 import { PortGenerator } from "../_generators/port-generator.service";
 import { IslandCounter } from "../_validators/island-counter.service";
+import { CollisionDetector } from "../_validators/collision-detector.service";
+import { CatanMap } from "../_maps/ICatanMap";
+import { getSampleHexMapWithMaximumResources } from "./TestUtils";
 
 describe("SeafarersMapGenerator", () => {
     let seafarersMapGenerator: SeafarersMapGenerator;
@@ -15,6 +18,7 @@ describe("SeafarersMapGenerator", () => {
     let terrainGenerator: TerrainGenerator;
     let portGenerator: PortGenerator;
     let islandCounter: IslandCounter;
+    let collisionDetector: CollisionDetector;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
@@ -24,6 +28,7 @@ describe("SeafarersMapGenerator", () => {
         terrainGenerator = TestBed.inject(TerrainGenerator);
         portGenerator = TestBed.inject(PortGenerator);
         islandCounter = TestBed.inject(IslandCounter);
+        collisionDetector = TestBed.inject(CollisionDetector);
     });
 
     it("should be created", () => {
@@ -80,9 +85,10 @@ describe("SeafarersMapGenerator", () => {
     });
 
     it("should regenerate every time validate fails", () => {
-        spyOn(islandCounter, "countIslands").and.returnValues(1, 1, 4);
+        spyOn(collisionDetector, "detectCollisions").and.returnValues(false, true, false);
+        spyOn(islandCounter, "countIslands").and.returnValues(1, 2, 3);
         spyOn(seafarersMapGenerator, "validateMap").and.callThrough();
-        const result: SeafarersMap = seafarersMapGenerator.generateMap({ islands: 4 });
+        const result: SeafarersMap = seafarersMapGenerator.generateMap({ islands: 3 });
         expect(seafarersMapGenerator.validateMap).toHaveBeenCalledTimes(3);
     });
 
@@ -124,5 +130,21 @@ describe("SeafarersMapGenerator", () => {
         it("seventh should have four hexes", () => {
             expect(seafarersMapGenerator.generateMap({ islands: 3 }).getRow(6).length).toEqual(4);
         });
+    });
+
+    it("should check for collisions", () => {
+        spyOn(collisionDetector, "detectCollisions").and.callThrough();
+        const result: SeafarersMap = seafarersMapGenerator.generateMap({ islands: 3 });
+        expect(collisionDetector.detectCollisions).toHaveBeenCalled();
+    });
+
+    it("should regenerate while there is a collision", () => {
+        console.log("test should regenerate while there is a collision");
+        spyOn(collisionDetector, "detectCollisions").and.returnValues(true, true, false);
+        spyOn(islandCounter, "countIslands").and.returnValue(3);
+        spyOn(diceNumberGenerator, "tryGenerateDiceNumbers").and.callThrough();
+        const result: SeafarersMap = seafarersMapGenerator.generateMap({ islands: 3 });
+        expect(collisionDetector.detectCollisions).toHaveBeenCalledTimes(3);
+        expect(diceNumberGenerator.tryGenerateDiceNumbers).toHaveBeenCalledTimes(3);
     });
 });

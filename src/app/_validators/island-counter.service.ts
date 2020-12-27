@@ -21,7 +21,7 @@ export class IslandCounter {
         // console.log("counting islands...");
         for (const hexRow of rows) {
             for (const hex of hexRow) {
-                if (hex.hasTerrain()) {
+                if (hex.isResourceTerrain()) {
                     if (visited.has(hex)) {
                         //
                     } else {
@@ -45,7 +45,7 @@ export class IslandCounter {
 
     private dfs(map: SeafarersMap, current: Hex, visited: Set<Hex>, island: Set<Hex>): Set<Hex> {
         // console.log(`dfs on hex current = [${current.getRow()}][${current.getCol()}]`);
-        if (visited.has(current) || !current.hasTerrain()) {
+        if (visited.has(current) || !current.isResourceTerrain()) {
             return island;
         }
         visited.add(current);

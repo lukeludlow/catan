@@ -6,6 +6,7 @@ import { Terrain } from "../_models/Terrain";
 import { HexSide } from "../_models/HexSide";
 import { MapSettings } from "../_maps/MapSettings";
 import { SeafarersSettings } from "../_maps/Seafarers/SeafarersSettings";
+import { CatanMap } from "../_maps/ICatanMap";
 
 describe("PortGenerator", () => {
     let portGenerator: PortGenerator;
@@ -21,7 +22,7 @@ describe("PortGenerator", () => {
     });
 
     it("hex is touching sea when it's at corner of map", () => {
-        const map = new SeafarersMap();
+        const map: CatanMap = new SeafarersMap();
         map.setHexTerrain(0, 0, Terrain.Gold);
         // note that all other hexes are Terrain.Empty
         const result: HexSide[] = portGenerator.findHexSidesTouchingSea(map, map.getHex(0, 0));
@@ -31,7 +32,7 @@ describe("PortGenerator", () => {
     });
 
     it("middle island hex all sides should be touching sea", () => {
-        const map = new SeafarersMap();
+        const map: CatanMap = new SeafarersMap();
         map.setHexTerrain(3, 1, Terrain.Gold);
         // top
         map.setHexTerrain(1, 1, Terrain.Sea);
@@ -55,7 +56,7 @@ describe("PortGenerator", () => {
     });
 
     it("should create a port for a hex", () => {
-        const map = new SeafarersMap();
+        const map: CatanMap = new SeafarersMap();
         map.getRows().forEach((row) => row.forEach((hex) => expect(hex.getPort()).toBeUndefined()));
         map.setHexTerrain(3, 1, Terrain.Gold);
         map.setHexTerrain(1, 1, Terrain.Sea);
@@ -64,12 +65,12 @@ describe("PortGenerator", () => {
         map.setHexTerrain(5, 1, Terrain.Sea);
         map.setHexTerrain(4, 1, Terrain.Sea);
         map.setHexTerrain(4, 2, Terrain.Sea);
-        const result: SeafarersMap = portGenerator.generatePorts(map, settings);
+        const result: CatanMap = portGenerator.generatePorts(map, settings);
         expect(result.getHex(3, 1).getPort()).toBeDefined();
     });
 
     it("should assign number of ports based on settings", () => {
-        const map = new SeafarersMap();
+        let map: CatanMap = new SeafarersMap();
         map.getRows().forEach((row) => {
             row.forEach((hex) => {
                 hex.setTerrain(Terrain.Sea);
@@ -85,7 +86,7 @@ describe("PortGenerator", () => {
         map.setHexTerrain(8, 0, Terrain.Gold);
         map.setHexTerrain(12, 0, Terrain.Gold);
         map.setHexTerrain(12, 1, Terrain.Gold);
-        const result: SeafarersMap = portGenerator.generatePorts(map, settings);
+        map = portGenerator.generatePorts(map, settings);
         expectPortCountToBeWithin(map, settings, Terrain.Brick);
         expectPortCountToBeWithin(map, settings, Terrain.Rock);
         expectPortCountToBeWithin(map, settings, Terrain.Sheep);
@@ -94,7 +95,7 @@ describe("PortGenerator", () => {
         expectPortCountToBeWithin(map, settings, Terrain.Any);
     });
 
-    function expectPortCountToBeWithin(map: SeafarersMap, countSettings: MapSettings, portTerrain: Terrain) {
+    function expectPortCountToBeWithin(map: CatanMap, countSettings: MapSettings, portTerrain: Terrain) {
         const min: number = countSettings.ports.get(portTerrain).min;
         const max: number = countSettings.ports.get(portTerrain).max;
         const count: number = countPortsInMap(map, portTerrain);
@@ -102,7 +103,7 @@ describe("PortGenerator", () => {
         expect(count).toBeLessThanOrEqual(max);
     }
 
-    function countPortsInMap(hexes: SeafarersMap, portTerrain: Terrain): number {
+    function countPortsInMap(hexes: CatanMap, portTerrain: Terrain): number {
         let count: number = 0;
         for (const row of hexes.getRows()) {
             for (const hex of row) {

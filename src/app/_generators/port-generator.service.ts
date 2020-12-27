@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { SeafarersMap } from "../_models/SeafarersMap";
+import { SeafarersMap } from "../_maps/Seafarers/SeafarersMap";
 import { Hex } from "../_models/Hex";
 import { Terrain } from "../_models/Terrain";
 import { HexSide } from "../_models/HexSide";
@@ -7,6 +7,7 @@ import { HexDirection } from "../_models/HexDirection";
 import { RandomService } from "../_services/random.service";
 import { Port } from "../_models/Port";
 import { ArrayService } from "../_services/array.service";
+import { MapSettings } from "../_maps/MapSettings";
 
 @Injectable({
     providedIn: "root",
@@ -20,19 +21,11 @@ export class PortGenerator {
         this.arrayService = arrayService;
     }
 
-    public generatePorts(map: SeafarersMap): SeafarersMap {
-        let availablePorts: Terrain[] = [
-            Terrain.Brick,
-            Terrain.Rock,
-            Terrain.Sheep,
-            Terrain.Tree,
-            Terrain.Wheat,
-            Terrain.Any,
-            Terrain.Any,
-            Terrain.Any,
-            Terrain.Any,
-            Terrain.Any,
-        ];
+    public generatePorts(map: SeafarersMap, settings: MapSettings): SeafarersMap {
+        let availablePorts: Terrain[] = new Array<Terrain>();
+        for (const portTerrain of settings.ports) {
+            availablePorts = this.arrayService.addItemToArrayXTimes(availablePorts, portTerrain[0], portTerrain[1].max);
+        }
         let availableHexes: Hex[] = [];
         map.getRows().forEach((row) => {
             row.forEach((hex) => {
@@ -41,7 +34,8 @@ export class PortGenerator {
                 }
             });
         });
-        for (let i = 0; i < 10; i++) {
+        const portCount: number = availablePorts.length;
+        for (let i = 0; i < portCount; i++) {
             if (availableHexes.length === 0) {
                 break;
             }

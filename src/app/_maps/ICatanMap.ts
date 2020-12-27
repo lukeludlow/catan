@@ -1,9 +1,9 @@
-import { Hex } from "./Hex";
-import { HexBlob } from "./HexBlob";
-import { Terrain } from "./Terrain";
-import { Port } from "./Port";
+import { Hex } from "../_models/Hex";
+import { HexBlob } from "../_models/HexBlob";
+import { Terrain } from "../_models/Terrain";
+import { Port } from "../_models/Port";
 
-export interface ICatanMap {
+export interface CatanMap {
     getHex(row: number, col: number): Hex;
     getRows(): Hex[][];
     getRow(row: number): Hex[];

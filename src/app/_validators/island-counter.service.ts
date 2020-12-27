@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Hex } from "../_models/Hex";
-import { SeafarersMap } from "../_models/SeafarersMap";
+import { SeafarersMap } from "../_maps/Seafarers/SeafarersMap";
 import { Terrain } from "../_models/Terrain";
 
 @Injectable({

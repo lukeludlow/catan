@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { RandomService } from "../_services/random.service";
-import { SeafarersMap } from "../_models/SeafarersMap";
+import { SeafarersMap } from "../_maps/Seafarers/SeafarersMap";
 import { Terrain } from "../_models/Terrain";
 import { ArrayService } from "../_services/array.service";
 import { MapSettings } from "../_maps/MapSettings";
@@ -40,7 +40,7 @@ export class TerrainGenerator {
         let minimums: Terrain[] = new Array<Terrain>();
         for (const terrain of settings.terrainTypes) {
             const minTerrainCount: number = settings.terrainCounts.get(terrain).min;
-            minimums = this.addTerrainToArrayXTimes(minimums, terrain, minTerrainCount);
+            minimums = this.arrayService.addItemToArrayXTimes(minimums, terrain, minTerrainCount);
         }
         return minimums;
     }
@@ -50,61 +50,54 @@ export class TerrainGenerator {
         for (const terrain of settings.terrainTypes) {
             const remainingTerrainCount: number =
                 settings.terrainCounts.get(terrain).max - settings.terrainCounts.get(terrain).min;
-            remaining = this.addTerrainToArrayXTimes(remaining, terrain, remainingTerrainCount);
+            remaining = this.arrayService.addItemToArrayXTimes(remaining, terrain, remainingTerrainCount);
         }
         return remaining;
     }
 
     public getAllAvailableTerrainsPool(settings: MapSettings): Terrain[] {
         let allAvailableTerrains: Terrain[] = new Array<Terrain>();
-        allAvailableTerrains = this.addTerrainToArrayXTimes(
+        allAvailableTerrains = this.arrayService.addItemToArrayXTimes(
             allAvailableTerrains,
             Terrain.Brick,
             settings.terrainCounts.get(Terrain.Brick).max
         );
-        allAvailableTerrains = this.addTerrainToArrayXTimes(
+        allAvailableTerrains = this.arrayService.addItemToArrayXTimes(
             allAvailableTerrains,
             Terrain.Desert,
             settings.terrainCounts.get(Terrain.Desert).max
         );
-        allAvailableTerrains = this.addTerrainToArrayXTimes(
+        allAvailableTerrains = this.arrayService.addItemToArrayXTimes(
             allAvailableTerrains,
             Terrain.Gold,
             settings.terrainCounts.get(Terrain.Gold).max
         );
-        allAvailableTerrains = this.addTerrainToArrayXTimes(
+        allAvailableTerrains = this.arrayService.addItemToArrayXTimes(
             allAvailableTerrains,
             Terrain.Rock,
             settings.terrainCounts.get(Terrain.Rock).max
         );
-        allAvailableTerrains = this.addTerrainToArrayXTimes(
+        allAvailableTerrains = this.arrayService.addItemToArrayXTimes(
             allAvailableTerrains,
             Terrain.Sea,
             settings.terrainCounts.get(Terrain.Sea).max
         );
-        allAvailableTerrains = this.addTerrainToArrayXTimes(
+        allAvailableTerrains = this.arrayService.addItemToArrayXTimes(
             allAvailableTerrains,
             Terrain.Sheep,
             settings.terrainCounts.get(Terrain.Sheep).max
         );
-        allAvailableTerrains = this.addTerrainToArrayXTimes(
+        allAvailableTerrains = this.arrayService.addItemToArrayXTimes(
             allAvailableTerrains,
             Terrain.Tree,
             settings.terrainCounts.get(Terrain.Tree).max
         );
-        allAvailableTerrains = this.addTerrainToArrayXTimes(
+        allAvailableTerrains = this.arrayService.addItemToArrayXTimes(
             allAvailableTerrains,
             Terrain.Wheat,
             settings.terrainCounts.get(Terrain.Wheat).max
         );
         return allAvailableTerrains;
-    }
-
-    private addTerrainToArrayXTimes(array: Terrain[], terrain: Terrain, x: number): Terrain[] {
-        for (let i = 0; i < x; i++) {
-            array.push(terrain);
-        }
-        return array;
     }
 
     private getRandomUnusedCoords(map: SeafarersMap): any {

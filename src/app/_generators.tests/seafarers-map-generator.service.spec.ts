@@ -4,7 +4,7 @@ import { SeafarersMapGenerator } from "../_generators/seafarers-map-generator.se
 import { RandomService } from "../_services/random.service";
 import { DiceNumberGenerator } from "../_generators/dice-number-generator.service";
 import { TerrainGenerator } from "../_generators/terrain-generator.service";
-import { SeafarersMap } from "../_models/SeafarersMap";
+import { SeafarersMap } from "../_maps/Seafarers/SeafarersMap";
 import { PortGenerator } from "../_generators/port-generator.service";
 import { IslandCounter } from "../_validators/island-counter.service";
 

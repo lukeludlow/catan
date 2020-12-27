@@ -2,10 +2,10 @@ import { TestBed } from "@angular/core/testing";
 
 import { TerrainGenerator } from "../_generators/terrain-generator.service";
 import { RandomService } from "../_services/random.service";
-import { SeafarersMap } from "../_models/SeafarersMap";
+import { SeafarersMap } from "../_maps/Seafarers/SeafarersMap";
 import { Terrain } from "../_models/Terrain";
 import { MapSettings } from "../_maps/MapSettings";
-import { SeafarersSettings } from "../_maps/SeafarersSettings";
+import { SeafarersSettings } from "../_maps/Seafarers/SeafarersSettings";
 
 describe("TerrainGenerator", () => {
     let terrainGenerator: TerrainGenerator;

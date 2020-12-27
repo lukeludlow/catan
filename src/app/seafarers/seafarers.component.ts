@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, Renderer2, AfterViewInit, Cha
 import { Options as SliderOptions } from "@angular-slider/ngx-slider";
 import { SeafarersMapGenerator } from "../_generators/seafarers-map-generator.service";
 import { Hex } from "../_models/Hex";
-import { SeafarersMap } from "../_models/SeafarersMap";
+import { SeafarersMap } from "../_maps/Seafarers/SeafarersMap";
 import { Terrain } from "../_models/Terrain";
 import { Port } from "../_models/Port";
 import { HexSide } from "../_models/HexSide";

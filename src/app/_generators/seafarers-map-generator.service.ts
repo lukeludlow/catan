@@ -3,11 +3,11 @@ import { Hex } from "../_models/Hex";
 import { RandomService } from "../_services/random.service";
 import { DiceNumberGenerator } from "./dice-number-generator.service";
 import { TerrainGenerator } from "./terrain-generator.service";
-import { SeafarersMap } from "../_models/SeafarersMap";
+import { SeafarersMap } from "../_maps/Seafarers/SeafarersMap";
 import { PortGenerator } from "../_generators/port-generator.service";
 import { IslandCounter } from "../_validators/island-counter.service";
 import { GenerateSettings } from "../_models/generate-settings";
-import { SeafarersSettings } from "../_maps/SeafarersSettings";
+import { SeafarersSettings } from "../_maps/Seafarers/SeafarersSettings";
 
 @Injectable({
     providedIn: "root",
@@ -65,7 +65,7 @@ export class SeafarersMapGenerator {
         let map: SeafarersMap = new SeafarersMap();
         map = this.terrainGenerator.generateTerrain(map, this.settings);
         map = this.diceNumberGenerator.generateDiceNumbers(map);
-        map = this.portGenerator.generatePorts(map);
+        map = this.portGenerator.generatePorts(map, this.settings);
         return map;
     }
 

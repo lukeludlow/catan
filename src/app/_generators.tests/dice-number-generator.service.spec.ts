@@ -4,7 +4,7 @@ import { DiceNumberGenerator } from "../_generators/dice-number-generator.servic
 import { Hex } from "../_models/Hex";
 import { RandomService } from "../_services/random.service";
 import { CollisionDetector } from "../_validators/collision-detector.service";
-import { SeafarersMap } from "../_models/SeafarersMap";
+import { SeafarersMap } from "../_maps/Seafarers/SeafarersMap";
 import { Terrain } from "../_models/Terrain";
 
 describe("DiceNumberGenerator", () => {

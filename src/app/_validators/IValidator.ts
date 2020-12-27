@@ -1,5 +1,5 @@
-import { ICatanMap } from "../_models/ICatanMap";
+import { CatanMap } from "../_maps/ICatanMap";
 
 export interface IValidator {
-    validate(map: ICatanMap): boolean;
+    validate(map: CatanMap): boolean;
 }

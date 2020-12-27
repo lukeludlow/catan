@@ -1,10 +1,10 @@
-import { Hex } from "./Hex";
-import { Terrain } from "./Terrain";
-import { HexBlob, OffsetCoord } from "./HexBlob";
-import { Port } from "./Port";
-import { ICatanMap } from "./ICatanMap";
+import { Hex } from "../../_models/Hex";
+import { Terrain } from "../../_models/Terrain";
+import { HexBlob, OffsetCoord } from "../../_models/HexBlob";
+import { Port } from "../../_models/Port";
+import { CatanMap } from "../ICatanMap";
 
-export class SeafarersMap implements ICatanMap {
+export class SeafarersMap implements CatanMap {
     private hexes: Hex[][];
 
     constructor() {

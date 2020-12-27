@@ -12,4 +12,11 @@ export class ArrayService {
         array.splice(index, 1);
         return array;
     }
+
+    public addItemToArrayXTimes(array: any[], item: any, x: number): any[] {
+        for (let i = 0; i < x; i++) {
+            array.push(item);
+        }
+        return array;
+    }
 }

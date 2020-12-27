@@ -2,39 +2,31 @@ import { Injectable } from "@angular/core";
 import { Hex } from "../_models/Hex";
 import { RandomService } from "../_services/random.service";
 import { CollisionDetector } from "../_validators/collision-detector.service";
-import { SeafarersMap } from "../_models/SeafarersMap";
 import { Terrain } from "../_models/Terrain";
 import { ArrayService } from "../_services/array.service";
+import { CatanMap } from "../_maps/ICatanMap";
+import { MapSettings } from "../_maps/MapSettings";
 
 @Injectable({
     providedIn: "root",
 })
 export class DiceNumberGenerator {
     private randomService: RandomService;
-    private collisionDetecter: CollisionDetector;
     private arrayService: ArrayService;
 
-    constructor(randomService: RandomService, collisionDetector: CollisionDetector, arrayService: ArrayService) {
+    constructor(randomService: RandomService, arrayService: ArrayService) {
         this.randomService = randomService;
-        this.collisionDetecter = collisionDetector;
         this.arrayService = arrayService;
     }
 
-    public generateDiceNumbers(map: SeafarersMap): SeafarersMap {
-        map = this.tryGenerateDiceNumbers(map);
-        let numTimesGenerated: number = 1;
-        while (this.collisionDetecter.detectCollisions(map)) {
-            map = this.tryGenerateDiceNumbers(map);
-            numTimesGenerated++;
-        }
-        // console.log(`successfully generated dice numbers. 
-        // it took ${numTimesGenerated} times to generate a map with no collisions`);
+    public generateDiceNumbers(map: CatanMap, settings: MapSettings): CatanMap {
+        map = this.tryGenerateDiceNumbers(map, settings);
         return map;
     }
 
-    public tryGenerateDiceNumbers(map: SeafarersMap): SeafarersMap {
+    public tryGenerateDiceNumbers(map: CatanMap, settings: MapSettings): CatanMap {
         map = this.resetDiceNumbers(map);
-        let diceNumbers: number[] = this.getStartingDiceNumberPool();
+        let diceNumbers: number[] = this.getStartingDiceNumberPool(settings);
         const numTerrainsToAssign: number = this.countTerrainsToAssign(map);
         for (let i = 0; i < numTerrainsToAssign; i++) {
             const diceNumber: number = this.randomService.getRandomElementFromArray(diceNumbers);
@@ -45,7 +37,7 @@ export class DiceNumberGenerator {
         return map;
     }
 
-    private resetDiceNumbers(map: SeafarersMap): SeafarersMap {
+    private resetDiceNumbers(map: CatanMap): CatanMap {
         map.getRows().forEach((row) => {
             row.forEach((hex) => {
                 map.setHexDiceNumber(hex.getRow(), hex.getCol(), 0);
@@ -54,11 +46,11 @@ export class DiceNumberGenerator {
         return map;
     }
 
-    private countTerrainsToAssign(map: SeafarersMap): number {
+    private countTerrainsToAssign(map: CatanMap): number {
         let numTerrainsToAssign: number = 0;
         map.getRows().forEach((row) => {
             row.forEach((hex) => {
-                if (this.isValidTerrain(hex)) {
+                if (hex.isResourceTerrain()) {
                     numTerrainsToAssign++;
                 }
             });
@@ -66,37 +58,25 @@ export class DiceNumberGenerator {
         return numTerrainsToAssign;
     }
 
-    public getStartingDiceNumberPool(): number[] {
+    public getStartingDiceNumberPool(settings: MapSettings): number[] {
         let allDiceNumbers: number[] = new Array<number>();
-        allDiceNumbers = this.addDiceNumberToArrayXTimes(allDiceNumbers, 2, 2);
-        allDiceNumbers = this.addDiceNumberToArrayXTimes(allDiceNumbers, 3, 3);
-        allDiceNumbers = this.addDiceNumberToArrayXTimes(allDiceNumbers, 4, 3);
-        allDiceNumbers = this.addDiceNumberToArrayXTimes(allDiceNumbers, 5, 3);
-        allDiceNumbers = this.addDiceNumberToArrayXTimes(allDiceNumbers, 6, 3);
-        allDiceNumbers = this.addDiceNumberToArrayXTimes(allDiceNumbers, 8, 3);
-        allDiceNumbers = this.addDiceNumberToArrayXTimes(allDiceNumbers, 9, 3);
-        allDiceNumbers = this.addDiceNumberToArrayXTimes(allDiceNumbers, 10, 3);
-        allDiceNumbers = this.addDiceNumberToArrayXTimes(allDiceNumbers, 11, 3);
-        allDiceNumbers = this.addDiceNumberToArrayXTimes(allDiceNumbers, 12, 2);
+        for (const diceNumber of settings.diceNumbers) {
+            const dice: number = diceNumber[0];
+            const count: number = diceNumber[1];
+            allDiceNumbers = this.arrayService.addItemToArrayXTimes(allDiceNumbers, dice, count);
+        }
         return allDiceNumbers;
     }
 
-    private addDiceNumberToArrayXTimes(array: number[], diceNumber: number, x: number): number[] {
-        for (let i = 0; i < x; i++) {
-            array.push(diceNumber);
-        }
-        return array;
-    }
+    // private areThereAnyAvailableCoords(map: CatanMap): boolean {
+    // return map.getRows().some((row) => row.some((hex) => hex.isResourceTerrain() && hex.getDiceNumber() === 0));
+    // }
 
-    private areThereAnyAvailableCoords(map: SeafarersMap): boolean {
-        return map.getRows().some((row) => row.some((hex) => this.isValidTerrain(hex) && hex.getDiceNumber() === 0));
-    }
-
-    private getRandomUnusedCoords(map: SeafarersMap): any {
+    private getRandomUnusedCoords(map: CatanMap): any {
         let randomRow: number = this.randomService.getRandomNumberExclusive(0, map.getRows().length);
         let randomCol: number = this.randomService.getRandomNumberExclusive(0, map.getRow(randomRow).length);
         let hexHasNoDiceNumber: boolean = map.getHex(randomRow, randomCol).getDiceNumber() === 0;
-        let hexIsResourceTerrain: boolean = this.isValidTerrain(map.getHex(randomRow, randomCol));
+        let hexIsResourceTerrain: boolean = map.getHex(randomRow, randomCol).isResourceTerrain();
         let okay: boolean = hexHasNoDiceNumber && hexIsResourceTerrain;
         if (okay) {
             return { randomRow, randomCol };
@@ -105,22 +85,10 @@ export class DiceNumberGenerator {
                 randomRow = this.randomService.getRandomNumberExclusive(0, map.getRows().length);
                 randomCol = this.randomService.getRandomNumberExclusive(0, map.getRow(randomRow).length);
                 hexHasNoDiceNumber = map.getHex(randomRow, randomCol).getDiceNumber() === 0;
-                hexIsResourceTerrain = this.isValidTerrain(map.getHex(randomRow, randomCol));
+                hexIsResourceTerrain = map.getHex(randomRow, randomCol).isResourceTerrain();
                 okay = hexHasNoDiceNumber && hexIsResourceTerrain;
             }
             return { randomRow, randomCol };
-        }
-    }
-
-    private isValidTerrain(hex: Hex): boolean {
-        if (
-            hex.getTerrain() !== Terrain.Empty &&
-            hex.getTerrain() !== Terrain.Sea &&
-            hex.getTerrain() !== Terrain.Desert
-        ) {
-            return true;
-        } else {
-            return false;
         }
     }
 }

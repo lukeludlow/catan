@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { ICatanMap } from "../_models/ICatanMap";
+import { CatanMap } from "../_maps/ICatanMap";
 import { matchHexIf } from "../_models/delegates";
 import { HexCoords } from "../_models/HexCoords";
 
@@ -23,7 +23,7 @@ export class RandomService {
         return array[Math.floor(Math.random() * array.length)];
     }
 
-    public getRandomCoords(map: ICatanMap, shouldMatchHex: matchHexIf): HexCoords {
+    public getRandomCoords(map: CatanMap, shouldMatchHex: matchHexIf): HexCoords {
         let randomRow: number = this.getRandomNumberExclusive(0, map.getRows().length);
         let randomCol: number = this.getRandomNumberExclusive(0, map.getRow(randomRow).length);
         while (!shouldMatchHex(map.getHex(randomRow, randomCol))) {

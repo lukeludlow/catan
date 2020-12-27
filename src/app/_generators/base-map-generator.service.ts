@@ -165,7 +165,6 @@ export class BaseMapGenerator {
 
     public generateWithNoCollisions(): BasicHex[][] {
         if (!this.hexesHaveAlreadyBeenGenerated()) {
-            console.log("generateWithNoCollisions: generating new board");
             this.generate();
         }
         let numTimesRegenerated = 0;

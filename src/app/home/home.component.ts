@@ -14,7 +14,6 @@ export class HomeComponent implements OnInit {
     ngOnInit(): void {}
 
     generate(): void {
-        console.log(`routing to "/${this.gameOption}"`);
         this.router.navigate([`/${this.gameOption}`]);
     }
 }

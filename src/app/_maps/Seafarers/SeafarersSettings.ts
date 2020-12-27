@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { Terrain } from "../_models/Terrain";
-import { TerrainCount } from "../_models/TerrainCount";
-import { MapSettings } from "./MapSettings";
+import { Terrain } from "../../_models/Terrain";
+import { TerrainCount } from "../../_models/TerrainCount";
+import { MapSettings } from "../MapSettings";
 
 @Injectable({
     providedIn: "root",
@@ -46,6 +46,6 @@ export class SeafarersSettings implements MapSettings {
         [Terrain.Sheep, { min: 1, max: 1 }],
         [Terrain.Tree, { min: 1, max: 1 }],
         [Terrain.Wheat, { min: 1, max: 1 }],
-        [Terrain.Any, { min: 0, max: 5 }],
+        [Terrain.Any, { min: 5, max: 5 }],
     ]);
 }

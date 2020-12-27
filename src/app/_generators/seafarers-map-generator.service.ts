@@ -3,11 +3,12 @@ import { Hex } from "../_models/Hex";
 import { RandomService } from "../_services/random.service";
 import { DiceNumberGenerator } from "./dice-number-generator.service";
 import { TerrainGenerator } from "./terrain-generator.service";
-import { SeafarersMap } from "../_models/SeafarersMap";
+import { SeafarersMap } from "../_maps/Seafarers/SeafarersMap";
 import { PortGenerator } from "../_generators/port-generator.service";
 import { IslandCounter } from "../_validators/island-counter.service";
 import { GenerateSettings } from "../_models/generate-settings";
-import { SeafarersSettings } from "../_maps/SeafarersSettings";
+import { SeafarersSettings } from "../_maps/Seafarers/SeafarersSettings";
+import { CollisionDetector } from "../_validators/collision-detector.service";
 
 @Injectable({
     providedIn: "root",
@@ -17,6 +18,7 @@ export class SeafarersMapGenerator {
     private terrainGenerator: TerrainGenerator;
     private portGenerator: PortGenerator;
     private islandCounter: IslandCounter;
+    private collisionDetector: CollisionDetector;
 
     private map: SeafarersMap;
     private settings: SeafarersSettings;
@@ -25,12 +27,14 @@ export class SeafarersMapGenerator {
         diceNumberGenerator: DiceNumberGenerator,
         terrainGenerator: TerrainGenerator,
         portGenerator: PortGenerator,
-        islandCounter: IslandCounter
+        islandCounter: IslandCounter,
+        collisionDetector: CollisionDetector
     ) {
         this.diceNumberGenerator = diceNumberGenerator;
         this.terrainGenerator = terrainGenerator;
         this.portGenerator = portGenerator;
         this.islandCounter = islandCounter;
+        this.collisionDetector = collisionDetector;
         this.settings = new SeafarersSettings();
     }
 
@@ -55,7 +59,6 @@ export class SeafarersMapGenerator {
             map = this.tryGenerate();
             isValidMap = this.validateMap(map, settings);
             numTimesGenerated++;
-            setTimeout(() => {}, 1);
         }
         console.log(`generated map after ${numTimesGenerated} validations`);
         return map;
@@ -63,14 +66,15 @@ export class SeafarersMapGenerator {
 
     private tryGenerate(): SeafarersMap {
         let map: SeafarersMap = new SeafarersMap();
-        map = this.terrainGenerator.generateTerrain(map, this.settings);
-        map = this.diceNumberGenerator.generateDiceNumbers(map);
-        map = this.portGenerator.generatePorts(map);
+        map = this.terrainGenerator.generateTerrain(map, this.settings) as SeafarersMap;
+        map = this.diceNumberGenerator.generateDiceNumbers(map, this.settings) as SeafarersMap;
+        map = this.portGenerator.generatePorts(map, this.settings) as SeafarersMap;
         return map;
     }
 
     public validateMap(map: SeafarersMap, settings: GenerateSettings): boolean {
-        const validIslands = this.islandCounter.countIslands(map) === settings.islands;
-        return validIslands;
+        const noCollisions: boolean = !this.collisionDetector.detectCollisions(map);
+        const validIslands: boolean = this.islandCounter.countIslands(map) === settings.islands;
+        return noCollisions && validIslands;
     }
 }

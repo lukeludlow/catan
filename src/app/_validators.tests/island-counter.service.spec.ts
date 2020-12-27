@@ -1,6 +1,6 @@
 import { TestBed } from "@angular/core/testing";
 import { IslandCounter } from "../_validators/island-counter.service";
-import { SeafarersMap } from "../_models/SeafarersMap";
+import { SeafarersMap } from "../_maps/Seafarers/SeafarersMap";
 import { Terrain } from "../_models/Terrain";
 
 describe("IslandCounter", () => {
@@ -103,7 +103,6 @@ describe("IslandCounter", () => {
         map.setHexTerrain(12, 0, Terrain.Tree);
         map.setHexTerrain(12, 1, Terrain.Sheep);
 
-        console.log("here");
         const result: number = islandCounter.countIslands(map);
         expect(result).toEqual(2);
     });

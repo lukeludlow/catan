@@ -1,5 +1,5 @@
 import { TestBed } from "@angular/core/testing";
-import { SeafarersMap } from "../_models/SeafarersMap";
+import { SeafarersMap } from "../_maps/Seafarers/SeafarersMap";
 import { Hex } from "../_models/Hex";
 import { Terrain } from "../_models/Terrain";
 

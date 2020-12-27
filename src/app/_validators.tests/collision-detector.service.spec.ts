@@ -1,7 +1,7 @@
 import { TestBed } from "@angular/core/testing";
 
 import { CollisionDetector } from "../_validators/collision-detector.service";
-import { SeafarersMap } from "../_models/SeafarersMap";
+import { SeafarersMap } from "../_maps/Seafarers/SeafarersMap";
 
 describe("CollisionDetector", () => {
     let collisionDetector: CollisionDetector;

@@ -14,7 +14,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgxSliderModule } from "@angular-slider/ngx-slider";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { InjectSeafarersSettings } from "./_maps/InjectionTokens";
-import { SeafarersSettings } from "./_maps/SeafarersSettings";
+import { SeafarersSettings } from "./_maps/Seafarers/SeafarersSettings";
 
 @NgModule({
     declarations: [AppComponent, HomeComponent, BaseGameComponent, SeafarersComponent],

@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { SeafarersMap } from "../_models/SeafarersMap";
 import { Hex } from "../_models/Hex";
 import { Terrain } from "../_models/Terrain";
 import { HexSide } from "../_models/HexSide";
@@ -7,6 +6,8 @@ import { HexDirection } from "../_models/HexDirection";
 import { RandomService } from "../_services/random.service";
 import { Port } from "../_models/Port";
 import { ArrayService } from "../_services/array.service";
+import { MapSettings } from "../_maps/MapSettings";
+import { CatanMap } from "../_maps/ICatanMap";
 
 @Injectable({
     providedIn: "root",
@@ -20,19 +21,13 @@ export class PortGenerator {
         this.arrayService = arrayService;
     }
 
-    public generatePorts(map: SeafarersMap): SeafarersMap {
-        let availablePorts: Terrain[] = [
-            Terrain.Brick,
-            Terrain.Rock,
-            Terrain.Sheep,
-            Terrain.Tree,
-            Terrain.Wheat,
-            Terrain.Any,
-            Terrain.Any,
-            Terrain.Any,
-            Terrain.Any,
-            Terrain.Any,
-        ];
+    public generatePorts(map: CatanMap, settings: MapSettings): CatanMap {
+        let availablePorts: Terrain[] = new Array<Terrain>();
+        for (const portTerrain of settings.ports) {
+            const terrain: Terrain = portTerrain[0];
+            const max: number = portTerrain[1].max;
+            availablePorts = this.arrayService.addItemToArrayXTimes(availablePorts, terrain, max);
+        }
         let availableHexes: Hex[] = [];
         map.getRows().forEach((row) => {
             row.forEach((hex) => {
@@ -41,7 +36,8 @@ export class PortGenerator {
                 }
             });
         });
-        for (let i = 0; i < 10; i++) {
+        const portCount: number = availablePorts.length;
+        for (let i = 0; i < portCount; i++) {
             if (availableHexes.length === 0) {
                 break;
             }
@@ -57,7 +53,7 @@ export class PortGenerator {
         return map;
     }
 
-    public findHexSidesTouchingSea(map: SeafarersMap, hex: Hex): HexSide[] {
+    public findHexSidesTouchingSea(map: CatanMap, hex: Hex): HexSide[] {
         const neighbors: Hex[] = map.listNeighbors(hex);
         const sidesTouchingSea: HexSide[] = [];
         if (this.isHexTouchingEdgeOfMap(hex)) {
@@ -156,7 +152,7 @@ export class PortGenerator {
         return sidesTouchingSea;
     }
 
-    private canHexHavePort(map: SeafarersMap, hex: Hex): boolean {
+    private canHexHavePort(map: CatanMap, hex: Hex): boolean {
         const hasAccessToSea: boolean = this.isHexTouchingEdgeOfMap(hex) || this.isHexTouchingSea(map, hex);
         const isResourceTerrain: boolean =
             hex.getTerrain() !== Terrain.Sea &&
@@ -165,7 +161,7 @@ export class PortGenerator {
         return hasAccessToSea && isResourceTerrain;
     }
 
-    private isHexTouchingSea(map: SeafarersMap, hex: Hex): boolean {
+    private isHexTouchingSea(map: CatanMap, hex: Hex): boolean {
         const neighbors: Hex[] = map.listNeighbors(hex);
         if (neighbors.some((neighborHex) => neighborHex.getTerrain() === Terrain.Sea)) {
             return true;

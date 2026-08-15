@@ -1,14 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>catan generator</title>
-        <base href="/catan/">        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" type="image/x-icon" href="favicon.png" />
-            <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link rel="stylesheet" href="styles.92d4022d3ec61b9385f5.css"></head>
-    <body>
-        <app-root></app-root>
-    <script src="runtime.c51bd5b1c616d9ffddc1.js" defer></script><script src="polyfills-es5.fb4cb20fe51e187308e1.js" nomodule defer></script><script src="polyfills.b22a0435e934d5fc1851.js" defer></script><script src="main.e91a0333aedc98315821.js" defer></script></body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>catan generator — moved</title>
+    <link rel="canonical" href="https://catan-next.vercel.app/" />
+    <meta http-equiv="refresh" content="0; url=https://catan-next.vercel.app/" />
+    <meta name="robots" content="noindex" />
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #fdfaf4;
+        --fg: #2b2622;
+        --muted: #6f6558;
+        --accent: #a8471f;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #1a1714;
+          --fg: #ece5da;
+          --muted: #a1968a;
+          --accent: #e8905f;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+        background: var(--bg);
+        color: var(--fg);
+        font: 400 1rem/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+        text-align: center;
+      }
+      main {
+        max-width: 30rem;
+      }
+      h1 {
+        margin: 0 0 0.75rem;
+        font-size: 1.5rem;
+        letter-spacing: -0.01em;
+      }
+      p {
+        margin: 0 0 1.5rem;
+        color: var(--muted);
+      }
+      a.go {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        background: var(--accent);
+        color: var(--bg);
+        font-weight: 600;
+        text-decoration: none;
+      }
+      a.go:hover,
+      a.go:focus-visible {
+        opacity: 0.85;
+      }
+      .fine {
+        margin: 1.5rem 0 0;
+        font-size: 0.8125rem;
+      }
+      .fine a {
+        color: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>The catan generator has moved</h1>
+      <p>
+        It now lives at
+        <strong>catan-next.vercel.app</strong> — rewritten in Next.js, where
+        every board is a link you can share.
+      </p>
+      <p><a class="go" href="https://catan-next.vercel.app/">Go to the generator</a></p>
+      <p class="fine">
+        The old Angular app is archived at
+        <a href="https://github.com/lukeludlow/catan">lukeludlow/catan</a>; the
+        source for the new one is at
+        <a href="https://github.com/lukeludlow/catan-next">lukeludlow/catan-next</a>.
+      </p>
+    </main>
+  </body>
 </html>

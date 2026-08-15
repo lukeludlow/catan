@@ -1,3 +1,8 @@
+_Historical — notes for the archived Angular app. The commands below no longer
+apply; see [readme.md](readme.md). The hex-grid references and tile/chit counts
+are kept because they are the source data the
+[catan-next](https://github.com/lukeludlow/catan-next) port was built from._
+
 # commands
 
 deploy to github pages  
